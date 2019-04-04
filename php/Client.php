@@ -28,7 +28,7 @@ class Client {
     
     /**
      * CONSTRUCTEUR : crée un objet de type Client
-     * @param $donnees - tableau associatif contenant les attributs et leurs valeurs
+     * @param {array} $donnees - tableau associatif contenant les attributs et leurs valeurs
      */
     public function __construct(array $donnees){
         $this->hydrate($donnees);
@@ -189,7 +189,7 @@ class Client {
 
     /**
      * Assigne les bonnes valeurs aux attributs
-     * @param $donnes - tableau associatif contenant les attributs et les valeurs
+     * @param {array} $donnes - tableau associatif contenant les attributs et les valeurs
      */
     public function hydrate(array $donnees) {
         foreach ($donnees as $attribut => $valeur) {
