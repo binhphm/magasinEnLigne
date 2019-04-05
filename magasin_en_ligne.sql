@@ -1,26 +1,26 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
--- https://www.phpmyadmin.net/
+-- version 4.2.11
+-- http://www.phpmyadmin.net
 --
--- Hôte : 127.0.0.1
--- Généré le :  ven. 05 avr. 2019 à 06:09
--- Version du serveur :  10.1.36-MariaDB
--- Version de PHP :  7.2.11
+-- Client :  127.0.0.1
+-- Généré le :  Ven 05 Avril 2019 à 20:53
+-- Version du serveur :  5.6.21
+-- Version de PHP :  5.6.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Base de données :  `magasin_en_ligne`
 --
+CREATE DATABASE IF NOT EXISTS `magasin_en_ligne` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `magasin_en_ligne`;
 
 -- --------------------------------------------------------
 
@@ -28,17 +28,18 @@ SET time_zone = "+00:00";
 -- Structure de la table `article`
 --
 
-CREATE TABLE `article` (
-  `noArticle` int(10) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `article`;
+CREATE TABLE IF NOT EXISTS `article` (
+`noArticle` int(10) unsigned NOT NULL,
   `description` varchar(255) NOT NULL,
   `cheminImage` varchar(255) DEFAULT NULL,
   `prixUnitaire` decimal(10,2) DEFAULT NULL,
   `quantiteEnStock` int(10) NOT NULL,
   `quantiteDansPanier` int(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `article`
+-- Contenu de la table `article`
 --
 
 INSERT INTO `article` (`noArticle`, `description`, `cheminImage`, `prixUnitaire`, `quantiteEnStock`, `quantiteDansPanier`) VALUES
@@ -51,8 +52,8 @@ INSERT INTO `article` (`noArticle`, `description`, `cheminImage`, `prixUnitaire`
 (7, 'Beard Guyz Beard Care & Grooming Kit', 'images/beard_guyz_beard_care_grooming_kit.jpg', '29.99', 9, 0),
 (8, 'Camille Rose Naturals Curl Maker', 'images/camille_rose_curl_maker.jpg', '41.99', 4, 0),
 (9, 'Cantu Shea Butter For Natural Hair Coconut Curling Cream', 'images/cantu_coconut_curling_cream.jpg', '31.99', 15, 0),
-(10, 'Carol\'s daughter Black Vanilla Moisture & Shine Hydrating Conditioner', 'images/carols_daughter_black_Vanilla_moisture_and_shine_hydrating_conditioner.jpg', '29.99', 10, 0),
-(11, 'Carol\'s daughter Hair Milk Curl Defining Moisture Mask', 'images/carols_daughter_hair_milk_curl_defining_moisture_mask.jpg', '34.99', 4, 0),
+(10, 'Carol''s daughter Black Vanilla Moisture & Shine Hydrating Conditioner', 'images/carols_daughter_black_Vanilla_moisture_and_shine_hydrating_conditioner.jpg', '29.99', 10, 0),
+(11, 'Carol''s daughter Hair Milk Curl Defining Moisture Mask', 'images/carols_daughter_hair_milk_curl_defining_moisture_mask.jpg', '34.99', 4, 0),
 (12, 'Curls Blueberry Bliss Curl Control Paste', 'images/curls_blueberry_control_paste.jpg', '15.99', 20, 0),
 (13, 'DevaCurl Supercream Coconut Curl Styler', 'images/devacurl_supercream_coconut_curl_styler.jpg', '55.99', 10, 0),
 (14, 'Dudu-Osun Black Soap', 'images/dudu_osun_black_soap.jpg', '5.99', 50, 0),
@@ -74,15 +75,16 @@ INSERT INTO `article` (`noArticle`, `description`, `cheminImage`, `prixUnitaire`
 -- Structure de la table `article_en_commande`
 --
 
-CREATE TABLE `article_en_commande` (
-  `noArticleEnCommande` int(10) UNSIGNED NOT NULL,
-  `noCommande` int(10) UNSIGNED NOT NULL,
-  `noArticle` int(10) UNSIGNED NOT NULL,
-  `quantite` int(10) UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `article_en_commande`;
+CREATE TABLE IF NOT EXISTS `article_en_commande` (
+`noArticleEnCommande` int(10) unsigned NOT NULL,
+  `noCommande` int(10) unsigned NOT NULL,
+  `noArticle` int(10) unsigned NOT NULL,
+  `quantite` int(10) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `article_en_commande`
+-- Contenu de la table `article_en_commande`
 --
 
 INSERT INTO `article_en_commande` (`noArticleEnCommande`, `noCommande`, `noArticle`, `quantite`) VALUES
@@ -104,8 +106,9 @@ INSERT INTO `article_en_commande` (`noArticleEnCommande`, `noCommande`, `noArtic
 -- Structure de la table `client`
 --
 
-CREATE TABLE `client` (
-  `noClient` int(10) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `client`;
+CREATE TABLE IF NOT EXISTS `client` (
+`noClient` int(10) unsigned NOT NULL,
   `nomClient` varchar(50) NOT NULL,
   `prenomClient` varchar(50) NOT NULL,
   `adresse` varchar(50) NOT NULL,
@@ -116,10 +119,10 @@ CREATE TABLE `client` (
   `pseudo` varchar(25) DEFAULT NULL,
   `motDePasse` varchar(25) DEFAULT NULL,
   `courriel` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `client`
+-- Contenu de la table `client`
 --
 
 INSERT INTO `client` (`noClient`, `nomClient`, `prenomClient`, `adresse`, `ville`, `province`, `codePostal`, `noTel`, `pseudo`, `motDePasse`, `courriel`) VALUES
@@ -135,15 +138,16 @@ INSERT INTO `client` (`noClient`, `nomClient`, `prenomClient`, `adresse`, `ville
 -- Structure de la table `commande`
 --
 
-CREATE TABLE `commande` (
-  `noCommande` int(10) UNSIGNED NOT NULL,
+DROP TABLE IF EXISTS `commande`;
+CREATE TABLE IF NOT EXISTS `commande` (
+`noCommande` int(10) unsigned NOT NULL,
   `dateCommande` datetime NOT NULL,
-  `noClient` int(10) UNSIGNED NOT NULL,
+  `noClient` int(10) unsigned NOT NULL,
   `paypalOrderId` char(17) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
--- Déchargement des données de la table `commande`
+-- Contenu de la table `commande`
 --
 
 INSERT INTO `commande` (`noCommande`, `dateCommande`, `noClient`, `paypalOrderId`) VALUES
@@ -157,9 +161,9 @@ INSERT INTO `commande` (`noCommande`, `dateCommande`, `noClient`, `paypalOrderId
 
 --
 -- Doublure de structure pour la vue `vue_article`
--- (Voir ci-dessous la vue réelle)
 --
-CREATE TABLE `vue_article` (
+DROP VIEW IF EXISTS `vue_article`;
+CREATE TABLE IF NOT EXISTS `vue_article` (
 `noArticle` int(10) unsigned
 ,`description` varchar(255)
 ,`cheminImage` varchar(255)
@@ -167,27 +171,25 @@ CREATE TABLE `vue_article` (
 ,`quantiteEnStock` int(10)
 ,`quantiteDansPanier` int(10)
 );
-
 -- --------------------------------------------------------
 
 --
 -- Doublure de structure pour la vue `vue_commande`
--- (Voir ci-dessous la vue réelle)
 --
-CREATE TABLE `vue_commande` (
+DROP VIEW IF EXISTS `vue_commande`;
+CREATE TABLE IF NOT EXISTS `vue_commande` (
 `Nom complet` varchar(101)
 ,`ville` varchar(50)
 ,`noCommande` int(10) unsigned
 ,`dateCommande` datetime
 );
-
 -- --------------------------------------------------------
 
 --
 -- Doublure de structure pour la vue `vue_commande_full`
--- (Voir ci-dessous la vue réelle)
 --
-CREATE TABLE `vue_commande_full` (
+DROP VIEW IF EXISTS `vue_commande_full`;
+CREATE TABLE IF NOT EXISTS `vue_commande_full` (
 `Nom complet` varchar(101)
 ,`ville` varchar(50)
 ,`noCommande` int(10) unsigned
@@ -195,7 +197,6 @@ CREATE TABLE `vue_commande_full` (
 ,`Nb d'articles` bigint(21)
 ,`Prix total` decimal(42,2)
 );
-
 -- --------------------------------------------------------
 
 --
@@ -203,7 +204,7 @@ CREATE TABLE `vue_commande_full` (
 --
 DROP TABLE IF EXISTS `vue_article`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vue_article`  AS  select `article`.`noArticle` AS `noArticle`,`article`.`description` AS `description`,`article`.`cheminImage` AS `cheminImage`,`article`.`prixUnitaire` AS `prixUnitaire`,`article`.`quantiteEnStock` AS `quantiteEnStock`,`article`.`quantiteDansPanier` AS `quantiteDansPanier` from `article` order by `article`.`quantiteEnStock` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vue_article` AS select `article`.`noArticle` AS `noArticle`,`article`.`description` AS `description`,`article`.`cheminImage` AS `cheminImage`,`article`.`prixUnitaire` AS `prixUnitaire`,`article`.`quantiteEnStock` AS `quantiteEnStock`,`article`.`quantiteDansPanier` AS `quantiteDansPanier` from `article` order by `article`.`quantiteEnStock`;
 
 -- --------------------------------------------------------
 
@@ -212,7 +213,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vue_commande`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vue_commande`  AS  select concat(`client`.`prenomClient`,' ',`client`.`nomClient`) AS `Nom complet`,`client`.`ville` AS `ville`,`commande`.`noCommande` AS `noCommande`,`commande`.`dateCommande` AS `dateCommande` from (`client` join `commande` on((`client`.`noClient` = `commande`.`noClient`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vue_commande` AS select concat(`client`.`prenomClient`,' ',`client`.`nomClient`) AS `Nom complet`,`client`.`ville` AS `ville`,`commande`.`noCommande` AS `noCommande`,`commande`.`dateCommande` AS `dateCommande` from (`client` join `commande` on((`client`.`noClient` = `commande`.`noClient`)));
 
 -- --------------------------------------------------------
 
@@ -221,84 +222,76 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `vue_commande_full`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vue_commande_full`  AS  select concat(`client`.`prenomClient`,' ',`client`.`nomClient`) AS `Nom complet`,`client`.`ville` AS `ville`,`commande`.`noCommande` AS `noCommande`,`commande`.`dateCommande` AS `dateCommande`,count(`article`.`noArticle`) AS `Nb d'articles`,sum((`article_en_commande`.`quantite` * `article`.`prixUnitaire`)) AS `Prix total` from (((`client` join `commande` on((`client`.`noClient` = `commande`.`noClient`))) join `article_en_commande` on((`commande`.`noCommande` = `article_en_commande`.`noCommande`))) join `article` on((`article_en_commande`.`noArticle` = `article`.`noArticle`))) group by `commande`.`noCommande` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vue_commande_full` AS select concat(`client`.`prenomClient`,' ',`client`.`nomClient`) AS `Nom complet`,`client`.`ville` AS `ville`,`commande`.`noCommande` AS `noCommande`,`commande`.`dateCommande` AS `dateCommande`,count(`article`.`noArticle`) AS `Nb d'articles`,sum((`article_en_commande`.`quantite` * `article`.`prixUnitaire`)) AS `Prix total` from (((`client` join `commande` on((`client`.`noClient` = `commande`.`noClient`))) join `article_en_commande` on((`commande`.`noCommande` = `article_en_commande`.`noCommande`))) join `article` on((`article_en_commande`.`noArticle` = `article`.`noArticle`))) group by `commande`.`noCommande`;
 
 --
--- Index pour les tables déchargées
+-- Index pour les tables exportées
 --
 
 --
 -- Index pour la table `article`
 --
 ALTER TABLE `article`
-  ADD PRIMARY KEY (`noArticle`);
+ ADD PRIMARY KEY (`noArticle`);
 
 --
 -- Index pour la table `article_en_commande`
 --
 ALTER TABLE `article_en_commande`
-  ADD PRIMARY KEY (`noArticleEnCommande`),
-  ADD KEY `commande_fk` (`noCommande`),
-  ADD KEY `article_fk` (`noArticle`);
+ ADD PRIMARY KEY (`noArticleEnCommande`), ADD KEY `commande_fk` (`noCommande`), ADD KEY `article_fk` (`noArticle`);
 
 --
 -- Index pour la table `client`
 --
 ALTER TABLE `client`
-  ADD PRIMARY KEY (`noClient`);
+ ADD PRIMARY KEY (`noClient`);
 
 --
 -- Index pour la table `commande`
 --
 ALTER TABLE `commande`
-  ADD PRIMARY KEY (`noCommande`),
-  ADD KEY `commande_noclient_idx` (`noClient`);
+ ADD PRIMARY KEY (`noCommande`), ADD KEY `commande_noclient_idx` (`noClient`);
 
 --
--- AUTO_INCREMENT pour les tables déchargées
+-- AUTO_INCREMENT pour les tables exportées
 --
 
 --
 -- AUTO_INCREMENT pour la table `article`
 --
 ALTER TABLE `article`
-  MODIFY `noArticle` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
-
+MODIFY `noArticle` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT pour la table `article_en_commande`
 --
 ALTER TABLE `article_en_commande`
-  MODIFY `noArticleEnCommande` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
+MODIFY `noArticleEnCommande` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT pour la table `client`
 --
 ALTER TABLE `client`
-  MODIFY `noClient` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
+MODIFY `noClient` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT pour la table `commande`
 --
 ALTER TABLE `commande`
-  MODIFY `noCommande` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
+MODIFY `noCommande` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
--- Contraintes pour les tables déchargées
+-- Contraintes pour les tables exportées
 --
 
 --
 -- Contraintes pour la table `article_en_commande`
 --
 ALTER TABLE `article_en_commande`
-  ADD CONSTRAINT `article_fk` FOREIGN KEY (`noArticle`) REFERENCES `article` (`noArticle`),
-  ADD CONSTRAINT `commande_fk` FOREIGN KEY (`noCommande`) REFERENCES `commande` (`noCommande`);
+ADD CONSTRAINT `article_fk` FOREIGN KEY (`noArticle`) REFERENCES `article` (`noArticle`),
+ADD CONSTRAINT `commande_fk` FOREIGN KEY (`noCommande`) REFERENCES `commande` (`noCommande`);
 
 --
 -- Contraintes pour la table `commande`
 --
 ALTER TABLE `commande`
-  ADD CONSTRAINT `client_commande_fk` FOREIGN KEY (`noClient`) REFERENCES `client` (`noClient`);
-COMMIT;
+ADD CONSTRAINT `client_commande_fk` FOREIGN KEY (`noClient`) REFERENCES `client` (`noClient`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
