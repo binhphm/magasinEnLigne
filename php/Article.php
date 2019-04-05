@@ -6,16 +6,15 @@
 class Article {
 
     /* ATTRIBUTS */
-    private $_noArticle;
-    private $_description;
-    private $_cheminImage;
-    private $_prixUnitaire;
-    private $_quantiteEnStock;
-    private $_quantiteDansPanier;
+    private $noArticle;
+    private $description;
+    private $cheminImage;
+    private $prixUnitaire;
+    private $quantiteEnStock;
+    private $quantiteDansPanier;
 
     /* CONSTANTES (regex) */
-    const CHEMIN_IMAGE = '/^images\/*.(jpg|jpeg|png|gif)$/';
-    
+   const CHEMIN_IMAGE = '/^images\/(.*)\.(jpg|jpeg|png|gif)$/';
 
     /**
      * CONSTRUCTEUR : crée un objet de type Article
@@ -29,37 +28,38 @@ class Article {
     /* ACCESSEURS */
 
     public function getNoArticle() {
-        return $this->_noArticle;
+        return $this->noArticle;
     }
 
     public function getDescription() {
-        return $this->_description;
+        return $this->description;
     }
 
     public function getCheminImage() {
-        return $this->_cheminImage;
+        return $this->cheminImage;
     }
 
     public function getPrixUnitaire() {
-        return $this->_prixUnitaire;
+        return $this->prixUnitaire;
     }
 
     public function getQuantiteEnStock() {
-        return $this->_quantiteEnStock;
+        return $this->quantiteEnStock;
     }
 
     public function getQuantiteDansPanier() {
-        return $this->_quantiteDansPanier;
+        return $this->quantiteDansPanier;
     }
 
     /* MUTATEURS */
 
     public function setNoArticle($noArticle) {
+        $noArticle = (int) $noArticle;
         if(!is_int($noArticle)){
             trigger_error('Le numéro d\'article doit être un nombre entier.', E_USER_WARNING);
             return;
         }
-        $this->_noArticle = $noArticle;
+        $this->noArticle = $noArticle;
     }
 
     public function setDescription($description) {
@@ -67,39 +67,47 @@ class Article {
             trigger_error('La description d\'un article doit être une chaîne de caractères.', E_USER_WARNING);
             return;
         }
-        $this->_description = $description;
+        $this->description = $description;
     }
 
-    public function setCheminImagw($cheminImage) {
+    public function setCheminImage($cheminImage) {
         if(!preg_match(self::CHEMIN_IMAGE, $cheminImage)){
             trigger_error('Le chemin de l\'image d\'un article doit être une chaîne de caractères.', E_USER_WARNING);
             return;
         }
-        $this->_cheminImage = $cheminImage;
+        $this->cheminImage = $cheminImage;
     }
 
     public function setPrixUnitaire($prixUnitaire) {
+        $prixUnitaire = (double) $prixUnitaire;
+        
         if(!is_double($prixUnitaire)){
             trigger_error('Le prix unitaire d\'un article doit être un nombre décimal.', E_USER_WARNING);
             return;
         }
-        $this->_prixUnitaire = $prixUnitaire;
+        
+        $this->prixUnitaire = $prixUnitaire;
     }
 
     public function setQuantiteEnStock($quantiteEnStock) {
+        $quantiteEnStock = (int) $quantiteEnStock;
+
         if(!is_int($quantiteEnStock)){
             trigger_error('La quantité en stock d\'un article doit être un nombre entier.', E_USER_WARNING);
             return;
         }
-        $this->_quantiteEnStock = $quantiteEnStock;
+        $this->quantiteEnStock = $quantiteEnStock;
     }
 
     public function setQuantiteDansPanier($quantiteDansPanier) {
+        $quantiteDansPanier = (int) $quantiteDansPanier;
+        
         if(!is_int($quantiteDansPanier)){
             trigger_error('La quantité dans le panier doit être un nombre entier.', E_USER_WARNING);
             return;
         }
-        $this->_quantiteDansPanier = $quantiteDansPanier;
+        
+        $this->quantiteDansPanier = $quantiteDansPanier;
     }
     
 
@@ -117,6 +125,13 @@ class Article {
             }
         }
     }
+
+
+    public function getTableau(){
+        return get_object_vars($this);
+    }
+
+
 }
 
 ?>

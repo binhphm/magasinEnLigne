@@ -1,12 +1,16 @@
 <?php
 
+/**
+ * Représente un objet de type Panier
+ * Son rôle est de gérer un panier d'achats
+ */
 class Panier {
 
     /**
      * CONSTRUCTEUR : crée un objet de type Panier
      * Créé un tableau associatif avec des variables de session
      */
-    public function __construct(){
+    public function __construct() {
         $this->creerPanier();
     }
 

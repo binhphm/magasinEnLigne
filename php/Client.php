@@ -12,7 +12,6 @@ class Client {
     private $_adresse
     private $_ville;
     private $_province;
-    private $_pays;
     private $_codePostal
     private $_noTel;
     private $_pseudo;
@@ -59,10 +58,6 @@ class Client {
 
     public function getProvince() {
         return $this->_province;
-    }
-
-    public function getPays() {
-        return $this->_pays;
     }
 
     public function getCodePostal() {
@@ -134,14 +129,6 @@ class Client {
             return;
         }
         $this->_province = $province;
-    }
-
-    public function setPays($pays) {
-        if(!preg_match(self::LETTRES_SEULEMENT, $pays)){
-            trigger_error('Le pays ne doit contenir que des lettres.', E_USER_WARNING);
-            return;
-        }
-        $this->_pays = $pays;
     }
 
     public function setCodePostal($codePostal) {
