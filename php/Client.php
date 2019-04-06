@@ -9,10 +9,10 @@ class Client {
     private $_noClient;
     private $_nomClient;
     private $_prenomClient;
-    private $_adresse
+    private $_adresse;
     private $_ville;
     private $_province;
-    private $_codePostal
+    private $_codePostal;
     private $_noTel;
     private $_pseudo;
     private $_motDePasse;
