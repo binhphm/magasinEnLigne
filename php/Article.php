@@ -6,12 +6,13 @@
 class Article {
 
     /* ATTRIBUTS */
-    private $noArticle;
-    private $description;
-    private $cheminImage;
-    private $prixUnitaire;
-    private $quantiteEnStock;
-    private $quantiteDansPanier;
+    private $_noArticle;
+    private $_categorie;
+    private $_description;
+    private $_cheminImage;
+    private $_prixUnitaire;
+    private $_quantiteEnStock;
+    private $_quantiteDansPanier;
 
     /* CONSTANTES (regex) */
    const CHEMIN_IMAGE = '/^images\/(.*)\.(jpg|jpeg|png|gif)$/';
@@ -28,27 +29,31 @@ class Article {
     /* ACCESSEURS */
 
     public function getNoArticle() {
-        return $this->noArticle;
+        return $this->_noArticle;
+    }
+
+    public function getCategorie() {
+        return $this->_categorie;
     }
 
     public function getDescription() {
-        return $this->description;
+        return $this->_description;
     }
 
     public function getCheminImage() {
-        return $this->cheminImage;
+        return $this->_cheminImage;
     }
 
     public function getPrixUnitaire() {
-        return $this->prixUnitaire;
+        return $this->_prixUnitaire;
     }
 
     public function getQuantiteEnStock() {
-        return $this->quantiteEnStock;
+        return $this->_quantiteEnStock;
     }
 
     public function getQuantiteDansPanier() {
-        return $this->quantiteDansPanier;
+        return $this->_quantiteDansPanier;
     }
 
     /* MUTATEURS */
@@ -59,7 +64,15 @@ class Article {
             error_log('Le numéro d\'article doit être un nombre entier.' . PHP_EOL, 3, 'erreurs.txt');
             return;
         }
-        $this->noArticle = $noArticle;
+        $this->_noArticle = $noArticle;
+    }
+
+    public function setCategorie($categorie) {
+        if(!is_string($categorie)){
+            error_log('La catégorie d\'un article doit être une chaîne de caractères.' . PHP_EOL, 3, 'erreurs.txt');
+            return;
+        }
+        $this->_categorie = $categorie;
     }
 
     public function setDescription($description) {
@@ -67,7 +80,7 @@ class Article {
             error_log('La description d\'un article doit être une chaîne de caractères.' . PHP_EOL, 3, 'erreurs.txt');
             return;
         }
-        $this->description = $description;
+        $this->_description = $description;
     }
 
     public function setCheminImage($cheminImage) {
@@ -75,7 +88,7 @@ class Article {
             error_log('Le chemin de l\'image d\'un article doit être une chaîne de caractères.' . PHP_EOL, 3, 'erreurs.txt');
             return;
         }
-        $this->cheminImage = $cheminImage;
+        $this->_cheminImage = $cheminImage;
     }
 
     public function setPrixUnitaire($prixUnitaire) {
@@ -86,7 +99,7 @@ class Article {
             return;
         }
         
-        $this->prixUnitaire = $prixUnitaire;
+        $this->_prixUnitaire = $prixUnitaire;
     }
 
     public function setQuantiteEnStock($quantiteEnStock) {
@@ -96,7 +109,7 @@ class Article {
             error_log('La quantité en stock d\'un article doit être un nombre entier.' . PHP_EOL , 3, 'erreurs.txt');
             return;
         }
-        $this->quantiteEnStock = $quantiteEnStock;
+        $this->_quantiteEnStock = $quantiteEnStock;
     }
 
     public function setQuantiteDansPanier($quantiteDansPanier) {
@@ -107,11 +120,11 @@ class Article {
             return;
         }
         
-        $this->quantiteDansPanier = $quantiteDansPanier;
+        $this->_quantiteDansPanier = $quantiteDansPanier;
     }
     
 
-    /* MÉTHODE GÉNÉRALE */
+    /* MÉTHODES GÉNÉRALES */
 
     /**
      * Assigne les bonnes valeurs aux attributs
@@ -127,8 +140,20 @@ class Article {
     }
 
 
+    /**
+     * Retourne les attributs et les valeurs de l'article
+     * @return array - un tableau associatif (retire les "_" des attributs)
+     */
     public function getTableau(){
-        return get_object_vars($this);
+        return array (
+            "noArticle" => $this->getNoArticle(),
+            "categorie" => $this->getCategorie(),
+            "description" => $this->getDescription(),
+            "cheminImage" => $this->getCheminImage(),
+            "prixUnitaire" => number_format($this->getPrixUnitaire(), 2, ',', ' ') . ' $',
+            "quantiteEnStock" => $this->getQuantiteEnStock(),
+            "quantiteDansPanier" => $this->getQuantiteDansPanier()
+        );
     }
 
 

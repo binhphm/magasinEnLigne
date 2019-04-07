@@ -37,7 +37,7 @@
 
 	</head>
     
-    <body onLoad="listerArticles()">
+    <body onLoad="listerArticles('', ''); getTotalPanier()">
 		
 	<div class="colorlib-loader"></div>
 
@@ -52,22 +52,40 @@
 						</div>
 						<div class="col-sm-5 col-md-3">
 			            <form action="#" class="search-wrap">
-			               <div class="form-group">
-			                  <input type="search" class="form-control search" placeholder="Rechercher">
-			                  <button class="btn btn-primary submit-search text-center" type="submit"><i class="icon-search"></i></button>
-			               </div>
+			            	<div class="form-group">
+			                	<input type="search" id="recherche" class="form-control search" placeholder="Rechercher">
+			                  	<button class="btn btn-primary submit-search text-center" onClick="listerArticles('mot', document.getElementById('recherche').value)">
+								  	<i class="icon-search"></i>
+								</button>
+			               	</div>
 			            </form>
 			         </div>
 		         </div>
 					<div class="row">
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
-                                <li class="active"><a href="index.html">Accueil</a></li>
-                                <li><a href="#">Maquillage</a></li>
-								<li><a href="#">Cheveux</a></li>
-								<li><a href="#">Hommes</a></li>
-								<li><a href="#">Contact</a></li>
-								<li class="cart"><a href="#"><i class="icon-shopping-cart"></i> Panier [<span id="nbArticles"><!-- Nombre dynamique --></span>]</a></li>
+                                <li><a href="#" onClick="listerArticles('', '')">Accueil</a></li>
+                                <li id="cat1" data-value="Maquillage">
+									<a href="#" onClick="listerArticles('categorie', document.getElementById('cat1').dataset.value)">Maquillage</a>
+								</li>
+								<li id="cat2" data-value="Cheveux">
+									<a href="#" onClick="listerArticles('categorie', document.getElementById('cat2').dataset.value)">Cheveux</a>
+								</li>
+								<li id="cat3" data-value="Peau">
+									<a href="#" onClick="listerArticles('categorie', document.getElementById('cat3').dataset.value)">Soins de la peau</a>
+								</li>
+								<li id="cat4" data-value="Hommes">
+									<a href="#" onClick="listerArticles('categorie', document.getElementById('cat4').dataset.value)">Hommes</a>
+								</li>
+								<li>
+									<a href="#">Contact</a>
+								</li>
+								<li class="cart">
+									<a href="#">
+										<i class="icon-shopping-cart"></i> 
+										<span id="nombre-total">PANIER[{nombreTotal}]</span>						
+									</a>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -97,31 +115,8 @@
 			</div>
 		</nav>
 
-		<!-- ### MILIEU DE LA PAGE (affichage conditionnel) ###-->
-		<div id="milieu-page">
-			
-			
-		<!-- Affichage la liste des articles -->
-		<div class="colorlib-product" id="affichage-articles">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-8 offset-sm-2 text-center colorlib-heading">
-						<h2>Produits</h2>
-					</div>
-				</div>
-				<div class="row row-pb-md" id="liste-articles">
-					<!-- Remplissage dynamique -->
-				</div>
-				<div class="row">
-					<div class="col-md-12 text-center">
-						<p><a href="#" class="btn btn-primary btn-lg">Voir tous les produits</a></p>
-					</div>
-				</div>
-			</div>
-		</div>
-	
-		
-		</div>
+		<!-- ### MILIEU DE LA PAGE (dynamique)  ###-->
+		<div id="milieu-page"></div>
 		
 
 		<!-- ### PIED DE PAGE ###-->
@@ -165,11 +160,31 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	</div>
 
 	<!-- ### TEMPLATES ###-->
+
+	<!-- Affichage de ce qui "entoure" la liste des articles -->
+	<template id="affichage-articles">
+		<div class="colorlib-product">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-8 offset-sm-2 text-center colorlib-heading">
+							<h2>Produits</h2>
+						</div>
+					</div>
+					<div class="row row-pb-md" id="liste-articles"><!-- Remplissage dynamique --></div>
+					<div class="row">
+						<div class="col-md-12 text-center">
+							<p><a href="#" onClick="listerArticles('', '')" class="btn btn-primary btn-lg">Voir tous les produits</a></p>
+						</div>
+					</div>
+				</div>
+			</div>
+	</template>
+	
 	
 	<!-- Modèle d'un élément dans la liste des articles -->
 	<template id="modele-liste-articles" type="text/MagasinModele">
-		<div class="col-lg-3 mb-4 text-center" onClick="afficherArticle(document.getElementById('identifiant').value)">
-			<input type="hidden" id="identifiant" value="{noArticle}">
+		<div class="col-lg-3 mb-4 text-center" onClick="afficherArticle(document.getElementById('article{noArticle}').value)">
+			<input type="hidden" id="article{noArticle}" value="{noArticle}">
             <div class="product-entry border">
                 <a href="#" class="prod-img">
                     <img src="{cheminImage}" class="img-fluid" alt="{description}">
@@ -180,6 +195,60 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                 </div>
             </div>
         </div>
+	</template>
+
+	<!-- Modèle pour les détails d'un seul article -->
+	<template id="modele-article" type="text/MagasinModele">
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<p class="bread"><span><a href="#" onClick="listerArticles('', '')">Accueil</a></span> / <span>Détails du produit</span></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="colorlib-product">
+			<div class="container">
+				<div class="row row-pb-lg product-detail-wrap">
+					<div class="col-sm-8">
+						<div class="item">
+							<div class="product-entry border">
+								<a href="#" class="prod-img">
+									<img src="{cheminImage}" class="img-fluid" alt="{description}">
+								</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="product-desc">
+							<h3>{description}</h3>
+							<p class="price">
+								<span>{prixUnitaire}</span> 
+							</p>
+							<div class="input-group mb-4">
+								<span class="input-group-btn">
+									<button type="button" class="quantity-left-minus btn"  data-type="minus" data-field="" onClick="changerQuantite(this)">
+										<i class="icon-minus2"></i>
+									</button>
+								</span>
+								<input type="text" id="quantity" name="quantity" class="form-control input-number" value="1" min="1" max="100">
+								<span class="input-group-btn ml-1">
+									<button type="button" class="quantity-right-plus btn" data-type="plus" data-field="" onClick="changerQuantite(this)">
+										<i class="icon-plus2"></i>
+									</button>
+								</span>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 text-center">
+									<p class="addtocart"><a href="#" class="btn btn-primary btn-addtocart"><i class="icon-shopping-cart"></i>Ajouter au panier</a></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</template>
 
 	<!-- ### SCRIPTS ###-->

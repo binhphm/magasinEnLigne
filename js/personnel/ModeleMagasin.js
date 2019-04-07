@@ -22,4 +22,14 @@ class ModeleMagasin {
 
         document.getElementById(idElement).innerHTML = codeHTML;
     }
+
+}
+
+class TexteMagasin {
+    remplacerNombre(txtJSON, idElement){
+        let objJSON = JSON.parse(txtJSON);
+        let valeur = document.getElementById(idElement).textContent;
+        let resultat = valeur.replace(/\{.*\}/, objJSON); 
+        document.getElementById(idElement).innerHTML = resultat; 
+    }
 }
