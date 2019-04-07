@@ -37,7 +37,7 @@
 
 	</head>
     
-    <body onLoad="afficherArticles()">
+    <body onLoad="listerArticles()">
 		
 	<div class="colorlib-loader"></div>
 
@@ -97,8 +97,12 @@
 			</div>
 		</nav>
 
-		<!-- ### MILIEU DE LA PAGE ###-->
-		<div class="colorlib-product">
+		<!-- ### MILIEU DE LA PAGE (affichage conditionnel) ###-->
+		<div id="milieu-page">
+			
+			
+		<!-- Affichage la liste des articles -->
+		<div class="colorlib-product" id="affichage-articles">
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-8 offset-sm-2 text-center colorlib-heading">
@@ -106,7 +110,7 @@
 					</div>
 				</div>
 				<div class="row row-pb-md" id="liste-articles">
-					<!-- Affichage dynamique -->
+					<!-- Remplissage dynamique -->
 				</div>
 				<div class="row">
 					<div class="col-md-12 text-center">
@@ -115,6 +119,10 @@
 				</div>
 			</div>
 		</div>
+	
+		
+		</div>
+		
 
 		<!-- ### PIED DE PAGE ###-->
 		<footer id="colorlib-footer" role="contentinfo">
@@ -157,10 +165,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	</div>
 
 	<!-- ### TEMPLATES ###-->
-
-	<!-- Modèle de la liste des articles -->
+	
+	<!-- Modèle d'un élément dans la liste des articles -->
 	<template id="modele-liste-articles" type="text/MagasinModele">
-		<div class="col-lg-3 mb-4 text-center" data-value="{noArticle}" onClick="">
+		<div class="col-lg-3 mb-4 text-center" onClick="afficherArticle(document.getElementById('identifiant').value)">
+			<input type="hidden" id="identifiant" value="{noArticle}">
             <div class="product-entry border">
                 <a href="#" class="prod-img">
                     <img src="{cheminImage}" class="img-fluid" alt="{description}">

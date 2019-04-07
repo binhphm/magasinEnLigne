@@ -39,8 +39,8 @@ class GestionBD {
             $this->_bdd = new PDO($nsd, $utilisateur, $mdp, $options);
         } 
         catch (PDOException $e) {
-            //throw new PDOException($e->getMessage(), (int)$e->getCode());
-            //exit;
+            error_log('Message : ' . $e->getMessage() . "\t Code : " . (int)$e->getCode(). "\n" , 3, "erreurs.txt");
+            exit;
         }
 
     }

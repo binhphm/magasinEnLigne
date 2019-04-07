@@ -14,4 +14,8 @@ class RequeteAjax {
         xhttp.open("GET", this.url, true);
         xhttp.send();
     }
+
+    envoyerDonnees(callback) {
+        // À compléter
+    }
 }

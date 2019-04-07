@@ -56,7 +56,7 @@ class Article {
     public function setNoArticle($noArticle) {
         $noArticle = (int) $noArticle;
         if(!is_int($noArticle)){
-            trigger_error('Le numéro d\'article doit être un nombre entier.', E_USER_WARNING);
+            error_log('Le numéro d\'article doit être un nombre entier.' . PHP_EOL, 3, 'erreurs.txt');
             return;
         }
         $this->noArticle = $noArticle;
@@ -64,7 +64,7 @@ class Article {
 
     public function setDescription($description) {
         if(!is_string($description)){
-            trigger_error('La description d\'un article doit être une chaîne de caractères.', E_USER_WARNING);
+            error_log('La description d\'un article doit être une chaîne de caractères.' . PHP_EOL, 3, 'erreurs.txt');
             return;
         }
         $this->description = $description;
@@ -72,7 +72,7 @@ class Article {
 
     public function setCheminImage($cheminImage) {
         if(!preg_match(self::CHEMIN_IMAGE, $cheminImage)){
-            trigger_error('Le chemin de l\'image d\'un article doit être une chaîne de caractères.', E_USER_WARNING);
+            error_log('Le chemin de l\'image d\'un article doit être une chaîne de caractères.' . PHP_EOL, 3, 'erreurs.txt');
             return;
         }
         $this->cheminImage = $cheminImage;
@@ -82,7 +82,7 @@ class Article {
         $prixUnitaire = (double) $prixUnitaire;
         
         if(!is_double($prixUnitaire)){
-            trigger_error('Le prix unitaire d\'un article doit être un nombre décimal.', E_USER_WARNING);
+            error_log('Le prix unitaire d\'un article doit être un nombre décimal.' . PHP_EOL, 3, 'erreurs.txt');
             return;
         }
         
@@ -93,7 +93,7 @@ class Article {
         $quantiteEnStock = (int) $quantiteEnStock;
 
         if(!is_int($quantiteEnStock)){
-            trigger_error('La quantité en stock d\'un article doit être un nombre entier.', E_USER_WARNING);
+            error_log('La quantité en stock d\'un article doit être un nombre entier.' . PHP_EOL , 3, 'erreurs.txt');
             return;
         }
         $this->quantiteEnStock = $quantiteEnStock;
@@ -103,7 +103,7 @@ class Article {
         $quantiteDansPanier = (int) $quantiteDansPanier;
         
         if(!is_int($quantiteDansPanier)){
-            trigger_error('La quantité dans le panier doit être un nombre entier.', E_USER_WARNING);
+            error_log('La quantité dans le panier doit être un nombre entier.' . PHP_EOL , 3, 'erreurs.txt');
             return;
         }
         
