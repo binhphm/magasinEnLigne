@@ -205,10 +205,7 @@ class Panier {
      * @return boolean
      */
     public function estVerrouille(){
-        if ($this->creerPanier() && $_SESSION['panier']['estVerrouille'])
-            return true;
-        else
-            return false;
+        return ($this->creerPanier() && $_SESSION['panier']['estVerouille'] == true);
     }
 
     /**

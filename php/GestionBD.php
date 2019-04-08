@@ -118,7 +118,7 @@ class GestionBD {
        
         $noArticle = (int) $noArticle;
         if(!is_int($noArticle)){
-            trigger_error('Le numéro d\'un article doit être un nombre entier');
+            error_log('Le numéro d\'un article doit être un nombre entier', 3, 'erreurs.txt');
             return;
         }
 
@@ -131,6 +131,44 @@ class GestionBD {
         $article = new Article($donnees);
         array_push($listeArticles, $article->getTableau());
         return $listeArticles;
+    }
+
+    /**
+     * Réserve un article dans l'inventaire
+     * @param {int} $noArticle - l'identifiant de l'article
+     * @param {int} $quantite - la quantité demandée
+     */
+    public function reserverArticle($noArticle, $quantite){
+        $noArticle = (int) $noArticle;
+        $quantite = (int) $quantite;
+        if(!is_int($noArticle) || !is_int($quantite)){
+            error_log('Le numéro ou la quantité d\'un article doit être un nombre entier', 3, 'erreurs.txt');
+            return;
+        }
+        
+        //Incrémenter la quantité dans le panier
+        $requete = $this->_bdd->prepare(
+            'UPDATE article 
+            SET quantiteDansPanier = quantiteDansPanier + :quantite 
+            WHERE noArticle = :noArticle 
+                AND quantiteDansPanier < quantiteEnStock'
+        );
+        $requete->bindValue(':noArticle', $noArticle, PDO::PARAM_INT);
+        $requete->bindValue(':quantite', $quantite, PDO::PARAM_INT);
+        $requete->execute();
+        $requete->closeCursor();
+
+        //Décrémenter la quantité dans l'inventaire
+        $requete = $this->_bdd->prepare(
+            'UPDATE article 
+            SET quantiteEnStock = quantiteEnStock - :quantite 
+            WHERE noArticle = :noArticle 
+                AND quantiteEnStock > quantiteDansPanier'
+        );
+        $requete->bindValue(':noArticle', $noArticle, PDO::PARAM_INT);
+        $requete->bindValue(':quantite', $quantite, PDO::PARAM_INT);
+        $requete->execute();
+        $requete->closeCursor();
     }
 
     
