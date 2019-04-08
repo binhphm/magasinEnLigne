@@ -8844,3 +8844,9 @@ input[type="text"] {
 
 .js .animate-box {
   opacity: 0; }
+
+.cart {
+  font-family: "Rokkitt", Georgia, serif;
+  color: black;
+  font-size: 1.5em;
+}

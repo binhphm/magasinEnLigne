@@ -59,4 +59,13 @@ function getTotalPanier(){
     requete.getJSON(donnees => {textePanier.remplacerNombre(donnees, "nombre-total");});
 }
 
+function afficherPanier(){
+    viderMilieuPage();
+
+    //Afficher le HTML qui "entoure" les éléments du panier
+    let temp = document.getElementById("affichage-panier");
+    let clone = temp.content.cloneNode(true);
+    document.getElementById("milieu-page").appendChild(clone);
+}
+
 

@@ -10,10 +10,10 @@ function chargerClasse($classe) {
 spl_autoload_register('chargerClasse');
 
 
-
 /* Instanciation du gestionnaire de la BD et du panier */
 $gestionBD = new GestionBD('magasin_en_ligne', 'webdev', 'toto99');
 $panier = new Panier();
+
 
 /** APPELER LA BONNE FONCTION EN FONCTION DE LA REQUÊTE */
 if(isset($_GET["q"])){
@@ -37,7 +37,7 @@ if(isset($_GET["q"])){
         if(isset($_GET["r"])){
             if($_GET["r"] == "total"){
                 $total = $panier->getNbArticlesTotal();
-                echo json_encode(22);
+                echo json_encode($total);
             }
 
         }
