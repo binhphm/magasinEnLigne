@@ -32,7 +32,7 @@ function listerArticles(filtre, valeur){
     document.getElementById("milieu-page").appendChild(clone);
     
     //Afficher tous les articles
-    let requete = new RequeteAjax("php/main.php?q=afficher" + 
+    let requete = new RequeteAjax("php/main.php?q=inventaire" + 
                     ((filtre != "" && valeur != "") ? "&" + filtre + "=" + valeur : ""));
     let modeleListeArticles = new ModeleMagasin("modele-liste-articles");
     requete.getJSON(donnees => {modeleListeArticles.appliquerModele(donnees, "liste-articles");});
@@ -45,7 +45,7 @@ function listerArticles(filtre, valeur){
  */
 function afficherArticle(noArticle){
     viderMilieuPage();
-    let requete = new RequeteAjax("php/main.php?q=afficher&noArticle=" + noArticle);
+    let requete = new RequeteAjax("php/main.php?q=inventaire&noArticle=" + noArticle);
     let modeleArticle = new ModeleMagasin("modele-article");
     requete.getJSON(donnees => {modeleArticle.appliquerModele(donnees, "milieu-page");});
 }
@@ -55,26 +55,27 @@ function afficherArticle(noArticle){
  */
 function getTotalPanier(){
     let requete = new RequeteAjax("php/main.php?q=panier&r=total");
-    let textePanier = new TexteMagasin();
-    requete.getJSON(donnees => {textePanier.remplacerNombre(donnees, "nombre-total");});
+    requete.getJSON(donnees => {
+        document.getElementById("nombre-total").innerHTML = 
+            "Panier [" + JSON.parse(donnees) + "]";
+    });
 }
 
-/**
- * Affiche le panier d'achat
- */
-function afficherPanier(){
-    viderMilieuPage();
 
-    //Afficher le HTML qui "entoure" les éléments du panier
-    let temp = document.getElementById("affichage-panier");
-    let clone = temp.content.cloneNode(true);
-    document.getElementById("milieu-page").appendChild(clone);
-}
+/*class TexteMagasin {
+    remplacerNombre(txtJSON, idElement){
+        let objJSON = JSON.parse(txtJSON);
+        let valeur = document.getElementById(idElement).textContent;
+        let resultat = valeur.replace(/\{.*\}/, objJSON); 
+        document.getElementById(idElement).innerHTML = resultat; 
+    }
+}*/
+
 
 /**
  * Ajoute un article au panier d'achat
  */
-function ajouterAuPanier(){
+function ajouterAuPanier(callback) {
     let objJSON = {
         "requete" : "ajouter",
         "noArticle" : document.getElementById("identifiant").value,
@@ -83,11 +84,37 @@ function ajouterAuPanier(){
         "prixUnitaire": document.getElementById("prix").value,
         "quantite" : document.getElementById("quantity").value
     };
+
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, reponse => {
-        console.log(reponse);
+    requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
+    callback();
+}
+
+/**
+ * Affiche le sommaire du panier
+ */
+function afficherSommaire(callback){
+    viderMilieuPage();
+    let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
+    let modelePanier = new ModeleMagasin("modele-panier");
+    requete.getJSON(donnees => {
+        modelePanier.appliquerModele(donnees, "milieu-page");
+    });
+    callback();
+}
+
+/**
+ * Affiche tous les éléments du panier
+ */
+function listerPanier(){
+    let requete = new RequeteAjax("php/main.php?q=panier&r=liste");
+    let modeleListePanier = new ModeleMagasin("modele-liste-panier");
+    requete.getJSON(donnees => {
+        modeleListePanier.appliquerModele(donnees, "liste-panier");
     });
 }
+
+
 
 

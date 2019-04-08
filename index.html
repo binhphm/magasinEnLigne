@@ -87,7 +87,7 @@
 				<div class="container">
 					<div class="row">
 						<div class="col-sm-12 col-md 12 text-center">
-							<a href="#" onClick="afficherPanier()">
+							<a href="#" onClick="afficherSommaire(listerPanier)">
 								<i class="icon-shopping-cart"></i> 
 								<span id="nombre-total">PANIER[{nombreTotal}]</span>						
 							</a>
@@ -249,7 +249,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 									<input type="hidden" id="description" value="{description}">
 									<input type="hidden" id="cheminImage" value="{cheminImage}">
 									<input type="hidden" id="prix" value="{prixUnitaire}">
-									<p class="addtocart"><a href="#" class="btn btn-primary btn-addtocart" onClick="ajouterAuPanier()"><i class="icon-shopping-cart"></i>Ajouter au panier</a></p>
+									<p class="addtocart"><a href="#" class="btn btn-primary btn-addtocart" onClick="ajouterAuPanier(getTotalPanier)"><i class="icon-shopping-cart"></i>Ajouter au panier</a></p>
 								</div>
 							</div>
 						</div>
@@ -260,7 +260,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	</template>
 
 	<!-- Modèle pour le panier d'achat -->
-	<template id="affichage-panier" type="text/MagasinModele">
+	<template id="modele-panier" type="text/MagasinModele">
 		<div class="breadcrumbs">
 			<div class="container">
 				<div class="row">
@@ -328,6 +328,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 										</div>
 									</form>
 								</div>
+								<!-- Sommaire -->
 								<div class="col-sm-4 text-center">
 									<div class="total">
 										<div class="sub">
@@ -335,7 +336,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 											<p><span>TPS:</span> <span>{tps}</span></p>
 											<p><span>TVQ:</span> <span>{tvq}</span></p>
 											<p><span>Livraison:</span> <span>{fraisLivraison}</span></p>
-											<p><span>Discount:</span> <span>{rabais}</span></p>
+											<p><span>Rabais:</span> <span>{rabais}</span></p>
 										</div>
 										<div class="grand-total">
 											<p><span><strong>Total:</strong></span> <span>{total}</span></p>
@@ -356,12 +357,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	</template>
 
 	<!-- Modèle pour un seul article dans le panier -->
-	<template id="modele-panier" type="text/MagasinModele">
+	<template id="modele-liste-panier" type="text/MagasinModele">
 		<div class="product-cart d-flex">
 			<div class="one-forth">
 				<div class="product-img" style="background-image: url({cheminImage});"></div>
 				<div class="display-tc">
-					<h3>Description</h3>
+					<h3>{description}</h3>
 				</div>
 			</div>
 			<div class="one-eight text-center">
@@ -371,12 +372,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			</div>
 			<div class="one-eight text-center">
 				<div class="display-tc">
-					<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="1" min="1" max="100">
+					<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="{quantiteDansPanier}" min="1" max="100">
 				</div>
 			</div>
 			<div class="one-eight text-center">
 				<div class="display-tc">
-					<span class="price">{total}</span>
+					<span class="price">{prixTotal}</span>
 				</div>
 			</div>
 			<div class="one-eight text-center">

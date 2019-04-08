@@ -19,7 +19,7 @@ $panier = new Panier();
 
 /* REQUÊTES GET */
 if(isset($_GET["q"])){
-    if($_GET["q"] == "afficher"){
+    if($_GET["q"] == "inventaire"){
         if(isset($_GET["noArticle"])){//afficher un seul article
             $noArticle = (int) $_GET["noArticle"];
             echo json_encode($gestionBD->getArticle($noArticle));
@@ -38,8 +38,13 @@ if(isset($_GET["q"])){
     if($_GET["q"] == "panier"){
         if(isset($_GET["r"])){
             if($_GET["r"] == "total"){//compter le nombre d'articles dans le panier
-                $total = $panier->getNbArticlesTotal();
-                echo json_encode($total);
+                echo json_encode($panier->getNbArticlesTotal());
+            }
+            elseif($_GET["r"] == "sommaire"){
+                echo json_encode($panier->getSommaire());
+            }
+            elseif($_GET["r"] == "liste"){
+                echo json_encode($panier->getPanier());
             }
 
         }
@@ -51,13 +56,13 @@ elseif(isset($_POST["x"])){
     $obj = json_decode($_POST["x"], false);
     if($obj->requete == "ajouter"){//ajouter au panier
         $noArticle = $obj->noArticle;
-        $descArticle = $obj->description;
+        $description = $obj->description;
         $cheminImage = $obj->cheminImage;
-        $qteArticle = $obj->quantite;
-        $prixArticle = $obj->prixUnitaire;
-        $panier->ajouterArticle($descArticle, $cheminImage, $qteArticle, $prixArticle);
+        $quantite = $obj->quantite;
+        $prixUnitaire = $obj->prixUnitaire;
+        $panier->ajouterArticle($description, $cheminImage, $quantite, $prixUnitaire);
         // réserver l'article dans l'inventaire
-        $gestionBD->reserverArticle($noArticle, $qteArticle);
+        $gestionBD->reserverArticle($noArticle, $quantite);
     }
 }
 
