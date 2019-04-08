@@ -22,6 +22,7 @@ class Panier {
         if (!isset($_SESSION['panier'])){
             $_SESSION['panier']=array();
             $_SESSION['panier']['descArticle'] = array();
+            $_SESSION['panier']['cheminImage'] = array();
             $_SESSION['panier']['qteArticle'] = array();
             $_SESSION['panier']['prixArticle'] = array();
             $_SESSION['panier']['estVerouille'] = false;
@@ -30,14 +31,48 @@ class Panier {
     }
 
     /**
-     * Retourne le panier
-     * @return array
+     * Retourne le panier (réarrange les variables de session)
+     * @return array - un tableau associatif pour chaque élément du panier
      */
     public function getPanier() {
-        if ($this->creerPanier()) {
-            return $_SESSION['panier'];
+        $listePanier = array();
+        if ($this->creerPanier()) {       
+            for($i = 0; $i < count($_SESSION['panier']['descArticle']); $i++){
+                // Convertir le nombre décimal en format monétaire
+                $prixTotal = $_SESSION['panier']['qteArticle'][$i] * $_SESSION['panier']['prixArticle'][$i];
+                $prixTotal = number_format($prixTotal, 2, ',', ' ') . ' $';
+                $ligne = array(
+                    "description" => $_SESSION['panier']['descArticle'][$i],
+                    "cheminImage" => $_SESSION['panier']['cheminImage'][$i],
+                    "quantite" => $_SESSION['panier']['qteArticle'][$i],
+                    "prixUnitaire" => $_SESSION['panier']['prixArticle'][$i],
+                    "prixTotal" => $prixTotal
+                );
+                array_push($listePanier, $ligne);
+            }
+            
         }
+        return $listePanier;
     }
+
+     /**
+     * Retourne le nombre total d'articles
+     * @return int
+     */
+    public function getNbArticlesTotal() {
+        $compteur = 0;
+        if ($this->creerPanier()){
+            for($i = 0; $i < count($_SESSION['panier']['qteArticle']); $i++){
+                $compteur += $_SESSION['panier']['qteArticle'][$i];
+            }
+        }
+        return $compteur;
+    }
+
+
+
+
+
 
     /**
      * Retourne les descriptions
@@ -75,17 +110,23 @@ class Panier {
      * @param {int} $qteArticle - la quantité par article
      * @param {double} $prixArticle - le prix à l'unité
      */
-    public function ajouterArticle($descArticle, $qteArticle, $prixArticle){
+    public function ajouterArticle($descArticle, $cheminImage, $qteArticle, $prixArticle){
         if ($this->creerPanier() && !$this->estVerrouille()) {
      
             //Si le produit existe déjà on ajoute seulement la quantité
             $indexArticle = array_search($descArticle, $_SESSION['panier']['descArticle']);
+
+            //Convertir le prix en numéro décimal
+            $prixArticle = substr($prixArticle, 0, -2);
+            $prixArticle = preg_replace('/,/', '.', $prixArticle);
+            $prixArticle = number_format($prixArticle, 2);
     
             if ($indexArticle !== false) {
                 $_SESSION['panier']['qteArticle'][$indexArticle] += $qteArticle ;
             }
             else {
                 array_push( $_SESSION['panier']['descArticle'],$descArticle);
+                array_push( $_SESSION['panier']['cheminImage'],$cheminImage);
                 array_push( $_SESSION['panier']['qteArticle'],$qteArticle);
                 array_push( $_SESSION['panier']['prixArticle'],$prixArticle);
             }
@@ -125,6 +166,7 @@ class Panier {
         if ($this->creerPanier() && !$this->estVerrouille()) {
             $tmp=array();
             $tmp['descArticle'] = array();
+            $tmp['cheminImage'] = array();
             $tmp['qteArticle'] = array();
             $tmp['prixArticle'] = array();
             $tmp['verrou'] = $_SESSION['panier']['verrou'];
@@ -132,6 +174,7 @@ class Panier {
             for($i = 0; $i < count($_SESSION['panier']['descArticle']); $i++) {
                 if ($_SESSION['panier']['descArticle'][$i] !==$descArticle) {
                     array_push($tmp['descArticle'],$_SESSION['panier']['descArticle'][$i]);
+                    array_push($tmp['cheminImage'],$_SESSION['panier']['cheminImage'][$i]);
                     array_push( $tmp['qteArticle'],$_SESSION['panier']['qteArticle'][$i]);
                     array_push( $tmp['prixArticle'],$_SESSION['panier']['prixArticle'][$i]);
                 }
@@ -174,17 +217,7 @@ class Panier {
         return $resultat;
     }
 
-     /**
-     * Retourne le nombre total d'articles
-     * @return int
-     */
-    public function getNbArticlesTotal() {
-        if ($this->creerPanier())
-            return count($_SESSION['panier']['descArticle']);
-        else
-            return 0;
-
-    }
+    
 
     /**
      * Retourne le nombre d'un article choisi

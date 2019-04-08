@@ -79,13 +79,15 @@ function ajouterAuPanier(){
         "requete" : "ajouter",
         "noArticle" : document.getElementById("identifiant").value,
         "description": document.getElementById("description").value, 
+        "cheminImage" : document.getElementById("cheminImage").value,
         "prixUnitaire": document.getElementById("prix").value,
         "quantite" : document.getElementById("quantity").value
     };
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, reponse => console.log(reponse));
-    getTotalPanier();
+    requete.envoyerDonnees(txtJSON, reponse => {
+        console.log(reponse);
+    });
 }
 
 

@@ -15,7 +15,6 @@ spl_autoload_register('chargerClasse');
 $gestionBD = new GestionBD('magasin_en_ligne', 'webdev', 'toto99');
 $panier = new Panier();
 
-
 /** APPELER LA BONNE FONCTION EN FONCTION DE LA REQUÊTE */
 
 /* REQUÊTES GET */
@@ -53,9 +52,10 @@ elseif(isset($_POST["x"])){
     if($obj->requete == "ajouter"){//ajouter au panier
         $noArticle = $obj->noArticle;
         $descArticle = $obj->description;
+        $cheminImage = $obj->cheminImage;
         $qteArticle = $obj->quantite;
         $prixArticle = $obj->prixUnitaire;
-        $panier->ajouterArticle($descArticle, $qteArticle, $prixArticle);
+        $panier->ajouterArticle($descArticle, $cheminImage, $qteArticle, $prixArticle);
         // réserver l'article dans l'inventaire
         $gestionBD->reserverArticle($noArticle, $qteArticle);
     }

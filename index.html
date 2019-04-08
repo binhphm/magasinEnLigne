@@ -247,6 +247,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								<div class="col-sm-12 text-center">
 									<input type="hidden" id="identifiant" value="{noArticle}">
 									<input type="hidden" id="description" value="{description}">
+									<input type="hidden" id="cheminImage" value="{cheminImage}">
 									<input type="hidden" id="prix" value="{prixUnitaire}">
 									<p class="addtocart"><a href="#" class="btn btn-primary btn-addtocart" onClick="ajouterAuPanier()"><i class="icon-shopping-cart"></i>Ajouter au panier</a></p>
 								</div>
@@ -358,7 +359,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<template id="modele-panier" type="text/MagasinModele">
 		<div class="product-cart d-flex">
 			<div class="one-forth">
-				<div class="product-img" style="background-image: url(images/item-6.jpg);"></div>
+				<div class="product-img" style="background-image: url({cheminImage});"></div>
 				<div class="display-tc">
 					<h3>Description</h3>
 				</div>
