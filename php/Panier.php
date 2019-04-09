@@ -25,6 +25,7 @@ class Panier {
     public function creerPanier(){
         if (!isset($_SESSION['panier'])){
             $_SESSION['panier']=array();
+            $_SESSION['panier']['noArticle'] = array();
             $_SESSION['panier']['description'] = array();
             $_SESSION['panier']['cheminImage'] = array();
             $_SESSION['panier']['quantiteDansPanier'] = array();
@@ -46,15 +47,15 @@ class Panier {
                 $prixTotal = $_SESSION['panier']['quantiteDansPanier'][$i] * $_SESSION['panier']['prixUnitaire'][$i];
                 $prixTotal = number_format($prixTotal, 2, ',', ' ') . ' $';
                 $ligne = array(
+                    "noArticle" => (int) $_SESSION['panier']['noArticle'][$i],
                     "description" => $_SESSION['panier']['description'][$i],
                     "cheminImage" => $_SESSION['panier']['cheminImage'][$i],
-                    "quantiteDansPanier" => $_SESSION['panier']['quantiteDansPanier'][$i],
+                    "quantiteDansPanier" => (int) $_SESSION['panier']['quantiteDansPanier'][$i],
                     "prixUnitaire" => number_format($_SESSION['panier']['prixUnitaire'][$i], 2, ',', '') . ' $',
                     "prixTotal" => $prixTotal
                 );
                 array_push($listePanier, $ligne);
-            }
-            
+            }   
         }
         return $listePanier;
     }
@@ -116,7 +117,7 @@ class Panier {
      * @param {int} $quantiteDansPanier - la quantité par article
      * @param {double} $prixUnitaire - le prix à l'unité
      */
-    public function ajouterArticle($description, $cheminImage, $quantite, $prixUnitaire){
+    public function ajouterArticle($noArticle, $description, $cheminImage, $quantite, $prixUnitaire){
         if ($this->creerPanier() && !$this->estVerrouille()) {
      
             //Si le produit existe déjà on ajoute seulement la quantité
@@ -131,6 +132,7 @@ class Panier {
                 $_SESSION['panier']['quantiteDansPanier'][$indexArticle] += $quantite ;
             }
             else {
+                array_push( $_SESSION['panier']['noArticle'],$noArticle);
                 array_push( $_SESSION['panier']['description'],$description);
                 array_push( $_SESSION['panier']['cheminImage'],$cheminImage);
                 array_push( $_SESSION['panier']['quantiteDansPanier'],$quantite);
@@ -143,18 +145,42 @@ class Panier {
     }
 
 
+    /**
+     * Supprime un article dans le tableau de session
+     * @param {string} $description - la description de l'article
+     */
+    public function supprimerArticle($description) {
+        if ($this->creerPanier() && !$this->estVerrouille()) {
+            $tmp=array();
+            $tmp['noArticle'] = array();
+            $tmp['description'] = array();
+            $tmp['cheminImage'] = array();
+            $tmp['quantiteDansPanier'] = array();
+            $tmp['prixUnitaire'] = array();
+            $tmp['estVerouille'] = $_SESSION['panier']['estVerouille'];
+     
+            for($i = 0; $i < count($_SESSION['panier']['description']); $i++) {
+                if ($_SESSION['panier']['description'][$i] !==$description) {
+                    array_push($tmp['noArticle'],$_SESSION['panier']['noArticle'][$i]);
+                    array_push($tmp['description'],$_SESSION['panier']['description'][$i]);
+                    array_push($tmp['cheminImage'],$_SESSION['panier']['cheminImage'][$i]);
+                    array_push( $tmp['quantiteDansPanier'],$_SESSION['panier']['quantiteDansPanier'][$i]);
+                    array_push( $tmp['prixUnitaire'],$_SESSION['panier']['prixUnitaire'][$i]);
+                }
+     
+            }
+            $_SESSION['panier'] = $tmp;
+            unset($tmp);
+        }
+        else
+            echo "Un problème est survenu, contactez l'administrateur du site.";
+    }
 
-
-
-
-
-   
 
     
-   
-
-   
-
+    
+    
+    
     /**
      * Modifie un article dans le tableau de session
      * @param {string} $description - la description de l'article
@@ -177,34 +203,7 @@ class Panier {
             echo "Un problème est survenu, contactez l'administrateur du site.";
     }
     
-    /**
-     * Supprime un article dans le tableau de session
-     * @param {string} $description - la description de l'article
-     */
-    public function supprimerArticle($description) {
-        if ($this->creerPanier() && !$this->estVerrouille()) {
-            $tmp=array();
-            $tmp['description'] = array();
-            $tmp['cheminImage'] = array();
-            $tmp['quantiteDansPanier'] = array();
-            $tmp['prixUnitaire'] = array();
-            $tmp['verrou'] = $_SESSION['panier']['verrou'];
-     
-            for($i = 0; $i < count($_SESSION['panier']['description']); $i++) {
-                if ($_SESSION['panier']['description'][$i] !==$description) {
-                    array_push($tmp['description'],$_SESSION['panier']['description'][$i]);
-                    array_push($tmp['cheminImage'],$_SESSION['panier']['cheminImage'][$i]);
-                    array_push( $tmp['quantiteDansPanier'],$_SESSION['panier']['quantiteDansPanier'][$i]);
-                    array_push( $tmp['prixUnitaire'],$_SESSION['panier']['prixUnitaire'][$i]);
-                }
-     
-            }
-            $_SESSION['panier'] = $tmp;
-            unset($tmp);
-        }
-        else
-            echo "Un problème est survenu, contactez l'administrateur du site.";
-    }
+    
     
    
     

@@ -89,7 +89,7 @@
 						<div class="col-sm-12 col-md 12 text-center">
 							<a href="#" onClick="afficherSommaire(listerPanier)">
 								<i class="icon-shopping-cart"></i> 
-								<span id="nombre-total">PANIER[{nombreTotal}]</span>						
+								<span id="nombre-total">PANIER[0]</span>						
 							</a>
 						</div>
 					</div>
@@ -330,6 +330,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								</div>
 								<!-- Sommaire -->
 								<div class="col-sm-4 text-center">
+									<div class="row form-group">
+										<div class="col-md-12 text-center">
+											<p><a href="#" class="btn btn-primary">Mettre à jour</a></p>
+										</div>
+									</div>
 									<div class="total">
 										<div class="sub">
 											<p><span>Sous-total:</span> <span>{sousTotal}</span></p>
@@ -372,6 +377,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			</div>
 			<div class="one-eight text-center">
 				<div class="display-tc">
+					<input type="hidden" id="identifiant" value="{noArticle}">
+					<input type="hidden" id="description" value="{description}">
 					<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="{quantiteDansPanier}" min="1" max="100">
 				</div>
 			</div>
@@ -382,7 +389,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			</div>
 			<div class="one-eight text-center">
 				<div class="display-tc">
-					<a href="#" class="closed"></a>
+					<a href="#" class="closed" onClick="supprimerDuPanier(getTotalPanier)"></a>
 				</div>
 			</div>
 		</div>

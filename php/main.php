@@ -12,7 +12,7 @@ spl_autoload_register('chargerClasse');
 
 
 /* Instanciation du gestionnaire de la BD et du panier */
-$gestionBD = new GestionBD('magasin_en_ligne', 'webdev', 'toto99');
+$gestionArticles = new GestionArticles('magasin_en_ligne', 'webdev', 'toto99');
 $panier = new Panier();
 
 /** APPELER LA BONNE FONCTION EN FONCTION DE LA REQUÊTE */
@@ -22,31 +22,36 @@ if(isset($_GET["q"])){
     if($_GET["q"] == "inventaire"){
         if(isset($_GET["noArticle"])){//afficher un seul article
             $noArticle = (int) $_GET["noArticle"];
-            echo json_encode($gestionBD->getArticle($noArticle));
+            echo json_encode($gestionArticles->getArticle($noArticle));
         }
         elseif(isset($_GET["categorie"])){//lister par catégorie
-            echo json_encode($gestionBD->listerParCategorie($_GET["categorie"]));
+            echo json_encode($gestionArticles->listerParCategorie($_GET["categorie"]));
         }
         elseif(isset($_GET["mot"])){//lister par mot
-            echo json_encode($gestionBD->listerParMot($_GET["mot"]));
+            echo json_encode($gestionArticles->listerParMot($_GET["mot"]));
         }
         else {//lister tous les articles
-            echo json_encode($gestionBD->getListeArticles());
+            echo json_encode($gestionArticles->getListeArticles());
         }
         
     }
     if($_GET["q"] == "panier"){
         if(isset($_GET["r"])){
-            if($_GET["r"] == "total"){//compter le nombre d'articles dans le panier
-                echo json_encode($panier->getNbArticlesTotal());
+            switch($_GET["r"]) {
+                case "total": //compter le nombre d'articles dans le panier
+                    echo json_encode($panier->getNbArticlesTotal());
+                    break;
+                case "sommaire": //afficher le sommaire du panier
+                    echo json_encode($panier->getSommaire());
+                    break;
+                case "liste": //afficher chaque article du panier
+                    echo json_encode($panier->getPanier());
+                    break;
+                case "supprimer"://TEMPORAIRE : supprimer du panier
+                    $panier->supprimerPanier();
+                    $gestionArticles->detruirePanier();
+                    break;
             }
-            elseif($_GET["r"] == "sommaire"){
-                echo json_encode($panier->getSommaire());
-            }
-            elseif($_GET["r"] == "liste"){
-                echo json_encode($panier->getPanier());
-            }
-
         }
     }
 }
@@ -54,18 +59,25 @@ if(isset($_GET["q"])){
 /* REQUÊTES POST */
 elseif(isset($_POST["x"])){
     $obj = json_decode($_POST["x"], false);
-    if($obj->requete == "ajouter"){//ajouter au panier
-        $noArticle = $obj->noArticle;
-        $description = $obj->description;
-        $cheminImage = $obj->cheminImage;
-        $quantite = $obj->quantite;
-        $prixUnitaire = $obj->prixUnitaire;
-        $panier->ajouterArticle($description, $cheminImage, $quantite, $prixUnitaire);
-        // réserver l'article dans l'inventaire
-        $gestionBD->reserverArticle($noArticle, $quantite);
+    switch($obj->requete) {
+        case "ajouter" :
+            $noArticle = $obj->noArticle;
+            $description = $obj->description;
+            $cheminImage = $obj->cheminImage;
+            $quantite = $obj->quantite;
+            $prixUnitaire = $obj->prixUnitaire;
+            $panier->ajouterArticle($noArticle, $description, $cheminImage, $quantite, $prixUnitaire);
+            $gestionArticles->reserverArticle($noArticle, $quantite);
+            break;
+        case "supprimer" :
+            $noArticle = $obj->noArticle;
+            $description = $obj->description;
+            $panier->supprimerArticle($description);
+            $gestionArticles->supprimerDuPanier($noArticle);
+            break;
     }
+   
 }
-
 
 ?>
 

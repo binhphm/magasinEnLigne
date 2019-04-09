@@ -62,34 +62,6 @@ function getTotalPanier(){
 }
 
 
-/*class TexteMagasin {
-    remplacerNombre(txtJSON, idElement){
-        let objJSON = JSON.parse(txtJSON);
-        let valeur = document.getElementById(idElement).textContent;
-        let resultat = valeur.replace(/\{.*\}/, objJSON); 
-        document.getElementById(idElement).innerHTML = resultat; 
-    }
-}*/
-
-
-/**
- * Ajoute un article au panier d'achat
- */
-function ajouterAuPanier(callback) {
-    let objJSON = {
-        "requete" : "ajouter",
-        "noArticle" : document.getElementById("identifiant").value,
-        "description": document.getElementById("description").value, 
-        "cheminImage" : document.getElementById("cheminImage").value,
-        "prixUnitaire": document.getElementById("prix").value,
-        "quantite" : document.getElementById("quantity").value
-    };
-
-    let txtJSON = JSON.stringify(objJSON);
-    let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
-    callback();
-}
 
 /**
  * Affiche le sommaire du panier
@@ -113,6 +85,43 @@ function listerPanier(){
     requete.getJSON(donnees => {
         modeleListePanier.appliquerModele(donnees, "liste-panier");
     });
+}
+
+/**
+ * Ajoute un article au panier d'achat
+ */
+function ajouterAuPanier(callback) {
+    let objJSON = {
+        "requete" : "ajouter",
+        "noArticle" : document.getElementById("identifiant").value,
+        "description": document.getElementById("description").value, 
+        "cheminImage" : document.getElementById("cheminImage").value,
+        "prixUnitaire": document.getElementById("prix").value,
+        "quantite" : document.getElementById("quantity").value
+    };
+
+    let txtJSON = JSON.stringify(objJSON);
+    let requete = new RequeteAjax("php/main.php");
+    requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
+    callback();
+}
+
+
+/**
+ * Supprime un article du panier d'achat
+ */
+function supprimerDuPanier(callback){
+    let objJSON = {
+        "requete" : "supprimer",
+        "noArticle" : document.getElementById("identifiant").value,
+        "description" : document.getElementById("description").value
+    };
+
+    let txtJSON = JSON.stringify(objJSON);
+    let requete = new RequeteAjax("php/main.php");
+    requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
+    callback();
+    afficherSommaire(listerPanier);
 }
 
 

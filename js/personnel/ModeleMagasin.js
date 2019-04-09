@@ -19,7 +19,7 @@ class ModeleMagasin {
             }
             codeHTML += modeleTemp;
         }
-
+        
         document.getElementById(idElement).innerHTML = codeHTML;
     }
 
