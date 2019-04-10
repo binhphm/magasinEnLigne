@@ -206,6 +206,26 @@ class GestionArticles extends GestionBD {
     }
 
     /**
+     * Calcule la quantité en stock d'un article
+     * @param $noArticle - l'identifiant de l'article
+     * @return int
+     */
+    private function getQteStock($noArticle){
+        $noArticle = (int) $noArticle;
+        if(!is_int($noArticle)){
+            error_log('Le numéro d\'un article doit être un nombre entier', 3, 'erreurs.txt');
+            return;
+        }
+        $requete = $this->_bdd->prepare('SELECT quantiteEnStock FROM article WHERE noArticle = ?');
+        $requete->bindValue(1, $noArticle, PDO::PARAM_INT);
+        $requete->execute();
+        $donnees = $requete->fetch(PDO::FETCH_NUM);
+        $requete->closeCursor();
+        
+        return (int) $donnees[0];
+    }
+
+    /**
      * Calcule la quantité dans le panier d'un article
      * @param $noArticle - l'identifiant de l'article
      * @return int
@@ -233,17 +253,18 @@ class GestionArticles extends GestionBD {
      */
     private function modifierQteStock($tabNoArticle, $tabQuantite) {
         for($i = 0; $i < count($tabNoArticle); $i++) {
-            //Calculer la différence entre la quantité voulue et la quantité dans le panier
-            $difference = (int) $tabQuantite[$i] - $this->getQteDansPanier((int)$tabNoArticle[$i]);
+            //Calculer la somme des quantités (stock + panier)
+            $somme = $this->getQteStock((int) $tabNoArticle[$i]) + $this->getQteDansPanier((int)$tabNoArticle[$i]);
         
             $requete = $this->_bdd->prepare(
                 'UPDATE article
-                SET quantiteEnStock = quantiteEnStock + CAST(:diff AS SIGNED)
+                SET quantiteEnStock = :somme - :quantite 
                 WHERE noArticle = :noArticle
                 AND quantiteDansPanier <= quantiteEnStock'
             );
             
-            $requete->bindValue(':diff', $difference, PDO::PARAM_INT);
+            $requete->bindValue(':somme', (int) $somme, PDO::PARAM_INT);
+            $requete->bindValue(':quantite', (int) $tabQuantite[$i], PDO::PARAM_INT);
             $requete->bindValue(':noArticle', (int) $tabNoArticle[$i], PDO::PARAM_INT);
             $requete->execute();
             $requete->closeCursor();
@@ -259,17 +280,14 @@ class GestionArticles extends GestionBD {
     private function modifierQtePanier($tabNoArticle, $tabQuantite) {
         
         for($i = 0; $i < count($tabNoArticle); $i++) {
-            //Calculer la différence entre la quantité voulue et la quantité dans le panier
-            $difference = (int) $tabQuantite[$i] - $this->getQteDansPanier((int)$tabNoArticle[$i]);
-        
             $requete = $this->_bdd->prepare(
                 'UPDATE article
-                SET quantiteDansPanier = quantiteDansPanier - CAST(:diff AS SIGNED)
+                SET quantiteDansPanier = :quantite
                 WHERE noArticle = :noArticle
                 AND quantiteDansPanier <= quantiteEnStock'
             );
         
-            $requete->bindValue(':diff', $difference, PDO::PARAM_INT);
+            $requete->bindValue(':quantite', (int) $tabQuantite[$i], PDO::PARAM_INT);
             $requete->bindValue(':noArticle', (int) $tabNoArticle[$i], PDO::PARAM_INT);
             $requete->execute();
             $requete->closeCursor();
