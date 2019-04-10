@@ -47,7 +47,7 @@ if(isset($_GET["q"])){
                 case "liste": //afficher chaque article du panier
                     echo json_encode($panier->getPanier());
                     break;
-                case "supprimer"://TEMPORAIRE : supprimer du panier
+                case "supprimer"://POUR TESTS : supprimer du panier
                     $panier->supprimerPanier();
                     $gestionArticles->detruirePanier();
                     break;
@@ -61,20 +61,26 @@ elseif(isset($_POST["x"])){
     $obj = json_decode($_POST["x"], false);
     switch($obj->requete) {
         case "ajouter" :
-            $noArticle = $obj->noArticle;
+            $noArticle = (int) $obj->noArticle;
             $description = $obj->description;
             $cheminImage = $obj->cheminImage;
-            $quantite = $obj->quantite;
+            $quantite = (int) $obj->quantite;
             $prixUnitaire = $obj->prixUnitaire;
             $panier->ajouterArticle($noArticle, $description, $cheminImage, $quantite, $prixUnitaire);
             $gestionArticles->reserverArticle($noArticle, $quantite);
             break;
         case "supprimer" :
-            $noArticle = $obj->noArticle;
-            $description = $obj->description;
-            $panier->supprimerArticle($description);
+            $noArticle = (int) $obj->noArticle;
+            $panier->supprimerArticle($noArticle);
             $gestionArticles->supprimerDuPanier($noArticle);
             break;
+        case "modifier" :
+            $tabNoArticle = json_decode($obj->tabNoArticle);
+            $tabQuantite = json_decode($obj->tabQuantite);
+            $panier->modifierQteArticles($tabNoArticle, $tabQuantite);
+            $gestionArticles->modifierPanier($tabNoArticle, $tabQuantite);
+            break;
+
     }
    
 }

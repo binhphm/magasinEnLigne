@@ -37,7 +37,7 @@
 
 	</head>
     
-    <body onLoad="listerArticles('', ''); getTotalPanier()">
+    <body onLoad="afficherInventaire(listerArticles, '', ''); getTotalPanier()">
 		
 	<div class="colorlib-loader"></div>
 
@@ -54,7 +54,7 @@
 			            <form action="#" class="search-wrap">
 			            	<div class="form-group">
 			                	<input type="search" id="recherche" class="form-control search" placeholder="Rechercher">
-			                  	<button class="btn btn-primary submit-search text-center" onClick="listerArticles('mot', document.getElementById('recherche').value)">
+			                  	<button class="btn btn-primary submit-search text-center" onClick="afficherInventaire(listerArticles, 'mot', document.getElementById('recherche').value)">
 								  	<i class="icon-search"></i>
 								</button>
 			               	</div>
@@ -64,18 +64,18 @@
 					<div class="row">
 						<div class="col-sm-12 text-left menu-1">
 							<ul>
-                                <li><a href="#" onClick="listerArticles('', '')">Accueil</a></li>
+                                <li><a href="#" onClick="afficherInventaire(listerArticles,'', '')">Accueil</a></li>
                                 <li id="cat1" data-value="Maquillage">
-									<a href="#" onClick="listerArticles('categorie', document.getElementById('cat1').dataset.value)">Maquillage</a>
+									<a href="#" onClick="afficherInventaire(listerArticles, 'categorie', document.getElementById('cat1').dataset.value)">Maquillage</a>
 								</li>
 								<li id="cat2" data-value="Cheveux">
-									<a href="#" onClick="listerArticles('categorie', document.getElementById('cat2').dataset.value)">Cheveux</a>
+									<a href="#" onClick="afficherInventaire(listerArticles, 'categorie', document.getElementById('cat2').dataset.value)">Cheveux</a>
 								</li>
 								<li id="cat3" data-value="Peau">
-									<a href="#" onClick="listerArticles('categorie', document.getElementById('cat3').dataset.value)">Soins de la peau</a>
+									<a href="#" onClick="afficherInventaire(listerArticles, 'categorie', document.getElementById('cat3').dataset.value)">Soins de la peau</a>
 								</li>
 								<li id="cat4" data-value="Hommes">
-									<a href="#" onClick="listerArticles('categorie', document.getElementById('cat4').dataset.value)">Hommes</a>
+									<a href="#" onClick="afficherInventaire(listerArticles, 'categorie', document.getElementById('cat4').dataset.value)">Hommes</a>
 								</li>
 							</ul>
 						</div>
@@ -177,7 +177,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					<div class="row row-pb-md" id="liste-articles"><!-- Remplissage dynamique --></div>
 					<div class="row">
 						<div class="col-md-12 text-center">
-							<p><a href="#" onClick="listerArticles('', '')" class="btn btn-primary btn-lg">Voir tous les produits</a></p>
+							<p><a href="#" onClick="afficherInventaire(listerArticles, '', '')" class="btn btn-primary btn-lg">Voir tous les produits</a></p>
 						</div>
 					</div>
 				</div>
@@ -207,7 +207,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<p class="bread"><span><a href="#" onClick="listerArticles('', '')">Accueil</a></span> / <span>Détails du produit</span></p>
+						<p class="bread"><span><a href="#" onClick="afficherInventaire(listerArticles, '', '')">Accueil</a></span> / <span>Détails du produit</span></p>
 					</div>
 				</div>
 			</div>
@@ -265,7 +265,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			<div class="container">
 				<div class="row">
 					<div class="col">
-						<p class="bread"><span><a href="#" onClick="listerArticles()">Accueil</a></span> / <span>Panier d'achat</span></p>
+						<p class="bread"><span><a href="#" onClick="afficherInventaire(listerArticles, '', '')">Accueil</a></span> / <span>Panier d'achat</span></p>
 					</div>
 				</div>
 			</div>
@@ -323,7 +323,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 												<input type="text" name="quantity" class="form-control input-number" placeholder="Votre code promotionnel...">
 											</div>
 											<div class="col-sm-3">
-												<input type="submit" value="Apply Coupon" class="btn btn-primary">
+												<input type="submit" value="Appliquer le coupon" class="btn btn-primary">
 											</div>
 										</div>
 									</form>
@@ -332,14 +332,13 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								<div class="col-sm-4 text-center">
 									<div class="row form-group">
 										<div class="col-md-12 text-center">
-											<p><a href="#" class="btn btn-primary">Mettre à jour</a></p>
+											<p><a href="#" class="btn btn-primary" onClick="modifierPanier(getTotalPanier,afficherSommaire,listerPanier)">Mettre à jour</a></p>
 										</div>
 									</div>
 									<div class="total">
 										<div class="sub">
 											<p><span>Sous-total:</span> <span>{sousTotal}</span></p>
-											<p><span>TPS:</span> <span>{tps}</span></p>
-											<p><span>TVQ:</span> <span>{tvq}</span></p>
+											<p><span>Taxes:</span> <span>{taxes}</span></p>
 											<p><span>Livraison:</span> <span>{fraisLivraison}</span></p>
 											<p><span>Rabais:</span> <span>{rabais}</span></p>
 										</div>
@@ -377,9 +376,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			</div>
 			<div class="one-eight text-center">
 				<div class="display-tc">
-					<input type="hidden" id="identifiant" value="{noArticle}">
-					<input type="hidden" id="description" value="{description}">
-					<input type="text" id="quantity" name="quantity" class="form-control input-number text-center" value="{quantiteDansPanier}" min="1" max="100">
+					<input type="text" id="quantity" name="quantity" title="appuyez sur Enter pour modifier la quantité" class="form-control input-number text-center quantite" value="{quantiteDansPanier}" min="1" max="100">
 				</div>
 			</div>
 			<div class="one-eight text-center">
@@ -389,7 +386,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			</div>
 			<div class="one-eight text-center">
 				<div class="display-tc">
-					<a href="#" class="closed" onClick="supprimerDuPanier(getTotalPanier)"></a>
+					<a href="#" class="closed" id="article{noArticle}" data-value="{noArticle}" onClick="supprimerDuPanier(getTotalPanier,afficherSommaire,listerPanier)"></a>
 				</div>
 			</div>
 		</div>

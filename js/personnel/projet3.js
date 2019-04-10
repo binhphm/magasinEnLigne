@@ -1,12 +1,6 @@
 /**
- * Efface le HTML du milieu de la page
- */
-function viderMilieuPage() {
-    document.getElementById("milieu-page").innerHTML = "";
-}
-
-/**
  * Change la quantité d'un article
+ * @param {HTMLElement} bouton 
  */
 function changerQuantite(bouton){
     let valeur = parseInt(document.getElementById("quantity").value);
@@ -20,11 +14,23 @@ function changerQuantite(bouton){
 }
 
 /**
- * Affiche tout les produits en vente
+ * 
+ * @param {function} callback - la fonction à appeler après avoir affiché le HTML
+ * @param {string} filtre - le critère de sélection
+ * @param {string} valeur - la valeur du critère de sélection
+ */
+function afficherInventaire(callback, filtre, valeur) {
+    let modeleInventaire = new ModeleMagasin("affichage-articles");
+    modeleInventaire.appliquerModele("", "milieu-page");
+    callback(filtre, valeur);
+}
+
+/**
+ * Liste chaque élément de l'inventaire
+ * @param {string} filtre - le critère de sélection
+ * @param {string} valeur - la valeur du critère de sélection
  */
 function listerArticles(filtre, valeur){
-
-    viderMilieuPage();
 
     //Afficher le HTML qui "entoure" la liste d'articles
     let temp = document.getElementById("affichage-articles");
@@ -44,7 +50,6 @@ function listerArticles(filtre, valeur){
  * @param {string} noArticle - l'identifiant de l'article
  */
 function afficherArticle(noArticle){
-    viderMilieuPage();
     let requete = new RequeteAjax("php/main.php?q=inventaire&noArticle=" + noArticle);
     let modeleArticle = new ModeleMagasin("modele-article");
     requete.getJSON(donnees => {modeleArticle.appliquerModele(donnees, "milieu-page");});
@@ -57,17 +62,17 @@ function getTotalPanier(){
     let requete = new RequeteAjax("php/main.php?q=panier&r=total");
     requete.getJSON(donnees => {
         document.getElementById("nombre-total").innerHTML = 
-            "Panier [" + JSON.parse(donnees) + "]";
+            "PANIER[" + JSON.parse(donnees) + "]";
     });
 }
 
 
-
 /**
- * Affiche le sommaire du panier
+ * Afficher le sommaire du panier
+ * @param {function} callback - la fonction à appeler après que le sommaire soit chargé
  */
 function afficherSommaire(callback){
-    viderMilieuPage();
+
     let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
     let modelePanier = new ModeleMagasin("modele-panier");
     requete.getJSON(donnees => {
@@ -87,8 +92,10 @@ function listerPanier(){
     });
 }
 
+
 /**
  * Ajoute un article au panier d'achat
+ * @param {function} callback - la fonction après avoir ajouté au panier
  */
 function ajouterAuPanier(callback) {
     let objJSON = {
@@ -108,22 +115,51 @@ function ajouterAuPanier(callback) {
 
 
 /**
- * Supprime un article du panier d'achat
+ * Supprime un élément du panier
+ * @param {function} callback - la fonction après avoir supprimé
+ * @param {function} callback2 - la fonction après avoir calculé le nb d'items
+ * @param {function} callback3 - la fonction après avoir affiché le sommaire
  */
-function supprimerDuPanier(callback){
+function supprimerDuPanier(callback, callback2, callback3){
+   
+    let idBouton = event.target.getAttribute("id");
+    let noArticle = document.getElementById(idBouton).dataset.value;
+
     let objJSON = {
         "requete" : "supprimer",
-        "noArticle" : document.getElementById("identifiant").value,
-        "description" : document.getElementById("description").value
+        "noArticle" : noArticle
     };
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
     requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
-    callback();
-    afficherSommaire(listerPanier);
+    callback(callback2(callback3));
+    
 }
 
+function modifierPanier(callback, callback2, callback3) {
+    //Tableau des numéros d'article
+    let liensNoArticle = document.getElementsByClassName("closed");
+    let tabNoArticle = new Array();
+    for(let i = 0; i < liensNoArticle.length; i++){
+        tabNoArticle.push(liensNoArticle[i].dataset.value);
+    }
+    //Tableau des quantités
+    let champsQuantite = document.getElementsByClassName("quantite");
+    let tabQuantite = new Array();
+    for(let i = 0; i < champsQuantite.length; i++){
+        tabQuantite.push(champsQuantite[i].value);
+    }
 
+    let objJSON = {
+        "requete" : "modifier",
+        "tabNoArticle" : JSON.stringify(tabNoArticle),
+        "tabQuantite" : JSON.stringify(tabQuantite)
+    };
 
+    let txtJSON = JSON.stringify(objJSON);
+    let requete = new RequeteAjax("php/main.php");
+    requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
+    callback(callback2(callback3));
+}
 

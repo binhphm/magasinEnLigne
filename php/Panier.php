@@ -6,9 +6,9 @@
  */
 class Panier {
 
-    const TPS = 0.05;
-    const TVQ = 0.095;
+    const TAXES = 0.15;
     const FRAIS_LIVRAISON = 10;
+    const MONTANT_MINIMUM = 75;
 
     /**
      * CONSTRUCTEUR : crée un objet de type Panier
@@ -61,13 +61,27 @@ class Panier {
     }
 
     /**
+     * Retourne le nombre total d'articles
+     * @return int
+     */
+    public function getNbArticlesTotal() {
+        $compteur = 0;
+        if ($this->creerPanier()){
+            for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++){
+                $compteur += $_SESSION['panier']['quantiteDansPanier'][$i];
+            }
+        }
+        return $compteur;
+    }
+
+    /**
      * Retourne le montant total
      * @return double
      */
     public function getMontantTotal(){
         $somme = 0;
 
-        for($i = 0; $i < count($_SESSION['panier']['description']); $i++) {
+        for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++) {
            $somme += $_SESSION['panier']['quantiteDansPanier'][$i] * $_SESSION['panier']['prixUnitaire'][$i];
         }
         return $somme;
@@ -78,38 +92,26 @@ class Panier {
      * @return array - un tableau associatif
      */
     public function getSommaire(){
+        
         $tabSommaire = array();
         $sousTotal = $this->getMontantTotal();
-        $tps = self::TPS * $sousTotal;
-        $tvq = self::TVQ * $sousTotal;
-        $fraisLivraison = self::FRAIS_LIVRAISON;
+        $taxes = self::TAXES * $sousTotal;
+        $fraisLivraison = $sousTotal >= self::MONTANT_MINIMUM || $sousTotal == 0 ? 0 : self::FRAIS_LIVRAISON;
         $rabais = 0;
-        $total = $sousTotal + $tps + $tvq + $fraisLivraison - $rabais;
+        $total = $sousTotal + $taxes + $fraisLivraison - $rabais;
+        
         $sommaire = array(
             "sousTotal" => number_format($sousTotal, 2, ',', '') . ' $',
-            "tps" => number_format($tps, 2, ',', '') . ' $',
-            "tvq" => number_format($tvq, 2, ',', '') . ' $',
+            "taxes" => number_format($taxes, 2, ',', '') . ' $',
             "fraisLivraison" => number_format($fraisLivraison, 2, ',', '') . ' $',
             "rabais" => '-' . number_format($rabais, 2, ',', '') . ' $',
             "total" => number_format($total, 2, ',', '') . ' $',
         );
+       
         array_push($tabSommaire, $sommaire);
         return $tabSommaire;
     }
 
-     /**
-     * Retourne le nombre total d'articles
-     * @return int
-     */
-    public function getNbArticlesTotal() {
-        $compteur = 0;
-        if ($this->creerPanier()){
-            for($i = 0; $i < count($_SESSION['panier']['description']); $i++){
-                $compteur += $_SESSION['panier']['quantiteDansPanier'][$i];
-            }
-        }
-        return $compteur;
-    }
 
      /**
      * Ajoute un article dans le tableau de session
@@ -118,20 +120,27 @@ class Panier {
      * @param {double} $prixUnitaire - le prix à l'unité
      */
     public function ajouterArticle($noArticle, $description, $cheminImage, $quantite, $prixUnitaire){
+        $noArticle = (int) $noArticle;
+        if(!is_int($noArticle)){
+            error_log('Le numéro d\'un article doit être un nombre entier', 3, 'erreurs.txt');
+            return;
+        }
+        
         if ($this->creerPanier() && !$this->estVerrouille()) {
      
             //Si le produit existe déjà on ajoute seulement la quantité
-            $indexArticle = array_search($description, $_SESSION['panier']['description']);
+            $indexArticle = array_search($noArticle, $_SESSION['panier']['noArticle']);
 
-            //Convertir le prix en numéro décimal
-            $prixUnitaire = substr($prixUnitaire, 0, -2);
-            $prixUnitaire = preg_replace('/,/', '.', $prixUnitaire);
-            $prixUnitaire = number_format($prixUnitaire, 2);
-    
             if ($indexArticle !== false) {
                 $_SESSION['panier']['quantiteDansPanier'][$indexArticle] += $quantite ;
             }
             else {
+                //Convertir le prix en numéro décimal
+                $prixUnitaire = substr($prixUnitaire, 0, -2);
+                $prixUnitaire = preg_replace('/,/', '.', $prixUnitaire);
+                $prixUnitaire = number_format($prixUnitaire, 2);
+                
+                //Insérer les informations dans le tableau
                 array_push( $_SESSION['panier']['noArticle'],$noArticle);
                 array_push( $_SESSION['panier']['description'],$description);
                 array_push( $_SESSION['panier']['cheminImage'],$cheminImage);
@@ -149,7 +158,13 @@ class Panier {
      * Supprime un article dans le tableau de session
      * @param {string} $description - la description de l'article
      */
-    public function supprimerArticle($description) {
+    public function supprimerArticle($noArticle) {
+        $noArticle = (int) $noArticle;
+        if(!is_int($noArticle)){
+            error_log('Le numéro d\'un article doit être un nombre entier', 3, 'erreurs.txt');
+            return;
+        }
+
         if ($this->creerPanier() && !$this->estVerrouille()) {
             $tmp=array();
             $tmp['noArticle'] = array();
@@ -159,8 +174,8 @@ class Panier {
             $tmp['prixUnitaire'] = array();
             $tmp['estVerouille'] = $_SESSION['panier']['estVerouille'];
      
-            for($i = 0; $i < count($_SESSION['panier']['description']); $i++) {
-                if ($_SESSION['panier']['description'][$i] !==$description) {
+            for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++) {
+                if ($_SESSION['panier']['noArticle'][$i] !== $noArticle) {
                     array_push($tmp['noArticle'],$_SESSION['panier']['noArticle'][$i]);
                     array_push($tmp['description'],$_SESSION['panier']['description'][$i]);
                     array_push($tmp['cheminImage'],$_SESSION['panier']['cheminImage'][$i]);
@@ -177,69 +192,34 @@ class Panier {
     }
 
 
-    
-    
-    
-    
     /**
-     * Modifie un article dans le tableau de session
-     * @param {string} $description - la description de l'article
-     * @param {int} $quantiteDansPanier - la quantité par article
+     * Modifier la quantité de tous les articles
+     * @param {array} $tabNoArticle - tous les numéros d'article
+     * @param {array} $tabQteDansPanier - toutes les quantités
      */
-    public function modifierQteArticle($description, $quantiteDansPanier){
-        //Si le panier éxiste
+    function modifierQteArticles($tabNoArticle, $tabQuantite){
+        //Vérifier si le panier existe
         if ($this->creerPanier() && !$this->estVerrouille()) {
-            if ($quantiteDansPanier > 0) {
-                //Recharche du produit dans le panier
-                $indexArticle = array_search($description, $_SESSION['panier']['description']);
-                if ($indexArticle !== false) {
-                    $_SESSION['panier']['quantiteDansPanier'][$indexArticle] = $quantiteDansPanier ;
-                }
-            }
-            else
-                supprimerArticle($description);
+           for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++){
+               if($tabQuantite[$i] > 0) {
+                    //Recherche du produit
+                    $index = array_search((int) $tabNoArticle[$i], $_SESSION['panier']['noArticle']);
+                    if ($index !== false) {
+                        $_SESSION['panier']['quantiteDansPanier'][$index] = (int) $tabQuantite[$i] ;
+                    }
+
+               }
+               else {
+                    $this->supprimerArticle((int) $tabNoArticle[$i]);
+               }
+           }
+                
         }
         else
             echo "Un problème est survenu, contactez l'administrateur du site.";
     }
-    
-    
-    
+
    
-    
-
-    /**
-     * Retourne le montant total par article
-     * @param {string} $description - la description de l'article
-     * @return double
-     */
-    public function getMontantArticle($description) {
-        $resultat = 0.00;
-        if($this->creerPanier()) {
-            $indexArticle = array_search($description, $_SESSION['panier']['description']);
-            $resultat = $_SESSION['panier']['quantiteDansPanier'][$indexArticle] * 
-                        $_SESSION['panier']['prixUnitaire'][$indexArticle];
-            return number_format($resultat,2,".",",");
-        }
-        return $resultat;
-    }
-
-    
-
-    /**
-     * Retourne le nombre d'un article choisi
-     * @param $description - la description de l'article
-     * @return int
-     */
-    public function getNbArticles($description){
-        if ($this->creerPanier()){
-            $indexArticle = array_search($description, $_SESSION['panier']['description']);
-            return $_SESSION['panier']['quantiteDansPanier'][$indexArticle] = $quantiteDansPanier ;
-        } 
-        else
-            return 0;
-    }
-
     /**
      * Vérifie si le panier est vérouillé ou pas
      * @return boolean

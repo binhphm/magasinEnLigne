@@ -96,37 +96,52 @@ class GestionArticles extends GestionBD {
     }
 
     /**
-     * Réserve un article dans l'inventaire
+     * Augmente la quantité dans le panier
      * @param {int} $noArticle - l'identifiant de l'article
      * @param {int} $quantite - la quantité demandée
      */
-    public function reserverArticle($noArticle, $quantite){
+    private function augmenterQtePanier($noArticle, $quantite){
         $noArticle = (int) $noArticle;
         $quantite = (int) $quantite;
         if(!is_int($noArticle) || !is_int($quantite)){
             error_log('Le numéro ou la quantité d\'un article doit être un nombre entier', 3, 'erreurs.txt');
             return;
         }
-        
-        //Incrémenter la quantité dans le panier
+
         $requete = $this->_bdd->prepare(
             'UPDATE article 
-            SET quantiteDansPanier = quantiteDansPanier + :quantite 
+            SET quantiteDansPanier = quantiteDansPanier + :quantite
             WHERE noArticle = :noArticle 
-                AND quantiteDansPanier < quantiteEnStock'
+            AND quantiteDansPanier < quantiteEnStock'
         );
+
         $requete->bindValue(':noArticle', $noArticle, PDO::PARAM_INT);
         $requete->bindValue(':quantite', $quantite, PDO::PARAM_INT);
         $requete->execute();
         $requete->closeCursor();
 
-        //Décrémenter la quantité dans l'inventaire
+    }
+
+    /**
+     * Diminue la quantité en stock
+     * @param {int} $noArticle - l'identifiant de l'article
+     * @param {int} $quantite - la quantité demandée
+     */
+    private function diminuerQteStock($noArticle, $quantite) {
+        $noArticle = (int) $noArticle;
+        $quantite = (int) $quantite;
+        if(!is_int($noArticle) || !is_int($quantite)){
+            error_log('Le numéro ou la quantité d\'un article doit être un nombre entier', 3, 'erreurs.txt');
+            return;
+        }
+
         $requete = $this->_bdd->prepare(
             'UPDATE article 
             SET quantiteEnStock = quantiteEnStock - :quantite 
             WHERE noArticle = :noArticle 
-                AND quantiteEnStock > quantiteDansPanier'
+            AND quantiteDansPanier < quantiteEnStock'
         );
+
         $requete->bindValue(':noArticle', $noArticle, PDO::PARAM_INT);
         $requete->bindValue(':quantite', $quantite, PDO::PARAM_INT);
         $requete->execute();
@@ -134,10 +149,20 @@ class GestionArticles extends GestionBD {
     }
 
     /**
-     * Remet dans la quantité en stock pour un seul article
-     * @param {string} $description - la description de l'article
+     * Réserve un article dans l'inventaire
+     * @param {int} $noArticle - l'identifiant de l'article
+     * @param {int} $quantite - la quantité demandée
      */
-    public function supprimerDuPanier($noArticle){
+    public function reserverArticle($noArticle, $quantite) {
+        $this->augmenterQtePanier($noArticle, $quantite);
+        $this->diminuerQteStock($noArticle, $quantite);
+    }
+
+
+    /**
+     * Rétablit le nombre d'article en stock pour un seul article
+     */
+    private function remettreStock($noArticle){
         $noArticle = (int) $noArticle;
         if(!is_int($noArticle)){
             error_log('Le numéro d\'un article doit être un nombre entier', 3, 'erreurs.txt');
@@ -152,34 +177,141 @@ class GestionArticles extends GestionBD {
         $requete->bindValue(1, $noArticle, PDO::PARAM_INT);
         $requete->execute();
         $requete->closeCursor();
+    }
+    
 
-        $requete = $this->_bdd->prepare(
-            'UPDATE article
-            SET quantiteDansPanier = 0
-            WHERE noArticle = ?'
-        );
+    /**
+     * Efface la quantité d'article dans le panier pour un seul article
+     */
+    private function effacerQtePanier($noArticle) {
+        $noArticle = (int) $noArticle;
+        if(!is_int($noArticle)){
+            error_log('Le numéro d\'un article doit être un nombre entier', 3, 'erreurs.txt');
+            return;
+        }
+
+        $requete = $this->_bdd->prepare('UPDATE article SET quantiteDansPanier = 0 WHERE noArticle = ?');
         $requete->bindValue(1, $noArticle, PDO::PARAM_INT);
         $requete->execute();
         $requete->closeCursor();
     }
 
     /**
-     * Remet dans la quantité en stock
+     * Supprime un élément du panier
+     * @param {string} $description - la description de l'article
      */
-    public function detruirePanier() {
-        
-        $requete = $this->_bdd->query(
-            'UPDATE article
-            SET quantiteEnStock = quantiteEnStock + quantiteDansPanier'
-        );
+    public function supprimerDuPanier($noArticle){
+        $this->remettreStock($noArticle);
+        $this->effacerQtePanier($noArticle);
+    }
+
+    /**
+     * Calcule la quantité dans le panier d'un article
+     * @param $noArticle - l'identifiant de l'article
+     * @return int
+     */
+    private function getQteDansPanier($noArticle){
+        $noArticle = (int) $noArticle;
+        if(!is_int($noArticle)){
+            error_log('Le numéro d\'un article doit être un nombre entier', 3, 'erreurs.txt');
+            return;
+        }
+        $requete = $this->_bdd->prepare('SELECT quantiteDansPanier FROM article WHERE noArticle = ?');
+        $requete->bindValue(1, $noArticle, PDO::PARAM_INT);
+        $requete->execute();
+        $donnees = $requete->fetch(PDO::FETCH_NUM);
         $requete->closeCursor();
         
-        $requete = $this->_bdd->query(
-            'UPDATE article
-            SET quantiteDansPanier = 0'
-        );
+        return (int) $donnees[0];
+    }
+
+
+    /**
+     * Modifie la quantité en stock
+     * @param {array} $tabNoArticle - tous les numéros d'article
+     * @param {array} $tabQteDansPanier - toutes les quantités
+     */
+    private function modifierQteStock($tabNoArticle, $tabQuantite) {
+        for($i = 0; $i < count($tabNoArticle); $i++) {
+            //Calculer la différence entre la quantité voulue et la quantité dans le panier
+            $difference = (int) $tabQuantite[$i] - $this->getQteDansPanier((int)$tabNoArticle[$i]);
+        
+            $requete = $this->_bdd->prepare(
+                'UPDATE article
+                SET quantiteEnStock = quantiteEnStock + CAST(:diff AS SIGNED)
+                WHERE noArticle = :noArticle
+                AND quantiteDansPanier <= quantiteEnStock'
+            );
+            
+            $requete->bindValue(':diff', $difference, PDO::PARAM_INT);
+            $requete->bindValue(':noArticle', (int) $tabNoArticle[$i], PDO::PARAM_INT);
+            $requete->execute();
+            $requete->closeCursor();
+
+        }
+    }
+
+    /**
+     * Modifie la quantité dans le panier
+     * @param {array} $tabNoArticle - tous les numéros d'article
+     * @param {array} $tabQteDansPanier - toutes les quantités
+     */
+    private function modifierQtePanier($tabNoArticle, $tabQuantite) {
+        
+        for($i = 0; $i < count($tabNoArticle); $i++) {
+            //Calculer la différence entre la quantité voulue et la quantité dans le panier
+            $difference = (int) $tabQuantite[$i] - $this->getQteDansPanier((int)$tabNoArticle[$i]);
+        
+            $requete = $this->_bdd->prepare(
+                'UPDATE article
+                SET quantiteDansPanier = quantiteDansPanier - CAST(:diff AS SIGNED)
+                WHERE noArticle = :noArticle
+                AND quantiteDansPanier <= quantiteEnStock'
+            );
+        
+            $requete->bindValue(':diff', $difference, PDO::PARAM_INT);
+            $requete->bindValue(':noArticle', (int) $tabNoArticle[$i], PDO::PARAM_INT);
+            $requete->execute();
+            $requete->closeCursor();
+
+        }
+    }
+
+    /**
+     * Modifie la quantité dans le panier
+     * @param {array} $tabNoArticle - tous les numéros d'article
+     * @param {array} $tabQteDansPanier - toutes les quantités
+     */
+    public function modifierPanier($tabNoArticle, $tabQuantite){
+        $this->modifierQteStock($tabNoArticle, $tabQuantite);
+        $this->modifierQtePanier($tabNoArticle, $tabQuantite);   
+    }
+
+
+    /**
+     * Rétablit le nombre d'articles en stock pour tous
+     */
+    private function remettreStockTous() {
+        $requete = $this->_bdd->query('UPDATE article SET quantiteEnStock = quantiteEnStock + quantiteDansPanier');
         $requete->closeCursor();
     }
+
+    /**
+     * Efface le nombre d'articles dans le panier pour tous
+     */
+    private function effacerQtePanierTous() {
+        $requete = $this->_bdd->query('UPDATE article SET quantiteDansPanier = 0');
+        $requete->closeCursor();
+    }
+
+    /**
+     * Détruit le panier d'achat
+     */
+    public function detruirePanier() {
+        $this->remettreStockTous();
+        $this->effacerQtePanierTous();
+    }
+
 }
 
 
