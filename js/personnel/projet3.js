@@ -108,8 +108,9 @@ function ajouterAuPanier(callback) {
     };
 
     let txtJSON = JSON.stringify(objJSON);
+    console.log(txtJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
+    requete.envoyerDonnees(txtJSON, reponse => {console.log("Données reçues de PHP : " + reponse);});
     callback();
 }
 
@@ -137,6 +138,12 @@ function supprimerDuPanier(callback, callback2, callback3){
     
 }
 
+/**
+ * Modifier les quantités du panier
+ * @param {function} callback - la fonction après avoir modifié
+ * @param {function} callback2 - la fonction après avoir calculé le nb d'items
+ * @param {function} callback3 - la fonction après avoir affiché le sommaire
+ */
 function modifierPanier(callback, callback2, callback3) {
     //Tableau des numéros d'article
     let liensNoArticle = document.getElementsByClassName("closed");
@@ -161,5 +168,34 @@ function modifierPanier(callback, callback2, callback3) {
     let requete = new RequeteAjax("php/main.php");
     requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
     callback(callback2(callback3));
+}
+
+/**
+ * Applique le rabais de 20%
+ * @param {function} callback - la fonction après avoir appliqué le rabais
+ * @param {function} callback2 - la fonction après avoir affiché le sommaire
+ */
+function appliquerCoupon(callback, callback2) {
+    event.preventDefault();
+    
+    let coupon = document.getElementById("coupon").value;
+    
+    if(coupon === "RAB20"){
+        let objJSON = {"requete" : "rabais"};
+        let txtJSON = JSON.stringify(objJSON);
+        let requete = new RequeteAjax("php/main.php");
+        requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
+        callback(callback2);
+    }
+
+    else {
+        alert("Vous n'avez pas saisi le bon code.");
+    }
+      
+}
+
+function afficherCaisse(){
+    let modelePanier = new ModeleMagasin("modele-caisse");
+    modelePanier.appliquerModele("", "milieu-page");
 }
 

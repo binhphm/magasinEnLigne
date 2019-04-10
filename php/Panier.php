@@ -9,6 +9,7 @@ class Panier {
     const TAXES = 0.15;
     const FRAIS_LIVRAISON = 10;
     const MONTANT_MINIMUM = 75;
+    const RABAIS = 0.8;
 
     /**
      * CONSTRUCTEUR : crée un objet de type Panier
@@ -89,6 +90,7 @@ class Panier {
 
     /**
      * Retourne le sommaire du panier
+     * @param {boolean} - s'il y a un rabais ou pas
      * @return array - un tableau associatif
      */
     public function getSommaire(){
@@ -219,6 +221,15 @@ class Panier {
             echo "Un problème est survenu, contactez l'administrateur du site.";
     }
 
+    /**
+     * Applique le rabais sur l'achat
+     */
+    public function appliquerRabais(){
+        for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++) {
+            $_SESSION['panier']['prixUnitaire'][$i] = self::RABAIS * $_SESSION['panier']['prixUnitaire'][$i];
+        }
+    }
+
    
     /**
      * Vérifie si le panier est vérouillé ou pas
@@ -245,10 +256,7 @@ class Panier {
             unset($_SESSION['panier']);
         }
        
-    }
-
-    
-       
+    }      
 }
 
 

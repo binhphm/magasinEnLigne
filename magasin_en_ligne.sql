@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  mer. 10 avr. 2019 à 06:48
+-- Généré le :  jeu. 11 avr. 2019 à 00:40
 -- Version du serveur :  10.1.36-MariaDB
 -- Version de PHP :  7.2.11
 
@@ -47,17 +47,17 @@ CREATE TABLE IF NOT EXISTS `article` (
 --
 
 INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `prixUnitaire`, `quantiteEnStock`, `quantiteDansPanier`) VALUES
-(1, 'Cheveux', 'Alikay Naturals Lemongrass Leave In Conditioner', 'images/alikay_naturals_lemongrass_leave_in_conditioner.jpg', '28.99', 20, 0),
-(2, 'Cheveux', 'ApHogee Curlific! Texture Treatment', 'images/aphogee_curlific_texture_treatment.jpg', '13.99', 25, 0),
-(3, 'Cheveux', 'As I Am Coconut Cowash Cleansing Conditioner', 'images/as_i_am_coconut_cowash.jpeg', '15.99', 20, 0),
+(1, 'Cheveux', 'Alikay Naturals Lemongrass Leave In Conditioner', 'images/alikay_naturals_lemongrass_leave_in_conditioner.jpg', '28.99', 16, 4),
+(2, 'Cheveux', 'ApHogee Curlific! Texture Treatment', 'images/aphogee_curlific_texture_treatment.jpg', '13.99', 22, 3),
+(3, 'Cheveux', 'As I Am Coconut Cowash Cleansing Conditioner', 'images/as_i_am_coconut_cowash.jpeg', '15.99', 18, 2),
 (4, 'Maquillage', 'Ardell Magnetic Lashes Double Wispies', 'images/ardell_magnetic_lashes_double_wispies.jpg', '21.99', 15, 0),
 (5, 'Maquillage', 'Ardell Natural Lashes Wispies Brown', 'images/ardell_natural_lashes_wispies_brown.jpg', '6.99', 50, 0),
 (6, 'Cheveux', 'BaByliss Pro Nano Titanium OPTIMA 3100 Straightening Iron', 'images/babylisspro_nano_titanium_optima_3100_straightening_iron_1_inch.jpg', '271.99', 5, 0),
-(7, 'Hommes', 'Beard Guyz Beard Care & Grooming Kit', 'images/beard_guyz_beard_care_grooming_kit.jpg', '29.99', 10, 0),
-(8, 'Cheveux', 'Camille Rose Naturals Curl Maker', 'images/camille_rose_curl_maker.jpg', '41.99', 5, 0),
+(7, 'Hommes', 'Beard Guyz Beard Care And Grooming Kit', 'images/beard_guyz_beard_care_grooming_kit.jpg', '29.99', 10, 0),
+(8, 'Cheveux', 'Camille Rose Naturals Curl Maker', 'images/camille_rose_curl_maker.jpg', '41.99', 4, 1),
 (9, 'Cheveux', 'Cantu Shea Butter For Natural Hair Coconut Curling Cream', 'images/cantu_coconut_curling_cream.jpg', '31.99', 15, 0),
-(10, 'Cheveux', 'Carol\'s daughter Black Vanilla Moisture & Shine Hydrating Conditioner', 'images/carols_daughter_black_Vanilla_moisture_and_shine_hydrating_conditioner.jpg', '29.99', 10, 0),
-(11, 'Cheveux', 'Carol\'s daughter Hair Milk Curl Defining Moisture Mask', 'images/carols_daughter_hair_milk_curl_defining_moisture_mask.jpg', '34.99', 5, 0),
+(10, 'Cheveux', 'Carol\'s daughter Black Vanilla Moisture And Shine Hydrating Conditioner', 'images/carols_daughter_black_Vanilla_moisture_and_shine_hydrating_conditioner.jpg', '29.99', 10, 0),
+(11, 'Cheveux', 'Carol\'s daughter Hair Milk Curl Defining Moisture Mask', 'images/carols_daughter_hair_milk_curl_defining_moisture_mask.jpg', '34.99', 3, 3),
 (12, 'Cheveux', 'Curls Blueberry Bliss Curl Control Paste', 'images/curls_blueberry_control_paste.jpg', '15.99', 20, 0),
 (13, 'Cheveux', 'DevaCurl Supercream Coconut Curl Styler', 'images/devacurl_supercream_coconut_curl_styler.jpg', '55.99', 10, 0),
 (14, 'Peau', 'Dudu-Osun Black Soap', 'images/dudu_osun_black_soap.jpg', '5.99', 50, 0),
@@ -67,11 +67,11 @@ INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `
 (18, 'Cheveux', 'Shea Moisture Jamaican Black Castor Oil Strengthen & Grow Thermal Protectant', 'images/shea_moisture_jbco_thermal_protectant.jpg', '19.99', 15, 0),
 (19, 'Cheveux', 'Kera Care Edge Tamer', 'images/kera_care_edge_tamer.jpg', '11.99', 10, 0),
 (20, 'Cheveux', 'Kinky Curly Come Clean Shampoo', 'images/kinky_curly_come_clean_shampoo.jpg', '21.99', 10, 0),
-(21, 'Cheveux', 'Maui Moisture Curl Quench+ Coconut Oil Curl Milk', 'images/maui_moisture_curl_quench_coconut_oil_curl_milk.jpg', '10.99', 5, 0),
+(21, 'Cheveux', 'Maui Moisture Curl Quench+ Coconut Oil Curl Milk', 'images/maui_moisture_curl_quench_coconut_oil_curl_milk.jpg', '10.99', 4, 1),
 (22, 'Cheveux', 'Mielle Organics Babassu Mint Deep Conditioner', 'images/mielle_organics_babassu_oil_mint_deep_conditioner.jpg', '22.99', 10, 0),
 (23, 'Cheveux', 'Moroccanoil Oil Treatment', 'images/moroccanoil_treatment.jpg', '59.99', 5, 0),
-(24, 'Peau', 'TGIN Argan Replenishing Hair & Body Serum', 'images/tgin_argan_replenishing_hair_body_serum.jpg', '24.99', 10, 0),
-(25, 'Cheveux', 'Denman Brush D4 Black', 'images/denman_brush_d4_black.jpg', '34.99', 25, 0);
+(24, 'Peau', 'TGIN Argan Replenishing Hair And Body Serum', 'images/tgin_argan_replenishing_hair_body_serum.jpg', '24.99', 9, 1),
+(25, 'Cheveux', 'Denman Brush D4 Black', 'images/denman_brush_d4_black.jpg', '34.99', 24, 1);
 
 -- --------------------------------------------------------
 

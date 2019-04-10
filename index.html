@@ -317,13 +317,13 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 						<div class="total-wrap">
 							<div class="row">
 								<div class="col-sm-8">
-									<form action="#">
+									<form action="#" id="form-rabais">
 										<div class="row form-group">
 											<div class="col-sm-9">
-												<input type="text" name="quantity" class="form-control input-number" placeholder="Votre code promotionnel...">
+												<input type="text" id="coupon" name="quantity" class="form-control input-number" placeholder="Votre code promotionnel...">
 											</div>
 											<div class="col-sm-3">
-												<input type="submit" value="Appliquer le coupon" class="btn btn-primary">
+												<input type="submit" id="btn-rabais" value="Appliquer le coupon" class="btn btn-primary" onClick="appliquerCoupon(afficherSommaire, listerPanier)">
 											</div>
 										</div>
 									</form>
@@ -348,7 +348,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 									</div>
 									<div class="row form-group">
 										<div class="col-md-12 text-center">
-											<p><a href="#" class="btn btn-primary">Passer à la caisse</a></p>
+											<p><a href="#" class="btn btn-primary" onClick="afficherCaisse()">Passer à la caisse</a></p>
 										</div>
 									</div>
 								</div>
@@ -387,6 +387,166 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			<div class="one-eight text-center">
 				<div class="display-tc">
 					<a href="#" class="closed" id="article{noArticle}" data-value="{noArticle}" onClick="supprimerDuPanier(getTotalPanier,afficherSommaire,listerPanier)"></a>
+				</div>
+			</div>
+		</div>
+	</template>
+
+	<!-- Modèle pour la caisse -->
+	<template id="modele-caisse" type="text/MagasinModele">
+		<div class="breadcrumbs">
+			<div class="container">
+				<div class="row">
+					<div class="col">
+						<p class="bread">
+							<span>
+								<a href="#" onClick="afficherInventaire(listerArticles, '', '')">Accueil</a>
+							</span> / 
+							<span>
+								<a href="#" onClick="afficherSommaire(listerPanier)">Panier</a>	
+							</span> /
+							<span>Passer à la caisse</span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="colorlib-product">
+			<div class="container">
+				<div class="row row-pb-lg">
+					<div class="col-sm-10 offset-md-1">
+						<div class="process-wrap">
+							<div class="process text-center active">
+								<p><span>01</span></p>
+								<h3>Panier d'achat</h3>
+							</div>
+							<div class="process text-center active">
+								<p><span>02</span></p>
+								<h3>Passer à la caisse</h3>
+							</div>
+							<div class="process text-center">
+								<p><span>03</span></p>
+								<h3>Confirmation de la commande</h3>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-8">
+						<form method="post" class="colorlib-form">
+							<h2>Détails de facturation</h2>
+		              		<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="fname">Prénom</label>
+										<input type="text" id="fname" class="form-control" placeholder="Votre prénom">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="lname">Nom</label>
+										<input type="text" id="lname" class="form-control" placeholder="Votre nom">
+									</div>
+								</div>
+			               		<div class="col-md-12">
+									<div class="form-group">
+										<label for="fname">Adresse</label>
+			                    		<input type="text" id="address" class="form-control" placeholder="Entrez votre adresse">
+			                  		</div>
+			                  		<div class="form-group">
+			                    		<input type="text" id="address2" class="form-control" placeholder="Entrez votre deuxième adresse">
+			                  		</div>
+			               		</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<label for="companyname">Ville</label>
+										<input type="text" id="towncity" class="form-control" placeholder="Ville">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="stateprovince">Province</label>
+										<input type="text" id="fname" class="form-control" placeholder="Province">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="lname">Code Postal</label>
+										<input type="text" id="zippostalcode" class="form-control" placeholder="Code postal">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="email">Courriel</label>
+										<input type="text" id="email" class="form-control" placeholder="Province">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="Phone">Numéro de téléphone</label>
+										<input type="text" id="zippostalcode" class="form-control" placeholder="Numéro de téléphone">
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group">
+										<div class="radio">
+										  <label><input type="radio" name="optradio"> Créer un compte ? </label>
+										</div>
+									</div>
+								</div>
+							</div>
+		            	</form>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="cart-detail">
+									<h2>Facture</h2>
+									<ul>
+										<li>
+											<span>Sous-total</span> <span>{sousTotal}</span>
+											<ul id="details-facture">
+												<li><span>{quantiteDansPanier} x {description}</span> <span>{prixTotal}</span></li>
+											</ul>
+										</li>
+										<li><span>Taxes</span> <span>{taxes}</span></li>
+										<li><span>Livraison</span> <span>{fraisLivraison}</span></li>
+										<li><span>Rabais</span> <span>{rabais}</span></li>
+										<li><span>Total</span> <span>{total}</span></li>
+									</ul>
+								</div>
+						   </div>
+
+						   <div class="w-100"></div>
+
+						   <div class="col-md-12">
+								<div class="cart-detail">
+									<h2>Méthode de paiement</h2>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="radio">
+											   <label><input type="radio" name="optradio"> Paypal</label>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<div class="checkbox">
+											   <label><input type="checkbox" value=""> J'ai lu et j'accepte les termes et conditions</label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12 text-center">
+								<p><a href="#" class="btn btn-primary">Placer la commande</a></p>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>

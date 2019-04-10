@@ -80,7 +80,9 @@ elseif(isset($_POST["x"])){
             $panier->modifierQteArticles($tabNoArticle, $tabQuantite);
             $gestionArticles->modifierPanier($tabNoArticle, $tabQuantite);
             break;
-
+        case "rabais" :
+            $panier->appliquerRabais();
+            break;
     }
    
 }

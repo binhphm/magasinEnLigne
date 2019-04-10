@@ -14,7 +14,7 @@ class GestionArticles extends GestionBD {
     public function getListeArticles() {
         $listeArticles = array();
 
-        $requete = $this->_bdd->query('SELECT * FROM article ORDER BY description');
+        $requete = $this->_bdd->query('SELECT * FROM article ORDER BY noArticle');
        
         while ($donnees = $requete->fetch(PDO::FETCH_ASSOC)) {
             $article = new Article($donnees);
@@ -34,7 +34,7 @@ class GestionArticles extends GestionBD {
     public function listerParCategorie($categorie){
         $listeArticles = array();
 
-        $requete = $this->_bdd->prepare('SELECT * FROM article WHERE categorie = ? ORDER BY description');
+        $requete = $this->_bdd->prepare('SELECT * FROM article WHERE categorie = ? ORDER BY `description`');
         $requete->bindValue(1, $categorie, PDO::PARAM_STR);
         $requete->execute();
 
