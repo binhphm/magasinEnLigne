@@ -108,9 +108,8 @@ function ajouterAuPanier(callback) {
     };
 
     let txtJSON = JSON.stringify(objJSON);
-    console.log(txtJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, reponse => {console.log("Données reçues de PHP : " + reponse);});
+    requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
     callback();
 }
 
@@ -194,8 +193,35 @@ function appliquerCoupon(callback, callback2) {
       
 }
 
-function afficherCaisse(){
-    let modelePanier = new ModeleMagasin("modele-caisse");
-    modelePanier.appliquerModele("", "milieu-page");
+/**
+ * Affiche le formulaire de commande et le sommaire de la facture
+ */
+function afficherCaisse(callback){
+    let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
+    let modeleCaisse = new ModeleMagasin("modele-caisse");
+    requete.getJSON(donnees => {
+        modeleCaisse.appliquerModele(donnees, "milieu-page");
+    });
+    callback();
+}
+
+
+/**
+ * Liste chaque élément de la facture
+ */
+function listerFacture() {
+    let requete = new RequeteAjax("php/main.php?q=panier&r=facture");
+    let modeleFacture = new ModeleMagasin("modele-details-facture");
+    requete.getJSON(donnees => {
+        modeleFacture.appliquerModele(donnees, "details-facture");
+    });
+}
+
+/**
+ * Ajoute un client s'il n'est pas membre et
+ * Créé une commande avec les articles
+ */
+function placerCommande() {
+    
 }
 

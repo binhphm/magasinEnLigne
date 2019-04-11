@@ -42,7 +42,8 @@ class Panier {
      */
     public function getPanier() {
         $listePanier = array();
-        if ($this->creerPanier()) {       
+    
+        if (!$this->estVerrouille()) {       
             for($i = 0; $i < count($_SESSION['panier']['description']); $i++){
                 // Convertir le nombre décimal en format monétaire
                 $prixTotal = $_SESSION['panier']['quantiteDansPanier'][$i] * $_SESSION['panier']['prixUnitaire'][$i];
@@ -67,7 +68,7 @@ class Panier {
      */
     public function getNbArticlesTotal() {
         $compteur = 0;
-        if ($this->creerPanier()){
+        if (!$this->estVerrouille()){
             for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++){
                 $compteur += $_SESSION['panier']['quantiteDansPanier'][$i];
             }
@@ -82,9 +83,12 @@ class Panier {
     public function getMontantTotal(){
         $somme = 0;
 
-        for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++) {
-           $somme += $_SESSION['panier']['quantiteDansPanier'][$i] * $_SESSION['panier']['prixUnitaire'][$i];
+        if (!$this->estVerrouille()) {
+            for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++) {
+                $somme += $_SESSION['panier']['quantiteDansPanier'][$i] * $_SESSION['panier']['prixUnitaire'][$i];
+             }
         }
+
         return $somme;
     }
 
@@ -96,21 +100,25 @@ class Panier {
     public function getSommaire(){
         
         $tabSommaire = array();
-        $sousTotal = $this->getMontantTotal();
-        $taxes = self::TAXES * $sousTotal;
-        $fraisLivraison = $sousTotal >= self::MONTANT_MINIMUM || $sousTotal == 0 ? 0 : self::FRAIS_LIVRAISON;
-        $rabais = 0;
-        $total = $sousTotal + $taxes + $fraisLivraison - $rabais;
         
-        $sommaire = array(
-            "sousTotal" => number_format($sousTotal, 2, ',', '') . ' $',
-            "taxes" => number_format($taxes, 2, ',', '') . ' $',
-            "fraisLivraison" => number_format($fraisLivraison, 2, ',', '') . ' $',
-            "rabais" => '-' . number_format($rabais, 2, ',', '') . ' $',
-            "total" => number_format($total, 2, ',', '') . ' $',
-        );
+        if(!$this->estVerrouille()) {
+            $sousTotal = $this->getMontantTotal();
+            $taxes = self::TAXES * $sousTotal;
+            $fraisLivraison = $sousTotal >= self::MONTANT_MINIMUM || $sousTotal == 0 ? 0 : self::FRAIS_LIVRAISON;
+            $rabais = 0;
+            $total = $sousTotal + $taxes + $fraisLivraison - $rabais;
+            
+            $sommaire = array(
+                "sousTotal" => number_format($sousTotal, 2, ',', '') . ' $',
+                "taxes" => number_format($taxes, 2, ',', '') . ' $',
+                "fraisLivraison" => number_format($fraisLivraison, 2, ',', '') . ' $',
+                "rabais" => '-' . number_format($rabais, 2, ',', '') . ' $',
+                "total" => number_format($total, 2, ',', '') . ' $',
+            );
        
-        array_push($tabSommaire, $sommaire);
+            array_push($tabSommaire, $sommaire);
+        } 
+        
         return $tabSommaire;
     }
 
@@ -128,7 +136,7 @@ class Panier {
             return;
         }
         
-        if ($this->creerPanier() && !$this->estVerrouille()) {
+        if (!$this->estVerrouille()) {
      
             //Si le produit existe déjà on ajoute seulement la quantité
             $indexArticle = array_search($noArticle, $_SESSION['panier']['noArticle']);
@@ -167,7 +175,7 @@ class Panier {
             return;
         }
 
-        if ($this->creerPanier() && !$this->estVerrouille()) {
+        if (!$this->estVerrouille()) {
             $tmp=array();
             $tmp['noArticle'] = array();
             $tmp['description'] = array();
@@ -201,7 +209,7 @@ class Panier {
      */
     function modifierQteArticles($tabNoArticle, $tabQuantite){
         //Vérifier si le panier existe
-        if ($this->creerPanier() && !$this->estVerrouille()) {
+        if (!$this->estVerrouille()) {
            for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++){
                if($tabQuantite[$i] > 0) {
                     //Recherche du produit
@@ -225,9 +233,35 @@ class Panier {
      * Applique le rabais sur l'achat
      */
     public function appliquerRabais(){
-        for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++) {
-            $_SESSION['panier']['prixUnitaire'][$i] = self::RABAIS * $_SESSION['panier']['prixUnitaire'][$i];
+        if(!$this->estVerrouille()) {
+            for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++) {
+                $_SESSION['panier']['prixUnitaire'][$i] = self::RABAIS * $_SESSION['panier']['prixUnitaire'][$i];
+            }
         }
+        
+    }
+
+    /**
+     * Obtenir le détail de la facture
+     */
+    public function getFacture() {
+        $tabFacture = array();
+        
+        if(!$this->estVerrouille()) {
+            
+            for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++) {
+                $prixTotal = $_SESSION['panier']['quantiteDansPanier'][$i] * $_SESSION['panier']['prixUnitaire'][$i];
+                $prixTotal = number_format($prixTotal, 2, ',', ' ') . ' $';
+                $ligne = array (
+                    "quantiteDansPanier" => $_SESSION['panier']['quantiteDansPanier'][$i],
+                    "description" => $_SESSION['panier']['description'][$i],
+                    "prixTotal" => $prixTotal
+                );
+                array_push($tabFacture, $ligne);
+            }
+            
+        }
+        return $tabFacture;
     }
 
    

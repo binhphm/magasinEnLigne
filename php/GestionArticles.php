@@ -14,7 +14,7 @@ class GestionArticles extends GestionBD {
     public function getListeArticles() {
         $listeArticles = array();
 
-        $requete = $this->_bdd->query('SELECT * FROM article ORDER BY noArticle');
+        $requete = $this->_bdd->query('SELECT * FROM article ORDER BY `description`');
        
         while ($donnees = $requete->fetch(PDO::FETCH_ASSOC)) {
             $article = new Article($donnees);
@@ -57,7 +57,7 @@ class GestionArticles extends GestionBD {
         $mot = strtolower($mot);
         $listeArticles = array();
 
-        $requete = $this->_bdd->query("SELECT * FROM article WHERE LOWER(description) LIKE '%$mot%' ORDER BY description");
+        $requete = $this->_bdd->query("SELECT * FROM article WHERE LOWER(description) LIKE '%$mot%' ORDER BY `description`");
         
         while ($donnees = $requete->fetch(PDO::FETCH_ASSOC)) {
             $article = new Article($donnees);
@@ -331,6 +331,5 @@ class GestionArticles extends GestionBD {
     }
 
 }
-
 
 ?>

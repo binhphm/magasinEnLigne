@@ -348,7 +348,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 									</div>
 									<div class="row form-group">
 										<div class="col-md-12 text-center">
-											<p><a href="#" class="btn btn-primary" onClick="afficherCaisse()">Passer à la caisse</a></p>
+											<p><a href="#" class="btn btn-primary" onClick="afficherCaisse(listerFacture)">Passer à la caisse</a></p>
 										</div>
 									</div>
 								</div>
@@ -507,9 +507,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 									<ul>
 										<li>
 											<span>Sous-total</span> <span>{sousTotal}</span>
-											<ul id="details-facture">
-												<li><span>{quantiteDansPanier} x {description}</span> <span>{prixTotal}</span></li>
-											</ul>
+											<ul id="details-facture"><!-- Affichage dynamique --></ul>
+											
 										</li>
 										<li><span>Taxes</span> <span>{taxes}</span></li>
 										<li><span>Livraison</span> <span>{fraisLivraison}</span></li>
@@ -550,6 +549,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				</div>
 			</div>
 		</div>
+	</template>
+
+	<!-- Modèle pour lister la facture -->
+	<template id="modele-details-facture" type="text/MagasinModele">
+		<li><span>{quantiteDansPanier} x {description}</span> <span>{prixTotal}</span></li>
 	</template>
 
 	<!-- ### SCRIPTS ###-->

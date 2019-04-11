@@ -172,7 +172,7 @@ class Client {
     }
 
 
-    /* MÉTHODE GÉNÉRALE */
+    /* MÉTHODES GÉNÉRALES */
 
     /**
      * Assigne les bonnes valeurs aux attributs
@@ -185,6 +185,27 @@ class Client {
                 $this->$methode($valeur);
             }
         }
+    }
+
+
+    /**
+     * Retourne les attributs et les valeurs du client
+     * @return array - un tableau associatif (retire les "_" des attributs)
+     */
+    public function getTableau(){
+        return array (
+            "noClient" => $this->getNoClient(),
+            "nomClient" => $this->getNomClient(),
+            "prenomClient" => $this->getPrenomClient(),
+            "adresse" => $this->getAdresse(),
+            "ville" => $this->getVille(),
+            "province" => $this->getProvince(),
+            "codePostal" => $this->getCodePostal(),
+            "noTel" => $this->getNoTel(),
+            "pseudo" => $this->getPseudo() != null? $this->getPseudo() : null,
+            "motDePasse" => $this->getMotDePasse() != null? $this->getMotDePasse() : null,
+            "courriel" => $this->getCourriel()
+        );
     }
 
 }
