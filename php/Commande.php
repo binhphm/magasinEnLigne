@@ -13,7 +13,6 @@ class Commande {
     /* CONSTANTES (regex) */
 
     const DATE = '/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/';
-    const PAYPAL_ORDER_ID = '/^[A-Z0-9]{17}$/';
 
 
     /**
@@ -47,7 +46,7 @@ class Commande {
     /* MUTATEURS */
     public function setNoCommande($noCommande){
         if(!is_int($noCommande)){
-            trigger_error('Le numéro de commande doit être un nombre entier.', E_USER_WARNING);
+            error_log('Le numéro de commande doit être un nombre entier.', 3, 'erreurs.txt');
             return;
         }
         $this->_noCommande = $noCommande;
@@ -55,7 +54,7 @@ class Commande {
 
     public function setDateCommande($dateCommande){
         if(!preg_match(self::DATE, $dateCommande)){
-            trigger_error('Format de date invalide.', E_USER_WARNING);
+            error_log('Format de date invalide.', 3, 'erreurs.txt');
             return;
         }
         $this->_dateCommande = $dateCommande;
@@ -63,17 +62,13 @@ class Commande {
 
     public function setNoClient($noClient){
         if(!is_int($noClient)){
-            trigger_error('Le numéro d\'un client doit être un nombre entier.', E_USER_WARNING);
+            error_log('Le numéro d\'un client doit être un nombre entier.', 3, 'erreurs.txt');
             return;
         }
         $this->_noClient = $noClient;
     }
 
     public function setPaypalOrderId($paypalOrderId) {
-        if(!preg_match(self::PAYPAL_ORDER_ID, $paypalOrderId)){
-            trigger_error('Format de numéro de commande Paypal invalide.', E_USER_WARNING);
-            return;
-        }
         $this->_paypalOrderId = $paypalOrderId;
     }
 
@@ -91,6 +86,20 @@ class Commande {
                 $this->$methode($valeur);
             }
         }
+    }
+
+
+     /**
+     * Retourne les attributs et les valeurs de la commande
+     * @return array - un tableau associatif (retire les "_" des attributs)
+     */
+    public function getTableau(){
+        return array (
+            "noCommande" => $this->getNoCommande(),
+            "dateCommande" => $this->getDateCommande(),
+            "noClient" => $this->getNoClient(),
+            "paypalOrderId" => $this->getPaypalOrderId()
+        );
     }
 
 }

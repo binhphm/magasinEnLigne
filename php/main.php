@@ -13,6 +13,8 @@ spl_autoload_register('chargerClasse');
 
 /* Instanciation du gestionnaire de la BD et du panier */
 $gestionArticles = new GestionArticles('magasin_en_ligne', 'webdev', 'toto99');
+$gestionClients = new GestionClients('magasin_en_ligne', 'webdev', 'toto99');
+$gestionCommandes = new GestionCommandes('magasin_en_ligne', 'webdev', 'toto99');
 $panier = new Panier();
 
 /** APPELER LA BONNE FONCTION EN FONCTION DE LA REQUÊTE */
@@ -47,9 +49,6 @@ if(isset($_GET["q"])){
                 case "liste": //afficher chaque article du panier
                     echo json_encode($panier->getPanier());
                     break;
-                case "facture" :
-                    echo json_encode($panier->getFacture());
-                    break;
             }
         }
     }
@@ -82,9 +81,28 @@ elseif(isset($_POST["x"])){
         case "rabais" :
             $panier->appliquerRabais();
             break;
-        case "achat" :
+        case "commande" :
+            //Récupérer les données
+            $donneesClient = json_decode($obj->client, true);
+            $tabNoArticle = json_decode($obj->tabNoArticle);
+            $tabQuantite = json_decode($obj->tabQuantite);
+            
+            //Ajouter le client
+            $client = new Client($donneesClient);
+            $gestionClients->ajouterClient($client);
+            
+            //Ajouter la commande
+            $noClient = (int) $gestionClients->getDernierClient()["noClient"];
+            $characteres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $paypalOrderId = substr(str_shuffle($characteres), 0, 17);
+            $gestionCommandes->ajouterCommande($noClient, $paypalOrderId, $tabNoArticle, $tabQuantite);
+
+            //Détruire le panier d'achat
             $panier->verrouillerPanier();
             $panier->supprimerPanier();
+
+            //Envoyer le numéro de confirmation
+            echo json_encode($gestionCommandes->getDerniereCommande()["paypalOrderId"]);
             break;
     }
    

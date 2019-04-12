@@ -249,7 +249,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 									<input type="hidden" id="description" value="{description}">
 									<input type="hidden" id="cheminImage" value="{cheminImage}">
 									<input type="hidden" id="prix" value="{prixUnitaire}">
-									<p class="addtocart"><a href="#" class="btn btn-primary btn-addtocart" onClick="ajouterAuPanier(getTotalPanier)"><i class="icon-shopping-cart"></i>Ajouter au panier</a></p>
+									<p class="addtocart"><a href="#" class="btn btn-primary btn-addtocart" onClick="ajouterAuPanier()"><i class="icon-shopping-cart"></i>Ajouter au panier</a></p>
 								</div>
 							</div>
 						</div>
@@ -323,7 +323,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 												<input type="text" id="coupon" name="quantity" class="form-control input-number" placeholder="Votre code promotionnel...">
 											</div>
 											<div class="col-sm-3">
-												<input type="submit" id="btn-rabais" value="Appliquer le coupon" class="btn btn-primary" onClick="appliquerCoupon(afficherSommaire, listerPanier)">
+												<input type="submit" id="btn-rabais" value="Appliquer le coupon" class="btn btn-primary" onClick="">
 											</div>
 										</div>
 									</form>
@@ -332,7 +332,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								<div class="col-sm-4 text-center">
 									<div class="row form-group">
 										<div class="col-md-12 text-center">
-											<p><a href="#" class="btn btn-primary" onClick="modifierPanier(getTotalPanier,afficherSommaire,listerPanier)">Mettre à jour</a></p>
+											<p><a href="#" class="btn btn-primary" onClick="modifierPanier()">Mettre à jour</a></p>
 										</div>
 									</div>
 									<div class="total">
@@ -386,7 +386,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			</div>
 			<div class="one-eight text-center">
 				<div class="display-tc">
-					<a href="#" class="closed" id="article{noArticle}" data-value="{noArticle}" onClick="supprimerDuPanier(getTotalPanier,afficherSommaire,listerPanier)"></a>
+					<a href="#" class="closed" id="article{noArticle}" data-value="{noArticle}" onClick="supprimerDuPanier()"></a>
 				</div>
 			</div>
 		</div>
@@ -467,7 +467,18 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="stateprovince">Province</label>
-										<input type="text" id="fname" class="form-control" placeholder="Province">
+										<select id="province" class="form-control">
+											<option value="Alberta">Alberta</option>
+											<option value="Colombie-Britannique">Colombie-Britannique</option>
+											<option value="Île-du-Prince-Édouard">Île-du-Prince-Édouard</option>
+											<option value="Manitoba">Manitoba</option>
+											<option value="Nouveau-Brunswick">Nouveau-Brunswick</option>
+											<option value="Nouvelle-Écosse">Nouvelle-Écosse</option>
+											<option value="Ontario">Ontario</option>
+											<option value="Québec" selected>Québec</option>
+											<option value="Saskatchewan">Saskatchewan</option>
+											<option value="Terre-Neuve">Terre-Neuve</option>
+										</select>
 									</div>
 								</div>
 								<div class="col-md-6">
@@ -479,13 +490,13 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="email">Courriel</label>
-										<input type="text" id="email" class="form-control" placeholder="Province">
+										<input type="text" id="email" class="form-control" placeholder="Courriel">
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="form-group">
 										<label for="Phone">Numéro de téléphone</label>
-										<input type="text" id="zippostalcode" class="form-control" placeholder="Numéro de téléphone">
+										<input type="text" id="phone" class="form-control" placeholder="Numéro de téléphone">
 									</div>
 								</div>
 								<div class="col-md-12">
@@ -542,7 +553,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 						</div>
 						<div class="row">
 							<div class="col-md-12 text-center">
-								<p><a href="#" class="btn btn-primary">Placer la commande</a></p>
+								<p><a href="#" class="btn btn-primary" onClick="placerCommande()">Placer la commande</a></p>
 							</div>
 						</div>
 					</div>
@@ -554,6 +565,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<!-- Modèle pour lister la facture -->
 	<template id="modele-details-facture" type="text/MagasinModele">
 		<li><span>{quantiteDansPanier} x {description}</span> <span>{prixTotal}</span></li>
+		<input type="hidden" class="numeros" id="article{noArticle}" value="{noArticle}">
+		<input type="hidden" class="quantites" id="quantiteDansPanier" value="{quantiteDansPanier}">
 	</template>
 
 	<!-- ### SCRIPTS ###-->

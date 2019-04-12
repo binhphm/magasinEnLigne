@@ -95,9 +95,8 @@ function listerPanier(){
 
 /**
  * Ajoute un article au panier d'achat
- * @param {function} callback - la fonction après avoir ajouté au panier
  */
-function ajouterAuPanier(callback) {
+function ajouterAuPanier() {
     let objJSON = {
         "requete" : "ajouter",
         "noArticle" : document.getElementById("identifiant").value,
@@ -109,18 +108,14 @@ function ajouterAuPanier(callback) {
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
-    callback();
+    requete.envoyerDonnees(txtJSON, getTotalPanier);
 }
 
 
 /**
  * Supprime un élément du panier
- * @param {function} callback - la fonction après avoir supprimé
- * @param {function} callback2 - la fonction après avoir calculé le nb d'items
- * @param {function} callback3 - la fonction après avoir affiché le sommaire
  */
-function supprimerDuPanier(callback, callback2, callback3){
+function supprimerDuPanier(){
    
     let idBouton = event.target.getAttribute("id");
     let noArticle = document.getElementById(idBouton).dataset.value;
@@ -132,18 +127,14 @@ function supprimerDuPanier(callback, callback2, callback3){
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
-    callback(callback2(callback3));
-    
+    requete.envoyerDonnees(txtJSON, getTotalPanier);
+    afficherSommaire(listerPanier);
 }
 
 /**
  * Modifier les quantités du panier
- * @param {function} callback - la fonction après avoir modifié
- * @param {function} callback2 - la fonction après avoir calculé le nb d'items
- * @param {function} callback3 - la fonction après avoir affiché le sommaire
  */
-function modifierPanier(callback, callback2, callback3) {
+function modifierPanier() {
     //Tableau des numéros d'article
     let liensNoArticle = document.getElementsByClassName("closed");
     let tabNoArticle = new Array();
@@ -165,36 +156,15 @@ function modifierPanier(callback, callback2, callback3) {
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
-    callback(callback2(callback3));
+    requete.envoyerDonnees(txtJSON, getTotalPanier);
+    afficherSommaire(listerPanier);
 }
 
-/**
- * Applique le rabais de 20%
- * @param {function} callback - la fonction après avoir appliqué le rabais
- * @param {function} callback2 - la fonction après avoir affiché le sommaire
- */
-function appliquerCoupon(callback, callback2) {
-    event.preventDefault();
-    
-    let coupon = document.getElementById("coupon").value;
-    
-    if(coupon === "RAB20"){
-        let objJSON = {"requete" : "rabais"};
-        let txtJSON = JSON.stringify(objJSON);
-        let requete = new RequeteAjax("php/main.php");
-        requete.envoyerDonnees(txtJSON, reponse => {console.log(reponse);});
-        callback(callback2);
-    }
 
-    else {
-        alert("Vous n'avez pas saisi le bon code.");
-    }
-      
-}
 
 /**
  * Affiche le formulaire de commande et le sommaire de la facture
+ * @param {function} callback - la fonction à appelé après avoir affiché la caisse
  */
 function afficherCaisse(callback){
     let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
@@ -210,7 +180,7 @@ function afficherCaisse(callback){
  * Liste chaque élément de la facture
  */
 function listerFacture() {
-    let requete = new RequeteAjax("php/main.php?q=panier&r=facture");
+    let requete = new RequeteAjax("php/main.php?q=panier&r=liste");
     let modeleFacture = new ModeleMagasin("modele-details-facture");
     requete.getJSON(donnees => {
         modeleFacture.appliquerModele(donnees, "details-facture");
@@ -218,10 +188,68 @@ function listerFacture() {
 }
 
 /**
- * Ajoute un client s'il n'est pas membre et
  * Créé une commande avec les articles
  */
 function placerCommande() {
+
+    /* DONNÉES DU CLIENT */
+    let nom = document.getElementById("lname").value;
+    let prenom = document.getElementById("fname").value;
+    let adresse1 = document.getElementById("address").value;
+    let adresse2 = document.getElementById("address2").value;
+    let adresse = adresse1 + (adresse2 !== "" ? adresse2 : "");
+    let ville = document.getElementById("towncity").value;
+    let province = document.getElementById("province").value;
+    let codePostal = document.getElementById("zippostalcode").value;
+    let noTel = document.getElementById("phone").value;
+    let courriel = document.getElementById("email").value;
+
+    let client = {
+        "nomClient" : nom,
+        "prenomClient" : prenom,
+        "adresse" : adresse,
+        "ville" : ville,
+        "province" : province,
+        "codePostal" : codePostal,
+        "noTel" : noTel,
+        "courriel" : courriel
+    };
+
+    /* DONNÉES DES ARTICLES */
     
+    //Tableau des numéros d'article
+    let numeros = document.getElementsByClassName("numeros");
+    let tabNoArticle = new Array();
+    for(let i = 0; i < numeros.length; i++){
+        tabNoArticle.push(numeros[i].value);
+    }
+    //Tableau des quantités
+    let quantites = document.getElementsByClassName("quantites");
+    let tabQuantite = new Array();
+    for(let i = 0; i < quantites.length; i++){
+        tabQuantite.push(quantites[i].value);
+    }
+
+    /* JSON à envoyer */
+    let objJSON = {
+        "requete" : "commande",
+        "client" : JSON.stringify(client),
+        "tabNoArticle" : JSON.stringify(tabNoArticle),
+        "tabQuantite" : JSON.stringify(tabQuantite)
+    };
+
+    let txtJSON = JSON.stringify(objJSON);
+    let requete = new RequeteAjax("php/main.php");
+    requete.envoyerDonnees(txtJSON, (donnees) => {
+        getTotalPanier();
+        alert("La commande a été effectuée avec succès.\nLe numéro de confirmation est :" + JSON.parse(donnees));
+        afficherConfirmation();
+    });
+   
+}
+
+function afficherConfirmation(){
+    
+
 }
 

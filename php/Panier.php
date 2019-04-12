@@ -31,7 +31,7 @@ class Panier {
             $_SESSION['panier']['cheminImage'] = array();
             $_SESSION['panier']['quantiteDansPanier'] = array();
             $_SESSION['panier']['prixUnitaire'] = array();
-            $_SESSION['panier']['estVerouille'] = false;
+            $_SESSION['panier']['estVerrouille'] = false;
         }
         return true;
     }
@@ -182,7 +182,7 @@ class Panier {
             $tmp['cheminImage'] = array();
             $tmp['quantiteDansPanier'] = array();
             $tmp['prixUnitaire'] = array();
-            $tmp['estVerouille'] = $_SESSION['panier']['estVerouille'];
+            $tmp['estVerrouille'] = $_SESSION['panier']['estVerrouille'];
      
             for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++) {
                 if ($_SESSION['panier']['noArticle'][$i] !== $noArticle) {
@@ -240,37 +240,13 @@ class Panier {
         }
         
     }
-
-    /**
-     * Obtenir le détail de la facture
-     */
-    public function getFacture() {
-        $tabFacture = array();
-        
-        if(!$this->estVerrouille()) {
-            
-            for($i = 0; $i < count($_SESSION['panier']['noArticle']); $i++) {
-                $prixTotal = $_SESSION['panier']['quantiteDansPanier'][$i] * $_SESSION['panier']['prixUnitaire'][$i];
-                $prixTotal = number_format($prixTotal, 2, ',', ' ') . ' $';
-                $ligne = array (
-                    "quantiteDansPanier" => $_SESSION['panier']['quantiteDansPanier'][$i],
-                    "description" => $_SESSION['panier']['description'][$i],
-                    "prixTotal" => $prixTotal
-                );
-                array_push($tabFacture, $ligne);
-            }
-            
-        }
-        return $tabFacture;
-    }
-
    
     /**
      * Vérifie si le panier est vérouillé ou pas
      * @return boolean
      */
     public function estVerrouille(){
-        return ($this->creerPanier() && $_SESSION['panier']['estVerouille'] == true);
+        return ($this->creerPanier() && $_SESSION['panier']['estVerrouille'] == true);
     }
 
     /**

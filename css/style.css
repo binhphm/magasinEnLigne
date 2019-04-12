@@ -8204,7 +8204,7 @@ h1, h2, h3, h4, h5,
     -o-appearance: none;
     appearance: none;
     border: none;
-    color: #999999;
+    color: black;
     background: #fff; }
     .colorlib-form .form-control:active, .colorlib-form .form-control:focus {
       -webkit-box-shadow: none;

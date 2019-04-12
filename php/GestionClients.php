@@ -32,9 +32,9 @@
         if(!$this->existeDeja($client->getCourriel())) {
             $requete = $this->_bdd->prepare(
                 'INSERT INTO client (nomClient, prenomClient, adresse, ville, province,
-                    codePostal, noTel, pseudo, motDePasse, courriel)
+                    codePostal, noTel, courriel)
                 VALUES (:nomClient, :prenomClient, :adresse, :ville, :province,
-                    :codePostal, :noTel, :pseudo, :motDePasse, :courriel)'
+                    :codePostal, :noTel, :courriel)'
             );
     
             $requete->bindValue(':nomClient', $client->getNomClient(), PDO::PARAM_STR);
@@ -44,8 +44,6 @@
             $requete->bindValue(':province', $client->getProvince(), PDO::PARAM_STR);
             $requete->bindValue(':codePostal', $client->getCodePostal(), PDO::PARAM_STR);
             $requete->bindValue(':noTel', $client->getNoTel(), PDO::PARAM_STR);
-            $requete->bindValue(':pseudo', $client->getPseudo(), PDO::PARAM_STR);
-            $requete->bindValue(':motDePasse', $client->getMotDePasse(), PDO::PARAM_STR);
             $requete->bindValue(':courriel', $client->getCourriel(), PDO::PARAM_STR);
     
             $requete->execute();
@@ -87,8 +85,8 @@
         $requete->bindValue(':province', $client->getProvince(), PDO::PARAM_STR);
         $requete->bindValue(':codePostal', $client->getCodePostal(), PDO::PARAM_STR);
         $requete->bindValue(':noTel', $client->getNoTel(), PDO::PARAM_STR);
-        $requete->bindValue(':pseudo', $client->getPseudo(), PDO::PARAM_);
-        $requete->bindValue(':motDePasse', $client->getMotDePasse(), PDO::PARAM_STR);
+        $requete->bindValue(':pseudo', $client->getPseudo());
+        $requete->bindValue(':motDePasse', $client->getMotDePasse());
         $requete->bindValue(':courriel', $client->getCourriel(), PDO::PARAM_STR);
 
         $requete->execute();
@@ -114,6 +112,18 @@
         }
 
         $requete->execute();
+        $donnees = $requete->fetch(PDO::FETCH_ASSOC);
+        $requete->closeCursor();
+        $client = new Client($donnees);
+        return $client->getTableau();
+    }
+
+     /**
+     * Récupère les information du dernier client ajouté
+     * @return array - un tableau associatif
+     */
+    public function getDernierClient() {
+        $requete = $this->_bdd->query('SELECT * FROM client ORDER BY noClient DESC LIMIT 1');
         $donnees = $requete->fetch(PDO::FETCH_ASSOC);
         $requete->closeCursor();
         $client = new Client($donnees);

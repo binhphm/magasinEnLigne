@@ -22,7 +22,6 @@ class Client {
     const LETTRES_SEULEMENT = '/[a-zA-Z]+/';
     const CODE_POSTAL = '/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$/';
     const NO_TEL = '/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/';
-    const COURRIEL = '/^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/';
 
     
     /**
@@ -85,7 +84,7 @@ class Client {
 
     public function setNoClient($noClient) {
         if(!is_int($noClient)){
-            trigger_error('Le numéro d\'un client doit être un nombre entier.', E_USER_WARNING);
+            error_log('Le numéro d\'un client doit être un nombre entier.', 3, 'erreurs.txt');
             return;
         }
         $this->_noClient = $noClient;
@@ -93,7 +92,7 @@ class Client {
 
     public function setNomClient($nomClient) {
         if(!preg_match(self::LETTRES_SEULEMENT, $nomClient)){
-            trigger_error('Le nom du client ne doit contenir que des lettres', E_USER_WARNING);
+            error_log('Le nom du client ne doit contenir que des lettres', 3, 'erreurs.txt');
             return;
         }
         $this->_nomClient = $nomClient;
@@ -101,7 +100,7 @@ class Client {
 
     public function setPrenomClient($prenomClient) {
         if(!preg_match(self::LETTRES_SEULEMENT, $prenomClient)){
-            trigger_error('Le prénom ne doit contenir que des lettrees.', E_USER_WARNING);
+            error_log('Le prénom ne doit contenir que des lettrees.', 3, 'erreurs.txt');
             return;
         }
         $this->_prenomClient = $prenomClient;
@@ -109,7 +108,7 @@ class Client {
 
     public function setAdresse($adresse) {
         if(!is_string($adresse)){
-            trigger_error('L\'adresse d\'un client doit être une chaîne de caractères.', E_USER_WARNING);
+            error_log('L\'adresse d\'un client doit être une chaîne de caractères.', 3, 'erreurs.txt');
             return;
         }
         $this->_adresse = $adresse;
@@ -117,7 +116,7 @@ class Client {
 
     public function setVille($ville) {
         if(!preg_match(self::LETTRES_SEULEMENT, $ville)){
-            trigger_error('La ville ne doit contenir que des lettres.', E_USER_WARNING);
+            error_log('La ville ne doit contenir que des lettres.', 3, 'erreurs.txt');
             return;
         }
         $this->_ville = $ville;
@@ -125,7 +124,7 @@ class Client {
 
     public function setProvince($province) {
         if(!preg_match(self::LETTRES_SEULEMENT, $province)){
-            trigger_error('La province ne doit contenir que des lettres.', E_USER_WARNING);
+            error_log('La province ne doit contenir que des lettres.', 3, 'erreurs.txt');
             return;
         }
         $this->_province = $province;
@@ -133,7 +132,7 @@ class Client {
 
     public function setCodePostal($codePostal) {
         if(!preg_match(self::CODE_POSTAL, $codePostal)){
-            trigger_error('Format de code postal invalide.', E_USER_WARNING);
+            error_log('Format de code postal invalide.', 3, 'erreurs.txt');
             return;
         }
         $this->_codePostal = $codePostal;
@@ -141,31 +140,23 @@ class Client {
 
     public function setNoTel($noTel) {
         if(!preg_match(self::NO_TEL, $noTel)){
-            trigger_error('Format de numéro de téléphone invalide.', E_USER_WARNING);
+            error_log('Format de numéro de téléphone invalide.', 3, 'erreurs.txt');
             return;
         }
-        $this->_codePostal = $codePostal;
+        $this->_noTel = $noTel;
     }
 
     public function setPseudo($pseudo) {
-        if(!is_string($pseudo)){
-            trigger_error('Le pseudonyme d\'un client doit être une chaîne de caractères.', E_USER_WARNING);
-            return;
-        }
         $this->_pseudo = $pseudo;
     }
 
     public function setMotDePasse($motDePasse) {
-        if(!is_string($motDePasse)){
-            trigger_error('Le mot de passe d\'un client doit être une chaîne de caractères.', E_USER_WARNING);
-            return;
-        }
         $this->_motDePasse = $motDePasse;
     }
 
     public function setCourriel($courriel) {
-        if(!preg_match(self::COURRIEL, $courriel)){
-            trigger_error('Format de courriel invalide.', E_USER_WARNING);
+        if(!filter_var($courriel, FILTER_VALIDATE_EMAIL)){
+            error_log('Format de courriel invalide.', 3, 'erreurs.txt');
             return;
         }
         $this->_courriel = $courriel;
