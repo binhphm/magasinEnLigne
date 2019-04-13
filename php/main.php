@@ -1,4 +1,3 @@
-
 <?php
 header("Content-Type: application/json; charset=UTF-8");
 // Débuter la session
@@ -12,9 +11,9 @@ spl_autoload_register('chargerClasse');
 
 
 /* Instanciation du gestionnaire de la BD et du panier */
-$gestionArticles = new GestionArticles('magasin_en_ligne', 'webdev', 'toto99');
-$gestionClients = new GestionClients('magasin_en_ligne', 'webdev', 'toto99');
-$gestionCommandes = new GestionCommandes('magasin_en_ligne', 'webdev', 'toto99');
+$gestionArticles = new GestionArticles();
+$gestionClients = new GestionClients();
+$gestionCommandes = new GestionCommandes();
 $panier = new Panier();
 
 /** APPELER LA BONNE FONCTION EN FONCTION DE LA REQUÊTE */
@@ -81,15 +80,21 @@ elseif(isset($_POST["x"])){
         case "rabais" :
             $panier->appliquerRabais();
             break;
-        case "commande" :
-            //Récupérer les données
+        case "client" :
             $donneesClient = json_decode($obj->client, true);
+            $client = new Client($donneesClient);
+            $gestionClients->ajouterClient($client);
+            echo json_encode($gestionClients->getDernierClient());
+            break;
+        
+           /* case "commande" :
+            //Récupérer les données
+            
             $tabNoArticle = json_decode($obj->tabNoArticle);
             $tabQuantite = json_decode($obj->tabQuantite);
             
             //Ajouter le client
-            $client = new Client($donneesClient);
-            $gestionClients->ajouterClient($client);
+            
             
             //Ajouter la commande
             $noClient = (int) $gestionClients->getDernierClient()["noClient"];
@@ -103,11 +108,9 @@ elseif(isset($_POST["x"])){
 
             //Envoyer le numéro de confirmation
             echo json_encode($gestionCommandes->getDerniereCommande()["paypalOrderId"]);
-            break;
+            break;*/
     }
    
 }
 
 ?>
-
-

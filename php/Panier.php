@@ -151,11 +151,11 @@ class Panier {
                 $prixUnitaire = number_format($prixUnitaire, 2);
                 
                 //Insérer les informations dans le tableau
-                array_push( $_SESSION['panier']['noArticle'],$noArticle);
-                array_push( $_SESSION['panier']['description'],$description);
-                array_push( $_SESSION['panier']['cheminImage'],$cheminImage);
-                array_push( $_SESSION['panier']['quantiteDansPanier'],$quantite);
-                array_push( $_SESSION['panier']['prixUnitaire'],$prixUnitaire);
+                array_push($_SESSION['panier']['noArticle'],$noArticle);
+                array_push($_SESSION['panier']['description'],$description);
+                array_push($_SESSION['panier']['cheminImage'],$cheminImage);
+                array_push($_SESSION['panier']['quantiteDansPanier'],$quantite);
+                array_push($_SESSION['panier']['prixUnitaire'],$prixUnitaire);
             }
         }
         else {

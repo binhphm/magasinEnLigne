@@ -19,7 +19,7 @@ class Client {
     private $_courriel;
 
     /* CONSTANTES (regex) */
-    const LETTRES_SEULEMENT = '/[a-zA-Z]+/';
+    const LETTRES_SEULEMENT = '/[a-zA-ZáàäâéèëêíìïîóòöôúùüûçñÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛÑÇ\'\-]+/';
     const CODE_POSTAL = '/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$/';
     const NO_TEL = '/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/';
 
@@ -155,10 +155,6 @@ class Client {
     }
 
     public function setCourriel($courriel) {
-        if(!filter_var($courriel, FILTER_VALIDATE_EMAIL)){
-            error_log('Format de courriel invalide.', 3, 'erreurs.txt');
-            return;
-        }
         $this->_courriel = $courriel;
     }
 

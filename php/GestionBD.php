@@ -6,8 +6,11 @@
  */
 abstract class GestionBD {
 
-    /* ATTRIBUT */
+    /* ATTRIBUTS */
     protected $_bdd;
+    private $_nomBD = 'magasin_en_ligne';
+    private $_utilisateur = 'webdev';
+    private $_mdp = 'toto99';
 
     /**
      * CONSTRUCTEUR : instanciation de l'objet
@@ -15,8 +18,8 @@ abstract class GestionBD {
      * @param {string} $utilisateur - l'utilisateur
      * @param {string} $mdp - le mot de passe
      */
-    public function __construct($nomBD, $utilisateur, $mdp) {
-        $this->connexionBD($nomBD, $utilisateur, $mdp);
+    public function __construct() {
+        $this->connexionBD();
     }
 
     /**
@@ -25,9 +28,9 @@ abstract class GestionBD {
      * @param {string} $utilisateur - l'utilisateur
      * @param {string} $mdp - le mot de passe
      */
-    public function connexionBD($nomBD, $utilisateur, $mdp) {
+    public function connexionBD() {
 
-        $nsd = "mysql:host=localhost;dbname=$nomBD;charset=utf8";
+        $nsd = 'mysql:host=localhost;dbname='.$this->_nomBD.';charset=utf8';
 
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -36,7 +39,7 @@ abstract class GestionBD {
         ];
 
         try {
-            $this->_bdd = new PDO($nsd, $utilisateur, $mdp, $options);
+            $this->_bdd = new PDO($nsd, $this->_utilisateur, $this->_mdp, $options);
         } 
         catch (PDOException $e) {
             error_log('Message : ' . $e->getMessage() . "\t Code : " . (int)$e->getCode(). "\n" , 3, "erreurs.txt");

@@ -32,9 +32,9 @@
         if(!$this->existeDeja($client->getCourriel())) {
             $requete = $this->_bdd->prepare(
                 'INSERT INTO client (nomClient, prenomClient, adresse, ville, province,
-                    codePostal, noTel, courriel)
+                    codePostal, noTel, courriel, pseudo, motDePasse)
                 VALUES (:nomClient, :prenomClient, :adresse, :ville, :province,
-                    :codePostal, :noTel, :courriel)'
+                    :codePostal, :noTel, :courriel, :pseudo, :motDePasse)'
             );
     
             $requete->bindValue(':nomClient', $client->getNomClient(), PDO::PARAM_STR);
@@ -45,6 +45,8 @@
             $requete->bindValue(':codePostal', $client->getCodePostal(), PDO::PARAM_STR);
             $requete->bindValue(':noTel', $client->getNoTel(), PDO::PARAM_STR);
             $requete->bindValue(':courriel', $client->getCourriel(), PDO::PARAM_STR);
+            $requete->bindValue(':pseudo', $client->getPseudo(), PDO::PARAM_STR);
+            $requete->bindValue(':motDePasse', $client->getMotDePasse(), PDO::PARAM_STR);
     
             $requete->execute();
             $requete->closeCursor();
@@ -74,7 +76,9 @@
                 noTel = :noTel,
                 pseudo = :pseudo,
                 motDePasse = :motDePasse,
-                courriel = :courriel
+                courriel = :courriel,
+                pseudo = :pseudo,
+                motDePasse = :motDePasse
             WHERE noClient = :noClient'
         );
 
@@ -88,6 +92,8 @@
         $requete->bindValue(':pseudo', $client->getPseudo());
         $requete->bindValue(':motDePasse', $client->getMotDePasse());
         $requete->bindValue(':courriel', $client->getCourriel(), PDO::PARAM_STR);
+        $requete->bindValue(':pseudo', $client->getPseudo(), PDO::PARAM_STR);
+        $requete->bindValue(':motDePasse', $client->getMotDePasse(), PDO::PARAM_STR);
 
         $requete->execute();
         $requete->closeCursor();
@@ -101,6 +107,8 @@
      * @return array - un tableau associatif
      */
     public function getClient($info) {
+        $tabClient = array();
+
         if(is_int($info)){//Il s'agit d'un numéro de client
             $info = (int) $info;
             $requete = $this->_bdd->prepare('SELECT * FROM client WHERE noClient = ?');
@@ -115,7 +123,9 @@
         $donnees = $requete->fetch(PDO::FETCH_ASSOC);
         $requete->closeCursor();
         $client = new Client($donnees);
-        return $client->getTableau();
+        array_push($tabClient, $client->getTableau());
+
+        return $tabClient;
     }
 
      /**
@@ -123,11 +133,15 @@
      * @return array - un tableau associatif
      */
     public function getDernierClient() {
+        $tabClient = array();
+
         $requete = $this->_bdd->query('SELECT * FROM client ORDER BY noClient DESC LIMIT 1');
         $donnees = $requete->fetch(PDO::FETCH_ASSOC);
         $requete->closeCursor();
         $client = new Client($donnees);
-        return $client->getTableau();
+        array_push($tabClient, $client->getTableau());
+
+        return $tabClient;
     }
 
 }
