@@ -289,7 +289,7 @@ function modifierPanier() {
 
 /**
  * -----------------------
- * CAISSE
+ * COMMANDE
  * -----------------------
  */
 
@@ -335,13 +335,13 @@ function afficherPaypal () {
         },
         createOrder: function(data, actions) {
             console.log(data);
-          return actions.order.create({
-            purchase_units: [{
-              amount: {
-                value: document.getElementById("montant-total").innerText.replace(' $', '').replace(',', '.')
-              }
-            }]
-          });
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+                        value: document.getElementById("montant-total").innerText.replace(' $', '').replace(',', '.')
+                    }
+                }]
+            });
         },
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(details) {
@@ -349,7 +349,7 @@ function afficherPaypal () {
                 placerCommande(data.orderID);
             });
           }
-      }).render('#paypal-button-container');
+    }).render('#paypal-button-container');
 }
 
 
@@ -373,6 +373,7 @@ function placerCommande(paypalOrderId) {
 
     let objJSON = {
         "requete" : "commande",
+        "noClient" : document.getElementById("numero-client").value,
         "paypalOrderId" : paypalOrderId,
         "tabNoArticle" : JSON.stringify(tabNoArticle),
         "tabQuantite" : JSON.stringify(tabQuantite)

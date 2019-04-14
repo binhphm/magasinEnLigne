@@ -86,29 +86,21 @@ elseif(isset($_POST["x"])){
             $gestionClients->ajouterClient($client);
             echo json_encode($gestionClients->getDernierClient());
             break;
-        
-           /* case "commande" :
+        case "commande" :
             //Récupérer les données
-            
+            $paypalOrderId = $obj->paypalOrderId;
             $tabNoArticle = json_decode($obj->tabNoArticle);
             $tabQuantite = json_decode($obj->tabQuantite);
-            
-            //Ajouter le client
-            
+            $noClient = $obj->noClient;
             
             //Ajouter la commande
-            $noClient = (int) $gestionClients->getDernierClient()["noClient"];
-            $characteres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            $paypalOrderId = substr(str_shuffle($characteres), 0, 17);
             $gestionCommandes->ajouterCommande($noClient, $paypalOrderId, $tabNoArticle, $tabQuantite);
 
             //Détruire le panier d'achat
             $panier->verrouillerPanier();
             $panier->supprimerPanier();
-
-            //Envoyer le numéro de confirmation
-            echo json_encode($gestionCommandes->getDerniereCommande()["paypalOrderId"]);
-            break;*/
+            
+            break;
     }
    
 }
