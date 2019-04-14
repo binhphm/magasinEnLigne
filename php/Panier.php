@@ -264,6 +264,8 @@ class Panier {
     public function supprimerPanier() {
         if($this->creerPanier()){
             unset($_SESSION['panier']);
+            session_unset();
+            session_destroy();
         }
        
     }      
