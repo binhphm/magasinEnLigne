@@ -27,7 +27,7 @@ function listerArticles(filtre, valeur){
     let requete = new RequeteAjax("php/main.php?q=inventaire" + 
                     ((filtre != "" && valeur != "") ? "&" + filtre + "=" + valeur : ""));
     let modeleListeArticles = new ModeleMagasin("modele-liste-articles");
-    requete.getJSON(donnees => {modeleListeArticles.appliquerModele(donnees, "liste-articles");});
+    requete.getJSON(reponse => {modeleListeArticles.appliquerModele(reponse, "liste-articles");});
 
 }
 
@@ -39,7 +39,7 @@ function listerArticles(filtre, valeur){
 function afficherArticle(noArticle){
     let requete = new RequeteAjax("php/main.php?q=inventaire&noArticle=" + noArticle);
     let modeleArticle = new ModeleMagasin("modele-article");
-    requete.getJSON(donnees => {modeleArticle.appliquerModele(donnees, "milieu-page");});
+    requete.getJSON(reponse => {modeleArticle.appliquerModele(reponse, "milieu-page");});
 }
 
 
@@ -54,9 +54,9 @@ function afficherArticle(noArticle){
  */
 function getTotalPanier(){
     let requete = new RequeteAjax("php/main.php?q=panier&r=total");
-    requete.getJSON(donnees => {
+    requete.getJSON(reponse => {
         document.getElementById("nombre-total").innerHTML = 
-            "PANIER[" + JSON.parse(donnees) + "]";
+            "PANIER[" + JSON.parse(reponse) + "]";
     });
 }
 
@@ -99,11 +99,10 @@ function ajouterAuPanier() {
  * @param {function} callback - la fonction à appeler après que le sommaire soit chargé
  */
 function afficherSommaire(){
-
     let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
     let modelePanier = new ModeleMagasin("modele-panier");
-    requete.getJSON(donnees => {
-        modelePanier.appliquerModele(donnees, "milieu-page");
+    requete.getJSON(reponse => {
+        modelePanier.appliquerModele(reponse, "milieu-page");
         listerPanier();
     });
    
@@ -115,8 +114,8 @@ function afficherSommaire(){
 function listerPanier(){
     let requete = new RequeteAjax("php/main.php?q=panier&r=liste");
     let modeleListePanier = new ModeleMagasin("modele-liste-panier");
-    requete.getJSON(donnees => {
-        modeleListePanier.appliquerModele(donnees, "liste-panier");
+    requete.getJSON(reponse => {
+        modeleListePanier.appliquerModele(reponse, "liste-panier");
     });
 }
 
@@ -187,6 +186,8 @@ function modifierPanier() {
   * Valide les données du formulaire
   */
  function validerFormulaire(){
+    //Message d'erreur
+    messageErreur = document.getElementById("message-erreur");
 
     //Données du formulaire
     let nom = document.getElementById("lname").value;
@@ -205,38 +206,48 @@ function modifierPanier() {
 
     //Expression régulières
     const LETTRES_SEULEMENT = /[a-zA-ZáàäâéèëêíìïîóòöôúùüûçñÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛÑÇ\'\-]+/;
-    const CODE_POSTAL = /^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$/;
+    const CODE_POSTAL = /^[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]$/;
     const NO_TEL = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
     const COURRIEL = /[^@]+@[^\.]+\..+/g;
 
     //Vérifier si le nom, le prénom et la ville ont seulement des lettres
     if(!nom.match(LETTRES_SEULEMENT) || !prenom.match(LETTRES_SEULEMENT) || 
             !ville.match(LETTRES_SEULEMENT)){
-        document.getElementById("message-erreur").innerHTML = "Ce champ ne doit contenir que des lettres";
+        messageErreur.classList.add('alert');
+        messageErreur.classList.add('alert-danger');
+        messageErreur.innerHTML = "Ce champ ne doit contenir que des lettres.";
         return;
     }
    
     //Vérifier si le code postal est valide
     if(!codePostal.match(CODE_POSTAL)) {
-        document.getElementById("message-erreur").innerHTML = "Format de code postal invalide";
+        messageErreur.classList.add('alert');
+        messageErreur.classList.add('alert-danger');
+        messageErreur.innerHTML = "Format de code postal invalide.";
         return;
     }
 
     //Vérifier si le numéro de téléphone est valide
     if(!noTel.match(NO_TEL)) {
-        document.getElementById("message-erreur").innerHTML = "Format de numéro de téléphone invalide";
+        messageErreur.classList.add('alert');
+        messageErreur.classList.add('alert-danger');
+        messageErreur.innerHTML = "Format de numéro de téléphone invalide.";
         return;
     }
 
     //Vérifier si le courriel est valide
     if(!courriel.match(COURRIEL)) {
-        document.getElementById("message-erreur").innerHTML = "Format de courriel invalide";
+        messageErreur.classList.add('alert');
+        messageErreur.classList.add('alert-danger');
+        messageErreur.innerHTML = "Format de courriel invalide.";
         return;
     }
 
     //Vérifier que les deux mots de passes sont identiques
     if(motDePasse !== confMotDePasse) {
-        document.getElementById("message-erreur").innerHTML = "Les deux mots de passe doivent être identiques";
+        messageErreur.classList.add('alert');
+        messageErreur.classList.add('alert-danger');
+        messageErreur.innerHTML = "Les deux mots de passe doivent être identiques.";
         return;
     }
 
@@ -262,14 +273,17 @@ function modifierPanier() {
     ajouterClient(txtJSON);
  }
 
+
+ /**
+  * Ajoute le client à la base de données
+  * @param {string} txtJSON - les données à envoyer
+  */
  function ajouterClient(txtJSON) {
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, (donnees) => {
-      console.log(donnees);
+    requete.envoyerDonnees(txtJSON, reponse => {
+      afficherCaisse(reponse);
     });
  }
-
-
 
 
 
@@ -280,15 +294,20 @@ function modifierPanier() {
  */
 
  /**
- * Affiche le formulaire de commande et le sommaire de la facture
- * @param {function} callback - la fonction à appelé après avoir affiché la caisse
+ * Affiche les informations du client et la facture
  */
-function afficherCaisse(){
-    let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
+function afficherCaisse(reponse){
+    //Informations du client
     let modeleCaisse = new ModeleMagasin("modele-caisse");
+    modeleCaisse.appliquerModele(reponse, "milieu-page");
+    
+    //Facture
+    let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
+    let modeleFacture = new ModeleMagasin("modele-facture");
     requete.getJSON(donnees => {
-        modeleCaisse.appliquerModele(donnees, "milieu-page");
+        modeleFacture.appliquerModele(donnees, "facture");
         listerFacture();
+        afficherPaypal();
     });
    
 }
@@ -298,19 +317,47 @@ function afficherCaisse(){
  */
 function listerFacture() {
     let requete = new RequeteAjax("php/main.php?q=panier&r=liste");
-    let modeleFacture = new ModeleMagasin("modele-details-facture");
+    let modeleDetailsFacture = new ModeleMagasin("modele-details-facture");
     requete.getJSON(donnees => {
-        modeleFacture.appliquerModele(donnees, "details-facture");
+        modeleDetailsFacture.appliquerModele(donnees, "details-facture");
     });
+}
+
+function afficherPaypal () {
+    paypal.Buttons({
+        locale: 'fr_CA',
+        currency: 'CAD',
+        style: {
+            layout:  'vertical',
+            color:   'silver',
+            shape:   'pill',
+            label:   'paypal'
+        },
+        createOrder: function(data, actions) {
+            console.log(data);
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: document.getElementById("montant-total").innerText.replace(' $', '').replace(',', '.')
+              }
+            }]
+          });
+        },
+        onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+                console.log(details);
+                placerCommande(data.orderID);
+            });
+          }
+      }).render('#paypal-button-container');
 }
 
 
 /**
- * Créé une commande avec les articles
+ * Crée une commande avec les articles
  */
-/*function placerCommande() {
+function placerCommande(paypalOrderId) {
 
-    
     //Tableau des numéros d'article
     let numeros = document.getElementsByClassName("numeros");
     let tabNoArticle = new Array();
@@ -324,9 +371,9 @@ function listerFacture() {
         tabQuantite.push(quantites[i].value);
     }
 
-    
     let objJSON = {
         "requete" : "commande",
+        "paypalOrderId" : paypalOrderId,
         "tabNoArticle" : JSON.stringify(tabNoArticle),
         "tabQuantite" : JSON.stringify(tabQuantite)
     };
@@ -334,58 +381,19 @@ function listerFacture() {
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
     requete.envoyerDonnees(txtJSON, (donnees) => {
+        console.log(donnees);
         getTotalPanier();
-        alert("La commande a été effectuée avec succès.\nLe numéro de confirmation est :" + JSON.parse(donnees));
-        afficherConfirmation();
+        commandeTerminee();
     });
    
 }
 
-
-function afficherPaypal () {
-
-    //<div id="paypal-button-container"></div>
-    paypal.Buttons({
-        locale: 'fr_CA',
-        style: {
-            layout:  'vertical',
-            color:   'silver',
-            shape:   'pill',
-            label:   'paypal'
-        },
-        createOrder: function(data, actions) {
-          return actions.order.create({
-            purchase_units: [{
-              amount: {
-                value: document.getElementById("total-facture").value
-              }
-            }]
-          });
-        },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-              alert('Transaction completed by ' + details.payer.name.given_name);
-              return fetch('/paypal-transaction-complete', {
-                method: 'post',
-                headers: {
-                  'content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                  orderID: data.orderID
-                })
-              });
-            });
-          }
-      }).render('#paypal-button-container');
-}*/
-
-
 /**
  * Affiche que la commande est bel et bien complétée
  */
-/*function commandeTerminee(){
+function commandeTerminee(){
     let modeleComplete= new ModeleMagasin("modele-commande-complete");
     modeleComplete.appliquerModele('', "milieu-page");
     
-}*/
+}
 

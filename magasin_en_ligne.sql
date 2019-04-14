@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  ven. 12 avr. 2019 à 07:36
+-- Généré le :  Dim 14 avr. 2019 à 05:49
 -- Version du serveur :  10.1.36-MariaDB
 -- Version de PHP :  7.2.11
 
@@ -47,12 +47,12 @@ CREATE TABLE IF NOT EXISTS `article` (
 --
 
 INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `prixUnitaire`, `quantiteEnStock`, `quantiteDansPanier`) VALUES
-(1, 'Cheveux', 'Alikay Naturals Lemongrass Leave In Conditioner', 'images/alikay_naturals_lemongrass_leave_in_conditioner.jpg', '28.99', 17, 3),
-(2, 'Cheveux', 'ApHogee Curlific! Texture Treatment', 'images/aphogee_curlific_texture_treatment.jpg', '13.99', 23, 2),
+(1, 'Cheveux', 'Alikay Naturals Lemongrass Leave In Conditioner', 'images/alikay_naturals_lemongrass_leave_in_conditioner.jpg', '28.99', 13, 7),
+(2, 'Cheveux', 'ApHogee Curlific! Texture Treatment', 'images/aphogee_curlific_texture_treatment.jpg', '13.99', 20, 5),
 (3, 'Cheveux', 'As I Am Coconut Cowash Cleansing Conditioner', 'images/as_i_am_coconut_cowash.jpeg', '15.99', 19, 1),
 (4, 'Maquillage', 'Ardell Magnetic Lashes Double Wispies', 'images/ardell_magnetic_lashes_double_wispies.jpg', '21.99', 12, 3),
 (5, 'Maquillage', 'Ardell Natural Lashes Wispies Brown', 'images/ardell_natural_lashes_wispies_brown.jpg', '6.99', 45, 5),
-(6, 'Cheveux', 'BaByliss Pro Nano Titanium OPTIMA 3100 Straightening Iron', 'images/babylisspro_nano_titanium_optima_3100_straightening_iron_1_inch.jpg', '271.99', 5, 0),
+(6, 'Cheveux', 'BaByliss Pro Nano Titanium OPTIMA 3100 Straightening Iron', 'images/babylisspro_nano_titanium_optima_3100_straightening_iron_1_inch.jpg', '271.99', 4, 1),
 (7, 'Hommes', 'Beard Guyz Beard Care And Grooming Kit', 'images/beard_guyz_beard_care_grooming_kit.jpg', '29.99', 10, 0),
 (8, 'Cheveux', 'Camille Rose Naturals Curl Maker', 'images/camille_rose_curl_maker.jpg', '41.99', 4, 1),
 (9, 'Cheveux', 'Cantu Shea Butter For Natural Hair Coconut Curling Cream', 'images/cantu_coconut_curling_cream.jpg', '31.99', 15, 0),
@@ -60,8 +60,8 @@ INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `
 (11, 'Cheveux', 'Carol\'s daughter Hair Milk Curl Defining Moisture Mask', 'images/carols_daughter_hair_milk_curl_defining_moisture_mask.jpg', '34.99', 3, 3),
 (12, 'Cheveux', 'Curls Blueberry Bliss Curl Control Paste', 'images/curls_blueberry_control_paste.jpg', '15.99', 20, 0),
 (13, 'Cheveux', 'DevaCurl Supercream Coconut Curl Styler', 'images/devacurl_supercream_coconut_curl_styler.jpg', '55.99', 9, 1),
-(14, 'Peau', 'Dudu-Osun Black Soap', 'images/dudu_osun_black_soap.jpg', '5.99', 35, 15),
-(15, 'Maquillage', 'DUO Strip Lash Adhesive Tube Dark Tone', 'images/duo_strip_lash_adhesive_tube_dark_tone.jpg', '8.99', 49, 1),
+(14, 'Peau', 'Dudu-Osun Black Soap', 'images/dudu_osun_black_soap.jpg', '5.99', 27, 23),
+(15, 'Maquillage', 'DUO Strip Lash Adhesive Tube Dark Tone', 'images/duo_strip_lash_adhesive_tube_dark_tone.jpg', '8.99', 48, 2),
 (16, 'Cheveux', 'Eco Styler Olive Oil Styling Gel', 'images/eco_styler_olive_oil_gel.jpeg', '9.99', 50, 0),
 (17, 'Cheveux', 'EDEN BodyWorks Coconut Shea Cleansing CoWash', 'images/eden_body_works_coconut_shea_cleansing_cowash.jpg', '17.99', 20, 0),
 (18, 'Cheveux', 'Shea Moisture Jamaican Black Castor Oil Strengthen And Grow Thermal Protectant', 'images/shea_moisture_jbco_thermal_protectant.jpg', '19.99', 12, 3),
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `article_en_commande` (
   PRIMARY KEY (`noArticleEnCommande`),
   KEY `commande_fk` (`noCommande`),
   KEY `article_fk` (`noArticle`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `article_en_commande`
@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   `motDePasse` varchar(25) DEFAULT NULL,
   `courriel` varchar(255) NOT NULL,
   PRIMARY KEY (`noClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `client`
@@ -142,7 +142,16 @@ INSERT INTO `client` (`noClient`, `nomClient`, `prenomClient`, `adresse`, `ville
 (7, 'Soucy', 'Warrane', '4686 Roger Street', 'Oyster River', 'Colombie-Britannique', 'V9W 5N0', '250-337-5002', NULL, NULL, 'WarraneSoucy@rhyta.com '),
 (8, 'Kou', 'Mingmei', '3375 5th Avenue', 'Fort Vermilion', 'Alberta', 'T0H 1N0', '780-927-6217', NULL, NULL, 'MingmeiKuo@armyspy.com '),
 (9, 'Antoun', 'Rais Fathi', '3564 St Marys Rd', 'Winnipeg', 'Manitoba', 'R3C 0C4', '204-292-9473', NULL, NULL, 'RaisFathiAntoun@rhyta.com'),
-(10, 'Chatigny', 'Dalmace', '3008 No. 3 Road', 'Richmond', 'Colombie-Britannique', 'V6X 2B8', '604-214-5060', NULL, NULL, 'DalmaceChatigny@armyspy.com');
+(10, 'Chatigny', 'Dalmace', '3008 No. 3 Road', 'Richmond', 'Colombie-Britannique', 'V6X 2B8', '604-214-5060', NULL, NULL, 'DalmaceChatigny@armyspy.com'),
+(11, 'Michel', 'Annot', '2516 Carling Avenue', 'Ottawa', 'Ontario', 'K1Z 7B5', '613-355-2003', 'Thempheince', 'Xaashoh3oh', 'annotmichel@jourrapide.com '),
+(12, 'Ahmad Ba', 'Mufeed', '4458 Reserve St', 'Inverary', 'Ontario', 'K0H 1X0', '613-353-0555', 'Mussiout', 'ahlei3Sh', 'mufeedahmadBa@teleworm.us'),
+(13, 'Sousa Pereira', 'Brenda', '4644 Dry Pine Bay Rd', 'Azilda', 'Ontario', 'H0M 1B0', '705-983-0538', 'Larearme', 'void2xu5Ii', 'brendasousapereira@jourrapide.com '),
+(14, 'Robel', 'Zewdi', '3336, Water Street', 'Kitchener', 'Ontario', 'N2H 5A5', '519-744-5326', 'Oweept', 'RaiPh2vee', 'zewdirobel@teleworm.us'),
+(15, 'Chieloka', 'Nkechiyerem', '4262 Orenda Rd', 'Brampton', 'Ontario', 'L6W 1Z2', '905-451-0542', 'Nowee1989', 'eiBie0zai', 'nkechiyeremchieloka@rhyta.com'),
+(16, 'Arteaga Garay', 'Denna', '878 Speers Road', 'Brampton', 'Ontario', 'G0H 1H0', '905-790-4905', 'Morty1947', 'ayo6gooXuwae', 'dennaarteagagaray@rhyta.com '),
+(17, 'Olivas', 'Jaclyn Lira', '3767 Wallace Street', 'Nanaimo', 'Colombie-Britannique', 'V9R 3A8', '250-755-5941', 'Acusid', 'vahWeiL2Ch', 'jaclynliraolivas@armyspy.com '),
+(18, 'Bernier', 'Geneviève', '1805 Quayside Dr', 'New Westminster', 'Colombie-Britannique', 'V3M 6A1', '604-764-5263', 'Sucan1982', 'ahMobahtae2', 'genevievebernier@dayrep.com '),
+(19, 'Bondy', 'Favor', '3295 2nd Street', 'Lac Du Bonnet', 'Manitoba', 'R0E 1A0', '204-345-8196', 'Heeut1980', 'Foe7zi9Othie', 'favorbondy@armyspy.com');
 
 -- --------------------------------------------------------
 
@@ -158,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `commande` (
   `paypalOrderId` char(17) NOT NULL,
   PRIMARY KEY (`noCommande`),
   KEY `commande_noclient_idx` (`noClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `commande`

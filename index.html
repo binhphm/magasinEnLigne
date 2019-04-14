@@ -319,10 +319,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								<div class="col-sm-8">
 									<form action="#" id="form-rabais">
 										<div class="row form-group">
-											<div class="col-sm-9">
+											<div class="col-sm-12">
 												<input type="text" id="coupon" name="quantity" class="form-control input-number" placeholder="Votre code promotionnel...">
 											</div>
-											<div class="col-sm-3">
+											<div class="col-sm-12">
 												<input type="submit" id="btn-rabais" value="Appliquer le coupon" class="btn btn-primary" onClick="">
 											</div>
 										</div>
@@ -346,6 +346,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 											<p><span><strong>Total:</strong></span> <span>{total}</span></p>
 										</div>
 									</div>
+									<div class="w-100"></div>
 									<div class="row form-group">
 										<div class="col-md-12 text-center">
 											<p><a href="#" class="btn btn-primary" onClick="formulaireInscription()">Passer à la caisse</a></p>
@@ -425,7 +426,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 							<div class="row">
 								<div class="col-md-12">
 									<div class="form-group">
-										<label id="message-erreur"><!-- Message dynamique --></label>
+										<div role="alert" id="message-erreur"><!-- Message dynamique --></div>
 									</div>
 									
 								</div>
@@ -519,17 +520,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 			</div>
 		</div>
-		
-
-
 	</template>
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	<!-- Modèle pour la caisse -->
@@ -551,7 +542,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				</div>
 			</div>
 		</div>
-
 		<div class="colorlib-product">
 			<div class="container">
 				<div class="row row-pb-lg">
@@ -574,109 +564,66 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				</div>
 				<div class="row">
 					<div class="col-lg-8">
-						<form method="post" class="colorlib-form">
-							<h2>Détails de facturation</h2>
-		              		<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="fname">Prénom</label>
-										<input type="text" id="fname" class="form-control" placeholder="Votre prénom">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="lname">Nom</label>
-										<input type="text" id="lname" class="form-control" placeholder="Votre nom">
-									</div>
-								</div>
-			               		<div class="col-md-12">
-									<div class="form-group">
-										<label for="fname">Adresse</label>
-			                    		<input type="text" id="address" class="form-control" placeholder="Entrez votre adresse">
-			                  		</div>
-			                  		<div class="form-group">
-			                    		<input type="text" id="address2" class="form-control" placeholder="Entrez votre deuxième adresse">
-			                  		</div>
-			               		</div>
-								<div class="col-md-12">
-									<div class="form-group">
-										<label for="companyname">Ville</label>
-										<input type="text" id="towncity" class="form-control" placeholder="Ville">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="stateprovince">Province</label>
-										<select id="province" class="form-control">
-											<option value="Alberta">Alberta</option>
-											<option value="Colombie-Britannique">Colombie-Britannique</option>
-											<option value="Île-du-Prince-Édouard">Île-du-Prince-Édouard</option>
-											<option value="Manitoba">Manitoba</option>
-											<option value="Nouveau-Brunswick">Nouveau-Brunswick</option>
-											<option value="Nouvelle-Écosse">Nouvelle-Écosse</option>
-											<option value="Ontario">Ontario</option>
-											<option value="Québec" selected>Québec</option>
-											<option value="Saskatchewan">Saskatchewan</option>
-											<option value="Terre-Neuve">Terre-Neuve</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="lname">Code Postal</label>
-										<input type="text" id="zippostalcode" class="form-control" placeholder="Code postal">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="email">Courriel</label>
-										<input type="text" id="email" class="form-control" placeholder="Courriel">
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="form-group">
-										<label for="Phone">Numéro de téléphone</label>
-										<input type="text" id="phone" class="form-control" placeholder="Numéro de téléphone">
-									</div>
-								</div>
-							</div>
-		            	</form>
+						<h2>Bienvenue {prenomClient} {nomClient} !</h2>
+						<table class="table table-borderless">
+							<h3>Vos renseignements personnels</h3>
+							<tr>
+								<td>Adresse de livraison</td>
+								<td>{adresse}, {ville} {province} {codePostal}</td>		
+							</tr>
+							<tr>
+								<td>Téléphone</td>
+								<td>{noTel}</td>		
+							</tr>
+							<tr>
+								<td>Courriel</td>
+								<td>{courriel}</td>		
+							</tr>
+						</table>	
 					</div>
-
 					<div class="col-lg-4">
-						<div class="row">
-							<div class="col-md-12">
-								<div class="cart-detail">
-									<h2>Facture</h2>
-									<ul>
-										<li>
-											<span>Sous-total</span> <span>{sousTotal}</span>
-											<ul id="details-facture"><!-- Affichage dynamique --></ul>
-											
-										</li>
-										<li><span>Taxes</span> <span>{taxes}</span></li>
-										<li><span>Livraison</span> <span>{fraisLivraison}</span></li>
-										<li><span>Rabais</span> <span>{rabais}</span></li>
-										<li><span>Total</span> <span>{total}</span></li>
-									</ul>
-								</div>
-							</div>
+						<div id="facture"><!-- Affichage dynamique--></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</template>
 
-							<div class="w-100"></div>
-							<div class="row">
-								<div class="col-md-12 text-center">
-									<span>Vous devez être membre pour placer une commande</span>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-12 text-center">
-								<a href="#" id="btn-membre" class="btn btn-primary" onClick="ajouterClient()">S'inscrire</a>	
+	<!-- Modèle pour la facture -->
+	<template id="modele-facture">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="cart-detail">
+					<h2>Détails de facturation</h2>
+					<ul>
+						<li>
+							<span>Sous-total</span> <span>{sousTotal}</span>
+							<ul id="details-facture"><!-- Affichage dynamique --></ul>	
+						</li>
+						<li><span>Taxes</span> <span>{taxes}</span></li>
+						<li><span>Livraison</span> <span>{fraisLivraison}</span></li>
+						<li><span>Rabais</span> <span>{rabais}</span></li>
+						<li><span>Total</span> <span id="montant-total">{total}</span></li>
+					</ul>
+				</div>
+			</div>
+			<div class="w-100"></div>
+			<div class="col-md-12">
+				<div class="cart-detail">
+					<h2>Mentions légales</h2>
+					<div class="form-group">
+						<div class="col-md-12">
+							<div class="checkbox">
+								<label><input type="checkbox" value="accepter"> J'ai lu et j'accepte les termes et conditions</label>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<div class="col-md-12 text-center">
+				<div id="paypal-button-container"></div>	
+			</div>
+
 		</div>
 	</template>
 
@@ -684,7 +631,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<template id="modele-details-facture" type="text/MagasinModele">
 		<li><span>{quantiteDansPanier} x {description}</span> <span>{prixTotal}</span></li>
 		<input type="hidden" class="numeros" id="article{noArticle}" value="{noArticle}">
-		<input type="hidden" class="quantites" id="quantiteDansPanier" value="{quantiteDansPanier}">
+		<input type="hidden" class="quantites" id="quantite{noArticle}" value="{quantiteDansPanier}">
 	</template>
 
 	<!-- Modèle pour commande complétée -->
@@ -723,7 +670,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 						<p class="icon-addcart"><span><i class="icon-check"></i></span></p>
 						<h2 class="mb-4">Merci d'avoir acheté chez nous, votre commande est complétée</h2>
 						<p>
-							<a href="#"class="btn btn-primary btn-outline-primary" onClick="afficherInventaire(listerArticles, '', '')">Retour à la page d'accueil</a>
+							<a href="#"class="btn btn-primary btn-outline-primary" onClick="afficherInventaire(listerArticles, '', '')">Continuer à magasiner</a>
 						</p>
 					</div>
 				</div>
@@ -739,7 +686,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<script src="js/personnel/ModeleMagasin.js"></script>
 
 	<!-- API de Paypal-->
-	<script src="https://www.paypal.com/sdk/js?client-id=AdSpTBXWcGfoW4-ZftERpu3BQQxvd2kFeUWy-pai_utQ-dSbZONHv0z0skbgJrMhel3Q_CFrXJbtOUyl"></script>
+	<script src="https://www.paypal.com/sdk/js?client-id=AdSpTBXWcGfoW4-ZftERpu3BQQxvd2kFeUWy-pai_utQ-dSbZONHv0z0skbgJrMhel3Q_CFrXJbtOUyl&currency=CAD"></script>
 	
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>

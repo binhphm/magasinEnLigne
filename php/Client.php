@@ -20,7 +20,7 @@ class Client {
 
     /* CONSTANTES (regex) */
     const LETTRES_SEULEMENT = '/[a-zA-ZáàäâéèëêíìïîóòöôúùüûçñÁÀÄÂÉÈËÊÍÌÏÎÓÒÖÔÚÙÜÛÑÇ\'\-]+/';
-    const CODE_POSTAL = '/^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$/';
+    const CODE_POSTAL = '/^[A-Z][0-9][A-Z] ?[0-9][A-Z][0-9]$/';
     const NO_TEL = '/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/';
 
     
