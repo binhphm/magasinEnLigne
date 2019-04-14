@@ -80,11 +80,16 @@ elseif(isset($_POST["x"])){
         case "rabais" :
             $panier->appliquerRabais();
             break;
-        case "client" :
+        case "inscription" :
             $donneesClient = json_decode($obj->client, true);
             $client = new Client($donneesClient);
             $gestionClients->ajouterClient($client);
             echo json_encode($gestionClients->getDernierClient());
+            break;
+        case "connexion" :
+            $pseudo = $obj->pseudo;
+            $motDePasse = $obj->motDePasse;
+            echo json_encode($gestionClients->getMembre($pseudo, $motDePasse));
             break;
         case "commande" :
             //Récupérer les données
@@ -97,6 +102,7 @@ elseif(isset($_POST["x"])){
             $gestionCommandes->ajouterCommande($noClient, $paypalOrderId, $tabNoArticle, $tabQuantite);
 
             //Détruire le panier d'achat
+            $gestionArticles->effacerQtePanierTous();
             $panier->verrouillerPanier();
             $panier->supprimerPanier();
             

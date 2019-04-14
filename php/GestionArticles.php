@@ -307,27 +307,11 @@ class GestionArticles extends GestionBD {
 
 
     /**
-     * Rétablit le nombre d'articles en stock pour tous
-     */
-    private function remettreStockTous() {
-        $requete = $this->_bdd->query('UPDATE article SET quantiteEnStock = quantiteEnStock + quantiteDansPanier');
-        $requete->closeCursor();
-    }
-
-    /**
      * Efface le nombre d'articles dans le panier pour tous
      */
-    private function effacerQtePanierTous() {
+    public function effacerQtePanierTous() {
         $requete = $this->_bdd->query('UPDATE article SET quantiteDansPanier = 0');
         $requete->closeCursor();
-    }
-
-    /**
-     * Détruit le panier d'achat
-     */
-    public function detruirePanier() {
-        $this->remettreStockTous();
-        $this->effacerQtePanierTous();
     }
 
 }

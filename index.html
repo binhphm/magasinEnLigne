@@ -416,7 +416,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			<div class="container">
 				<div class="col-md-12">
 					<div class="form-group text-right">
-						<a href="">Déjà membre ? Cliquez ici pour vous connecter</a>
+						<a href="#" onClick="formulaireConnexion()">Déjà membre ? Cliquez ici pour vous connecter</a>
 					</div>
 				</div>
 				<div class="row row align-items-center justify-content-center">
@@ -520,6 +520,36 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 			</div>
 		</div>
+	</template>
+
+	<!-- Modèle pour le formulaire de connexion -->
+	<template id="modele-connexion" type="text/MagasinModele">
+		<div class="colorlib-product">
+            <div class="container d-flex justify-content-center align-items-center">
+                <div class="col-lg-6">
+                    <h2 class="text-center">Connexion</h2>
+                    <form method="post" class="colorlib-form">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="pseudo">Nom d'utilisateur</label>
+                                    <input type="text" id="pseudo" class="form-control" placeholder="Votre nom d'utilisateur">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="mot-de-passe">Mot de passe</label>
+                                    <input type="password" id="mot-de-passe" class="form-control" placeholder="Votre mot de passe">
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center"> 
+                                <a href="#" id="btn-membre" class="btn btn-primary col-md-6" onClick="seConnecter()">Se connecter</a>
+                            </div>   
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 	</template>
 	
 	
@@ -715,4 +745,3 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 	</body>
 </html>
-

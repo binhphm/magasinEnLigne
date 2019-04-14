@@ -128,6 +128,23 @@
         return $tabClient;
     }
 
+    public function getMembre($pseudo, $motDePasse) {
+        $tabMembre = array();
+        $requete = $this->_bdd->prepare(
+            'SELECT * FROM client WHERE pseudo = :pseudo AND motDePasse = :motDePasse'
+        );
+        $requete->bindValue(':pseudo', $pseudo, PDO::PARAM_STR);
+        $requete->bindValue(':motDePasse', $motDePasse, PDO::PARAM_STR);
+        $requete->execute();
+        
+        $donnees = $requete->fetch(PDO::FETCH_ASSOC);
+        $requete->closeCursor();
+        $membre = new Client($donnees);
+        array_push($tabMembre, $membre->getTableau());
+
+        return $tabMembre;
+    }
+
      /**
      * Récupère les information du dernier client ajouté
      * @return array - un tableau associatif

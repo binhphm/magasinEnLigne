@@ -182,6 +182,7 @@ function modifierPanier() {
     modeleInscription.appliquerModele('', "milieu-page");
  }
 
+
  /**
   * Valide les données du formulaire
   */
@@ -265,7 +266,7 @@ function modifierPanier() {
     }
 
     let objJSON = {
-        "requete" : "client",
+        "requete" : "inscription",
         "client" : JSON.stringify(client) 
     };
 
@@ -286,6 +287,36 @@ function modifierPanier() {
  }
 
 
+  /**
+  * Affiche le formulaire de connexion
+  */
+ function formulaireConnexion() {
+    let modeleConnexion = new ModeleMagasin("modele-connexion");
+    modeleConnexion.appliquerModele('', "milieu-page");
+ }
+
+
+ /**
+  * Permet à un client existant de se connecter
+  */
+ function seConnecter() {
+    let pseudo = document.getElementById("pseudo").value;
+    let motDePasse = document.getElementById("mot-de-passe").value;
+
+    let objJSON = {
+        "requete" : "connexion",
+        "pseudo" : pseudo,
+        "motDePasse" : motDePasse
+    }
+
+    let txtJSON = JSON.stringify(objJSON);
+    let requete = new RequeteAjax("php/main.php");
+    requete.envoyerDonnees(txtJSON, reponse => {
+        afficherCaisse(reponse);
+      });
+ }
+
+
 
 /**
  * -----------------------
@@ -297,6 +328,7 @@ function modifierPanier() {
  * Affiche les informations du client et la facture
  */
 function afficherCaisse(reponse){
+    console.log(reponse);
     //Informations du client
     let modeleCaisse = new ModeleMagasin("modele-caisse");
     modeleCaisse.appliquerModele(reponse, "milieu-page");
@@ -394,7 +426,6 @@ function placerCommande(paypalOrderId) {
  */
 function commandeTerminee(){
     let modeleComplete= new ModeleMagasin("modele-commande-complete");
-    modeleComplete.appliquerModele('', "milieu-page");
-    
+    modeleComplete.appliquerModele('', "milieu-page");  
 }
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  Dim 14 avr. 2019 à 05:49
+-- Généré le :  Dim 14 avr. 2019 à 18:04
 -- Version du serveur :  10.1.36-MariaDB
 -- Version de PHP :  7.2.11
 
@@ -47,31 +47,31 @@ CREATE TABLE IF NOT EXISTS `article` (
 --
 
 INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `prixUnitaire`, `quantiteEnStock`, `quantiteDansPanier`) VALUES
-(1, 'Cheveux', 'Alikay Naturals Lemongrass Leave In Conditioner', 'images/alikay_naturals_lemongrass_leave_in_conditioner.jpg', '28.99', 13, 7),
-(2, 'Cheveux', 'ApHogee Curlific! Texture Treatment', 'images/aphogee_curlific_texture_treatment.jpg', '13.99', 20, 5),
-(3, 'Cheveux', 'As I Am Coconut Cowash Cleansing Conditioner', 'images/as_i_am_coconut_cowash.jpeg', '15.99', 19, 1),
-(4, 'Maquillage', 'Ardell Magnetic Lashes Double Wispies', 'images/ardell_magnetic_lashes_double_wispies.jpg', '21.99', 12, 3),
-(5, 'Maquillage', 'Ardell Natural Lashes Wispies Brown', 'images/ardell_natural_lashes_wispies_brown.jpg', '6.99', 45, 5),
-(6, 'Cheveux', 'BaByliss Pro Nano Titanium OPTIMA 3100 Straightening Iron', 'images/babylisspro_nano_titanium_optima_3100_straightening_iron_1_inch.jpg', '271.99', 4, 1),
-(7, 'Hommes', 'Beard Guyz Beard Care And Grooming Kit', 'images/beard_guyz_beard_care_grooming_kit.jpg', '29.99', 10, 0),
-(8, 'Cheveux', 'Camille Rose Naturals Curl Maker', 'images/camille_rose_curl_maker.jpg', '41.99', 4, 1),
-(9, 'Cheveux', 'Cantu Shea Butter For Natural Hair Coconut Curling Cream', 'images/cantu_coconut_curling_cream.jpg', '31.99', 15, 0),
-(10, 'Cheveux', 'Carol\'s daughter Black Vanilla Moisture And Shine Hydrating Conditioner', 'images/carols_daughter_black_Vanilla_moisture_and_shine_hydrating_conditioner.jpg', '29.99', 10, 0),
-(11, 'Cheveux', 'Carol\'s daughter Hair Milk Curl Defining Moisture Mask', 'images/carols_daughter_hair_milk_curl_defining_moisture_mask.jpg', '34.99', 3, 3),
-(12, 'Cheveux', 'Curls Blueberry Bliss Curl Control Paste', 'images/curls_blueberry_control_paste.jpg', '15.99', 20, 0),
-(13, 'Cheveux', 'DevaCurl Supercream Coconut Curl Styler', 'images/devacurl_supercream_coconut_curl_styler.jpg', '55.99', 9, 1),
-(14, 'Peau', 'Dudu-Osun Black Soap', 'images/dudu_osun_black_soap.jpg', '5.99', 27, 23),
-(15, 'Maquillage', 'DUO Strip Lash Adhesive Tube Dark Tone', 'images/duo_strip_lash_adhesive_tube_dark_tone.jpg', '8.99', 48, 2),
+(1, 'Cheveux', 'Alikay Naturals Lemongrass Leave In Conditioner', 'images/alikay_naturals_lemongrass_leave_in_conditioner.jpg', '28.99', 50, 0),
+(2, 'Cheveux', 'ApHogee Curlific! Texture Treatment', 'images/aphogee_curlific_texture_treatment.jpg', '13.99', 50, 0),
+(3, 'Cheveux', 'As I Am Coconut Cowash Cleansing Conditioner', 'images/as_i_am_coconut_cowash.jpeg', '15.99', 50, 0),
+(4, 'Maquillage', 'Ardell Magnetic Lashes Double Wispies', 'images/ardell_magnetic_lashes_double_wispies.jpg', '21.99', 47, 0),
+(5, 'Maquillage', 'Ardell Natural Lashes Wispies Brown', 'images/ardell_natural_lashes_wispies_brown.jpg', '6.99', 50, 0),
+(6, 'Cheveux', 'BaByliss Pro Nano Titanium OPTIMA 3100 Straightening Iron', 'images/babylisspro_nano_titanium_optima_3100_straightening_iron_1_inch.jpg', '271.99', 50, 0),
+(7, 'Hommes', 'Beard Guyz Beard Care And Grooming Kit', 'images/beard_guyz_beard_care_grooming_kit.jpg', '29.99', 50, 0),
+(8, 'Cheveux', 'Camille Rose Naturals Curl Maker', 'images/camille_rose_curl_maker.jpg', '41.99', 50, 0),
+(9, 'Cheveux', 'Cantu Shea Butter For Natural Hair Coconut Curling Cream', 'images/cantu_coconut_curling_cream.jpg', '31.99', 50, 0),
+(10, 'Cheveux', 'Carol\'s daughter Black Vanilla Moisture And Shine Hydrating Conditioner', 'images/carols_daughter_black_Vanilla_moisture_and_shine_hydrating_conditioner.jpg', '29.99', 50, 0),
+(11, 'Cheveux', 'Carol\'s daughter Hair Milk Curl Defining Moisture Mask', 'images/carols_daughter_hair_milk_curl_defining_moisture_mask.jpg', '34.99', 50, 0),
+(12, 'Cheveux', 'Curls Blueberry Bliss Curl Control Paste', 'images/curls_blueberry_control_paste.jpg', '15.99', 50, 0),
+(13, 'Cheveux', 'DevaCurl Supercream Coconut Curl Styler', 'images/devacurl_supercream_coconut_curl_styler.jpg', '55.99', 50, 0),
+(14, 'Peau', 'Dudu-Osun Black Soap', 'images/dudu_osun_black_soap.jpg', '5.99', 46, 0),
+(15, 'Maquillage', 'DUO Strip Lash Adhesive Tube Dark Tone', 'images/duo_strip_lash_adhesive_tube_dark_tone.jpg', '8.99', 50, 0),
 (16, 'Cheveux', 'Eco Styler Olive Oil Styling Gel', 'images/eco_styler_olive_oil_gel.jpeg', '9.99', 50, 0),
-(17, 'Cheveux', 'EDEN BodyWorks Coconut Shea Cleansing CoWash', 'images/eden_body_works_coconut_shea_cleansing_cowash.jpg', '17.99', 20, 0),
-(18, 'Cheveux', 'Shea Moisture Jamaican Black Castor Oil Strengthen And Grow Thermal Protectant', 'images/shea_moisture_jbco_thermal_protectant.jpg', '19.99', 12, 3),
-(19, 'Cheveux', 'Kera Care Edge Tamer', 'images/kera_care_edge_tamer.jpg', '11.99', 10, 0),
-(20, 'Cheveux', 'Kinky Curly Come Clean Shampoo', 'images/kinky_curly_come_clean_shampoo.jpg', '21.99', 10, 0),
-(21, 'Cheveux', 'Maui Moisture Curl Quench+ Coconut Oil Curl Milk', 'images/maui_moisture_curl_quench_coconut_oil_curl_milk.jpg', '10.99', 4, 1),
-(22, 'Cheveux', 'Mielle Organics Babassu Mint Deep Conditioner', 'images/mielle_organics_babassu_oil_mint_deep_conditioner.jpg', '22.99', 10, 0),
-(23, 'Cheveux', 'Moroccanoil Oil Treatment', 'images/moroccanoil_treatment.jpg', '59.99', 5, 0),
-(24, 'Peau', 'TGIN Argan Replenishing Hair And Body Serum', 'images/tgin_argan_replenishing_hair_body_serum.jpg', '24.99', 7, 3),
-(25, 'Cheveux', 'Denman Brush D4 Black', 'images/denman_brush_d4_black.jpg', '34.99', 23, 2);
+(17, 'Cheveux', 'EDEN BodyWorks Coconut Shea Cleansing CoWash', 'images/eden_body_works_coconut_shea_cleansing_cowash.jpg', '17.99', 18, 0),
+(18, 'Cheveux', 'Shea Moisture Jamaican Black Castor Oil Strengthen And Grow Thermal Protectant', 'images/shea_moisture_jbco_thermal_protectant.jpg', '19.99', 50, 0),
+(19, 'Cheveux', 'Kera Care Edge Tamer', 'images/kera_care_edge_tamer.jpg', '11.99', 50, 0),
+(20, 'Cheveux', 'Kinky Curly Come Clean Shampoo', 'images/kinky_curly_come_clean_shampoo.jpg', '21.99', 50, 0),
+(21, 'Cheveux', 'Maui Moisture Curl Quench+ Coconut Oil Curl Milk', 'images/maui_moisture_curl_quench_coconut_oil_curl_milk.jpg', '10.99', 50, 0),
+(22, 'Cheveux', 'Mielle Organics Babassu Mint Deep Conditioner', 'images/mielle_organics_babassu_oil_mint_deep_conditioner.jpg', '22.99', 50, 0),
+(23, 'Cheveux', 'Moroccanoil Oil Treatment', 'images/moroccanoil_treatment.jpg', '59.99', 50, 0),
+(24, 'Peau', 'TGIN Argan Replenishing Hair And Body Serum', 'images/tgin_argan_replenishing_hair_body_serum.jpg', '24.99', 50, 0),
+(25, 'Cheveux', 'Denman Brush D4 Black', 'images/denman_brush_d4_black.jpg', '34.99', 50, 0);
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `article_en_commande` (
   PRIMARY KEY (`noArticleEnCommande`),
   KEY `commande_fk` (`noCommande`),
   KEY `article_fk` (`noArticle`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `article_en_commande`
@@ -105,7 +105,17 @@ INSERT INTO `article_en_commande` (`noArticleEnCommande`, `noCommande`, `noArtic
 (8, 4, 4, 1),
 (9, 4, 6, 1),
 (10, 4, 7, 1),
-(11, 5, 20, 1);
+(11, 5, 20, 1),
+(12, 6, 6, 1),
+(13, 6, 14, 4),
+(14, 6, 15, 1),
+(15, 6, 16, 1),
+(16, 7, 22, 2),
+(17, 7, 14, 4),
+(18, 7, 7, 1),
+(19, 8, 17, 2),
+(20, 8, 4, 3),
+(21, 8, 14, 4);
 
 -- --------------------------------------------------------
 
@@ -134,15 +144,15 @@ CREATE TABLE IF NOT EXISTS `client` (
 --
 
 INSERT INTO `client` (`noClient`, `nomClient`, `prenomClient`, `adresse`, `ville`, `province`, `codePostal`, `noTel`, `pseudo`, `motDePasse`, `courriel`) VALUES
-(1, 'Collins', 'Renee B', '2394 St Jean Baptiste St', 'Montréal', 'Québec', 'G0M 1W0', '819-548-2143', NULL, NULL, 'w8drqcfwb2o@payspun.com'),
-(2, 'Kirk', 'Oscar M', '4277 40th Street', 'Calgary', 'Alberta', 'T2C 2P3', '403-236-7859', NULL, NULL, 'xt4v02xxx0g@thrubay.com'),
-(3, 'Delossantos', 'Julia', '4603 Yonge Street', 'Toronto', 'Ontario', 'M4W 1J7', '416-301-6292', NULL, NULL, 'sowl5hn2y9k@thrubay.com'),
-(4, 'Desantiago', 'Ruben J', '1097 Mountain Rd', 'Moncton', 'Nouveau-Brunswick', 'E1C 1H6', '506-961-5510', NULL, NULL, 'e02n5x6ptto@payspun.com'),
-(5, 'Rivera', 'Linda M', '496 2nd Street', 'Oakbank', 'Oakbank', 'R0E 1J0', '204-444-1472', NULL, NULL, 'os8l3vscf7r@fakemailgenerator.net'),
-(7, 'Soucy', 'Warrane', '4686 Roger Street', 'Oyster River', 'Colombie-Britannique', 'V9W 5N0', '250-337-5002', NULL, NULL, 'WarraneSoucy@rhyta.com '),
-(8, 'Kou', 'Mingmei', '3375 5th Avenue', 'Fort Vermilion', 'Alberta', 'T0H 1N0', '780-927-6217', NULL, NULL, 'MingmeiKuo@armyspy.com '),
-(9, 'Antoun', 'Rais Fathi', '3564 St Marys Rd', 'Winnipeg', 'Manitoba', 'R3C 0C4', '204-292-9473', NULL, NULL, 'RaisFathiAntoun@rhyta.com'),
-(10, 'Chatigny', 'Dalmace', '3008 No. 3 Road', 'Richmond', 'Colombie-Britannique', 'V6X 2B8', '604-214-5060', NULL, NULL, 'DalmaceChatigny@armyspy.com'),
+(1, 'Collins', 'Renee B', '2394 St Jean Baptiste St', 'Montréal', 'Québec', 'G0M 1W0', '819-548-2143', 'LAstAinV', 'jhULyARS', 'w8drqcfwb2o@payspun.com'),
+(2, 'Kirk', 'Oscar M', '4277 40th Street', 'Calgary', 'Alberta', 'T2C 2P3', '403-236-7859', 'vaShosIX', 'MTyxIjsH', 'xt4v02xxx0g@thrubay.com'),
+(3, 'Delossantos', 'Julia', '4603 Yonge Street', 'Toronto', 'Ontario', 'M4W 1J7', '416-301-6292', 'NciDeGON', 'pV2VAqRJ', 'sowl5hn2y9k@thrubay.com'),
+(4, 'Desantiago', 'Ruben J', '1097 Mountain Rd', 'Moncton', 'Nouveau-Brunswick', 'E1C 1H6', '506-961-5510', 'STevERse', 'ENwSdBDW', 'e02n5x6ptto@payspun.com'),
+(5, 'Rivera', 'Linda M', '496 2nd Street', 'Oakbank', 'Manitoba', 'R0E 1J0', '204-444-1472', 'eoNVOvar', 'S2tDbmiz', 'os8l3vscf7r@fakemailgenerator.net'),
+(7, 'Soucy', 'Warrane', '4686 Roger Street', 'Oyster River', 'Colombie-Britannique', 'V9W 5N0', '250-337-5002', 'ouRYPtIC', 'BmwxI84I', 'warranesoucy@rhyta.com '),
+(8, 'Kou', 'Mingmei', '3375 5th Avenue', 'Fort Vermilion', 'Alberta', 'T0H 1N0', '780-927-6217', 'TRATerfi', 'BuXVRdUl', 'mingmeikuo@armyspy.com '),
+(9, 'Antoun', 'Rais Fathi', '3564 St Marys Rd', 'Winnipeg', 'Manitoba', 'R3C 0C4', '204-292-9473', 'aBlEUren', 'LwTtG3N5', 'raisfathiantoun@rhyta.com'),
+(10, 'Chatigny', 'Dalmace', '3008 No. 3 Road', 'Richmond', 'Colombie-Britannique', 'V6X 2B8', '604-214-5060', 'siTaNtaN', 'ggCEbGjg', 'dalmacechatigny@armyspy.com'),
 (11, 'Michel', 'Annot', '2516 Carling Avenue', 'Ottawa', 'Ontario', 'K1Z 7B5', '613-355-2003', 'Thempheince', 'Xaashoh3oh', 'annotmichel@jourrapide.com '),
 (12, 'Ahmad Ba', 'Mufeed', '4458 Reserve St', 'Inverary', 'Ontario', 'K0H 1X0', '613-353-0555', 'Mussiout', 'ahlei3Sh', 'mufeedahmadBa@teleworm.us'),
 (13, 'Sousa Pereira', 'Brenda', '4644 Dry Pine Bay Rd', 'Azilda', 'Ontario', 'H0M 1B0', '705-983-0538', 'Larearme', 'void2xu5Ii', 'brendasousapereira@jourrapide.com '),
@@ -167,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `commande` (
   `paypalOrderId` char(17) NOT NULL,
   PRIMARY KEY (`noCommande`),
   KEY `commande_noclient_idx` (`noClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `commande`
@@ -178,7 +188,10 @@ INSERT INTO `commande` (`noCommande`, `dateCommande`, `noClient`, `paypalOrderId
 (2, '2019-04-02 19:00:17', 2, 'Z6G6FLEUYAS5QVDKG'),
 (3, '2019-04-02 19:00:17', 3, 'DJ7PN4N20N23W68AA'),
 (4, '2019-04-02 19:00:17', 4, '2QW9JOV2MQSIK62UO'),
-(5, '2019-04-02 19:00:17', 4, 'LG7M12RBTV2YU85E0');
+(5, '2019-04-02 19:00:17', 4, 'LG7M12RBTV2YU85E0'),
+(6, '2019-04-14 11:31:08', 1, '1FP03323RH1890633'),
+(7, '2019-04-14 11:50:14', 2, '51U788521W1105035'),
+(8, '2019-04-14 12:01:28', 5, '6SP278845A189145G');
 
 -- --------------------------------------------------------
 

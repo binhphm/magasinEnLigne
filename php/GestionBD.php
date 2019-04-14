@@ -42,7 +42,7 @@ abstract class GestionBD {
             $this->_bdd = new PDO($nsd, $this->_utilisateur, $this->_mdp, $options);
         } 
         catch (PDOException $e) {
-            error_log('Message : ' . $e->getMessage() . "\t Code : " . (int)$e->getCode(). "\n" , 3, "erreurs.txt");
+            error_log('Message : ' . $e->getMessage() . "\t Code : " . (int)$e->getCode(). "\n" , 3, 'erreurs.txt');
             exit;
         }
 
