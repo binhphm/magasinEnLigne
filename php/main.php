@@ -63,8 +63,14 @@ elseif(isset($_POST["x"])){
             $cheminImage = $obj->cheminImage;
             $quantite = (int) $obj->quantite;
             $prixUnitaire = $obj->prixUnitaire;
-            $panier->ajouterArticle($noArticle, $description, $cheminImage, $quantite, $prixUnitaire);
-            $gestionArticles->reserverArticle($noArticle, $quantite);
+            if($gestionArticles->reserverArticle($noArticle, $quantite)){
+                $panier->ajouterArticle($noArticle, $description, $cheminImage, $quantite, $prixUnitaire);
+                $reponse["statut"] = "succes";
+            }
+            else {
+                $reponse["statut"] = "echec";
+            }
+            echo json_encode($reponse);
             break;
         case "supprimer" :
             $noArticle = (int) $obj->noArticle;
@@ -74,8 +80,14 @@ elseif(isset($_POST["x"])){
         case "modifier" :
             $tabNoArticle = json_decode($obj->tabNoArticle);
             $tabQuantite = json_decode($obj->tabQuantite);
-            $panier->modifierQteArticles($tabNoArticle, $tabQuantite);
-            $gestionArticles->modifierPanier($tabNoArticle, $tabQuantite);
+            if($gestionArticles->modifierPanier($tabNoArticle, $tabQuantite)) {
+                $panier->modifierQteArticles($tabNoArticle, $tabQuantite);
+                $reponse["statut"] = "succes";
+            }
+            else {
+                $reponse["statut"] = "echec";
+            }
+            echo json_encode($reponse);
             break;
         case "rabais" :
             $panier->appliquerRabais();
@@ -89,7 +101,14 @@ elseif(isset($_POST["x"])){
         case "connexion" :
             $pseudo = $obj->pseudo;
             $motDePasse = $obj->motDePasse;
-            echo json_encode($gestionClients->getMembre($pseudo, $motDePasse));
+            if($gestionClients->getMembre($pseudo, $motDePasse) !== false){
+                $reponse["statut"] = "succes";
+                $reponse["membre"] = $gestionClients->getMembre($pseudo, $motDePasse);
+            }
+            else {
+                $reponse["statut"] = "echec";
+            }
+            echo json_encode($reponse);
             break;
         case "commande" :
             //Récupérer les données

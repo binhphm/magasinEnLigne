@@ -27,7 +27,14 @@ function listerArticles(filtre, valeur){
     let requete = new RequeteAjax("php/main.php?q=inventaire" + 
                     ((filtre != "" && valeur != "") ? "&" + filtre + "=" + valeur : ""));
     let modeleListeArticles = new ModeleMagasin("modele-liste-articles");
-    requete.getJSON(reponse => {modeleListeArticles.appliquerModele(reponse, "liste-articles");});
+    requete.getJSON(function(reponse) {
+        if(JSON.parse(reponse).length == 0){
+            document.getElementById("liste-articles").innerHTML = "AUCUN ARTICLE SÉLECTIONNÉ."
+        }
+        else {
+            modeleListeArticles.appliquerModele(reponse, "liste-articles");
+        }
+    });
 
 }
 
@@ -79,6 +86,8 @@ function changerQuantite(bouton){
  * Ajoute un article au panier d'achat
  */
 function ajouterAuPanier() {
+    let messageErreur = document.getElementById("message-erreur");
+    
     let objJSON = {
         "requete" : "ajouter",
         "noArticle" : document.getElementById("identifiant").value,
@@ -90,7 +99,25 @@ function ajouterAuPanier() {
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, getTotalPanier);
+    requete.envoyerDonnees(txtJSON, function(reponse) {
+        let objJSON = JSON.parse(reponse);  
+        messageErreur.classList.add('alert'); 
+        if(objJSON["statut"] === "succes"){
+            getTotalPanier();
+            messageErreur.classList.remove('alert-danger');
+            messageErreur.classList.add('alert-success');
+            messageErreur.style.color = "green";
+            messageErreur.innerHTML = "L'article a été ajouté au panier avec succès.";
+        }
+        else if(objJSON["statut"] === "echec"){
+            messageErreur.classList.remove('alert-success');
+            messageErreur.classList.add('alert-danger');
+            messageErreur.style.color = "red";
+            messageErreur.innerHTML = "Il n'y a pas assez d'articles en stock. Veuillez choisir une plus petite quantité.";
+        }
+    });
+        
+        
 }
 
 
@@ -114,9 +141,14 @@ function afficherSommaire(){
 function listerPanier(){
     let requete = new RequeteAjax("php/main.php?q=panier&r=liste");
     let modeleListePanier = new ModeleMagasin("modele-liste-panier");
-    requete.getJSON(reponse => {
-        modeleListePanier.appliquerModele(reponse, "liste-panier");
-    });
+    requete.getJSON(function(reponse){
+        if(JSON.parse(reponse).length == 0){
+            document.getElementById("liste-panier").innerHTML = "PANIER VIDE."
+        }
+        else {
+            modeleListePanier.appliquerModele(reponse, "liste-panier");
+        }
+    })
 }
 
 /**
@@ -142,6 +174,8 @@ function supprimerDuPanier(){
  * Modifier les quantités du panier
  */
 function modifierPanier() {
+    let messageErreur = document.getElementById("message-erreur");
+
     //Tableau des numéros d'article
     let liensNoArticle = document.getElementsByClassName("closed");
     let tabNoArticle = new Array();
@@ -163,8 +197,25 @@ function modifierPanier() {
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, getTotalPanier);
-    afficherSommaire(listerPanier);
+    requete.envoyerDonnees(txtJSON, function(reponse){
+        let objJSON = JSON.parse(reponse);  
+        messageErreur.classList.add('alert'); 
+        if(objJSON["statut"] == "succes"){
+            getTotalPanier();
+            messageErreur.classList.remove('alert-danger');
+            messageErreur.classList.add('alert-success');
+            messageErreur.style.color = "green";
+            messageErreur.innerHTML = "La modification a été effectuée avec succès.";  
+        }
+        else if(objJSON["statut"] == "echec"){
+            messageErreur.classList.remove('alert-success');
+            messageErreur.classList.add('alert-danger');
+            messageErreur.style.color = "red";
+            messageErreur.innerHTML = "Il n'y a pas assez d'articles en stock pour un ou plusieurs articles.";
+                                        
+        }
+    });
+    
 }
 
 
@@ -175,12 +226,33 @@ function modifierPanier() {
  */
 
 /**
+ * Cacher ou afficher l'en tête et le pied de page
+ * @param {string} etat 
+ */
+function enTetePiedPage(etat){
+    document.querySelector(".colorlib-nav").style.visibility = etat;
+    document.getElementById("colorlib-footer").style.visibility = etat;
+}
+
+/**
   * Affiche le formulaire d'inscription
   */
  function formulaireInscription() {
-    let modeleInscription = new ModeleMagasin("modele-inscription");
-    modeleInscription.appliquerModele('', "milieu-page");
+    let messageErreur = document.getElementById("message-erreur");
+    let nbTotal = document.getElementById("nombre-total").innerText;
+    if(nbTotal == "PANIER[0]"){
+        messageErreur.classList.add('alert'); 
+        messageErreur.classList.add('alert-danger');
+        messageErreur.innerHTML = "Vous ne pouvez pas passer à la caisse si votre panier est vide.";
+    }
+    else {
+        enTetePiedPage("hidden");
+        let modeleInscription = new ModeleMagasin("modele-inscription");
+        modeleInscription.appliquerModele('', "milieu-page");
+    } 
  }
+
+
 
 
  /**
@@ -291,6 +363,7 @@ function modifierPanier() {
   * Affiche le formulaire de connexion
   */
  function formulaireConnexion() {
+    enTetePiedPage("hidden");
     let modeleConnexion = new ModeleMagasin("modele-connexion");
     modeleConnexion.appliquerModele('', "milieu-page");
  }
@@ -300,6 +373,7 @@ function modifierPanier() {
   * Permet à un client existant de se connecter
   */
  function seConnecter() {
+    let messageErreur = document.getElementById("message-erreur");
     let pseudo = document.getElementById("pseudo").value;
     let motDePasse = document.getElementById("mot-de-passe").value;
 
@@ -311,9 +385,19 @@ function modifierPanier() {
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, reponse => {
-        afficherCaisse(reponse);
-      });
+    requete.envoyerDonnees(txtJSON, function(reponse) {
+        let objJSON = JSON.parse(reponse);
+        if(objJSON["statut"] == "succes"){
+            afficherCaisse(JSON.stringify(objJSON["membre"]));
+        }
+        else if (objJSON["statut"] == "echec"){
+            messageErreur.classList.add('alert');
+            messageErreur.classList.add('alert-danger');
+            messageErreur.innerHTML = "Nom d'utilisateur ou mot de passe non valide.";
+        }
+    });
+
+     
  }
 
 
@@ -328,7 +412,8 @@ function modifierPanier() {
  * Affiche les informations du client et la facture
  */
 function afficherCaisse(reponse){
-    console.log(reponse);
+    enTetePiedPage("visible");
+    
     //Informations du client
     let modeleCaisse = new ModeleMagasin("modele-caisse");
     modeleCaisse.appliquerModele(reponse, "milieu-page");
@@ -358,7 +443,6 @@ function listerFacture() {
 function afficherPaypal () {
     paypal.Buttons({
         locale: 'fr_CA',
-        currency: 'CAD',
         style: {
             layout:  'vertical',
             color:   'silver',
@@ -428,4 +512,3 @@ function commandeTerminee(){
     let modeleComplete= new ModeleMagasin("modele-commande-complete");
     modeleComplete.appliquerModele('', "milieu-page");  
 }
-

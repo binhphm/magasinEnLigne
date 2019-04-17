@@ -128,6 +128,12 @@
         return $tabClient;
     }
 
+    /**
+     * Retourne les informations d'une personne déjà inscrite
+     * @param {string} $pseuoo - le pseudonyme
+     * @param {string} $motDePasse - le mot de passe
+     * @return array or boolean
+     */
     public function getMembre($pseudo, $motDePasse) {
         $tabMembre = array();
         $requete = $this->_bdd->prepare(
@@ -139,10 +145,16 @@
         
         $donnees = $requete->fetch(PDO::FETCH_ASSOC);
         $requete->closeCursor();
-        $membre = new Client($donnees);
-        array_push($tabMembre, $membre->getTableau());
 
-        return $tabMembre;
+        if($donnees == false ){
+            return false;
+        }
+        else {
+            $membre = new Client($donnees);
+            array_push($tabMembre, $membre->getTableau());
+            return $tabMembre;
+        }
+       
     }
 
      /**

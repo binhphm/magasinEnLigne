@@ -251,6 +251,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 									<input type="hidden" id="prix" value="{prixUnitaire}">
 									<p class="addtocart"><a href="#" class="btn btn-primary btn-addtocart" onClick="ajouterAuPanier()"><i class="icon-shopping-cart"></i>Ajouter au panier</a></p>
 								</div>
+								<div class="col-sm-12">
+									<div class="form-group">
+										<div role="alert" id="message-erreur"><!-- Message dynamique --></div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -291,6 +296,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					</div>
 				</div>
 				<div class="row row-pb-lg">
+					<div class="col-sm-12">
+						<div class="form-group">
+							<div role="alert" id="message-erreur"><!-- Message dynamique --></div>
+						</div>
+					</div>
 					<div class="col-md-12">
 						<div class="product-name d-flex">
 							<div class="one-forth text-left px-4">
@@ -395,23 +405,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 	<!-- Modèle pour le formulaire d'inscription -->
 	<template id="modele-inscription" type="text/MagasinModele">
-		<div class="breadcrumbs">
-			<div class="container">
-				<div class="row">
-					<div class="col">
-						<p class="bread">
-							<span>
-								<a href="#" onClick="afficherInventaire(listerArticles, '', '')">Accueil</a>
-							</span> / 
-							<span>
-								<a href="#" onClick="afficherSommaire()">Panier</a>	
-							</span> /
-							<span>Inscription</span>
-						</p>
-					</div>
-				</div>
-			</div>
-		</div>
 		<div class="colorlib-product">
 			<div class="container">
 				<div class="col-md-12">
@@ -530,6 +523,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                     <h2 class="text-center">Connexion</h2>
                     <form method="post" class="colorlib-form">
                         <div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div id="message-erreur" role="alert"></div>
+								</div>
+							</div>
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="pseudo">Nom d'utilisateur</label>
@@ -650,7 +648,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					<div class="form-group">
 						<div class="col-md-12">
 							<div class="checkbox">
-								<label><input type="checkbox" value="accepter"> J'ai lu et j'accepte les termes et conditions</label>
+								<label><input type="checkbox" value="accepter" checked> J'ai lu et j'accepte les termes et conditions</label>
 							</div>
 						</div>
 					</div>
