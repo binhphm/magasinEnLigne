@@ -62,8 +62,7 @@ function afficherArticle(noArticle) {
 function getTotalPanier() {
     let requete = new RequeteAjax("php/main.php?q=panier&r=total");
     requete.getJSON(reponse => {
-        document.getElementById("nombre-total").innerHTML =
-            "PANIER[" + JSON.parse(reponse) + "]";
+        document.getElementById("nombre-total").innerHTML = JSON.parse(reponse);
     });
 }
 
@@ -241,7 +240,7 @@ function enTetePiedPage(etat) {
 function formulaireInscription() {
     let messageErreur = document.getElementById("message-erreur");
     let nbTotal = document.getElementById("nombre-total").innerText;
-    if (nbTotal == "PANIER[0]") {
+    if (nbTotal == "0") {
         messageErreur.classList.add('alert');
         messageErreur.classList.add('alert-danger');
         messageErreur.innerHTML = "Vous ne pouvez pas passer à la caisse si votre panier est vide.";
