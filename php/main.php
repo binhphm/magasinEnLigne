@@ -16,6 +16,7 @@ $gestionClients = new GestionClients();
 $gestionCommandes = new GestionCommandes();
 $panier = new Panier();
 
+
 /** APPELER LA BONNE FONCTION EN FONCTION DE LA REQUÊTE */
 
 /* REQUÊTES GET */
@@ -89,14 +90,17 @@ elseif(isset($_POST["x"])){
             }
             echo json_encode($reponse);
             break;
-        case "rabais" :
-            $panier->appliquerRabais();
-            break;
         case "inscription" :
             $donneesClient = json_decode($obj->client, true);
             $client = new Client($donneesClient);
-            $gestionClients->ajouterClient($client);
-            echo json_encode($gestionClients->getDernierClient());
+            if($gestionClients->ajouterClient($client)){
+                $reponse["statut"] = "succes";
+                $reponse["client"] = $gestionClients->getDernierClient();
+            }
+            else {
+                $reponse["statut"] = "echec";
+            }
+            echo json_encode($reponse);
             break;
         case "connexion" :
             $pseudo = $obj->pseudo;
@@ -124,7 +128,7 @@ elseif(isset($_POST["x"])){
             $gestionArticles->effacerQtePanierTous();
             $panier->verrouillerPanier();
             $panier->supprimerPanier();
-            
+        
             break;
     }
    

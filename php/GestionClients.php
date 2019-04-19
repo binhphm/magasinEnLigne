@@ -11,15 +11,7 @@
      * @return boolean
      */
     public function existeDeja($courriel) {
-        $requete = $this->_bdd->prepare(
-            'SELECT * FROM client WHERE courriel = ?'
-        );
-        $requete->bindValue(1, $courriel, PDO::PARAM_STR);
-        $requete->execute();
-        $donnees = $requete->fetch();
-        $requete->closeCursor();
-
-        return $donnees != false;
+        return count($this->getClient($courriel)) > 0;
     }
 
     /**
@@ -58,48 +50,6 @@
         
     }
 
-    /**
-     * Modifie un client existant
-     * @param {Client} une instance de l'objet Client 
-     */
-    public function modifierClient(Client $client) {
-
-        $requete = $this->_bdd->prepare(
-            'UPDATE client
-            SET 
-                nomClient = :nomClient,
-                prenomClient = :prenomClient,
-                adresse = :adresse,
-                ville = :ville,
-                province = :province,
-                codePostal = :codePostal,
-                noTel = :noTel,
-                pseudo = :pseudo,
-                motDePasse = :motDePasse,
-                courriel = :courriel,
-                pseudo = :pseudo,
-                motDePasse = :motDePasse
-            WHERE noClient = :noClient'
-        );
-
-        $requete->bindValue(':nomClient', $client->getNomClient(), PDO::PARAM_STR);
-        $requete->bindValue(':prenomClient', $client->getPrenomClient(), PDO::PARAM_STR);
-        $requete->bindValue(':adresse', $client->getAdresse(), PDO::PARAM_STR);
-        $requete->bindValue(':ville', $client->getVille(), PDO::PARAM_STR);
-        $requete->bindValue(':province', $client->getProvince(), PDO::PARAM_STR);
-        $requete->bindValue(':codePostal', $client->getCodePostal(), PDO::PARAM_STR);
-        $requete->bindValue(':noTel', $client->getNoTel(), PDO::PARAM_STR);
-        $requete->bindValue(':pseudo', $client->getPseudo());
-        $requete->bindValue(':motDePasse', $client->getMotDePasse());
-        $requete->bindValue(':courriel', $client->getCourriel(), PDO::PARAM_STR);
-        $requete->bindValue(':pseudo', $client->getPseudo(), PDO::PARAM_STR);
-        $requete->bindValue(':motDePasse', $client->getMotDePasse(), PDO::PARAM_STR);
-
-        $requete->execute();
-        $requete->closeCursor();
-
-    }
-
 
     /**
      * Retourne les informations du client
@@ -115,6 +65,7 @@
             $requete->bindValue(1, $info, PDO::PARAM_INT);
         }
         else {//Sinon, c'est un courriel
+            $info = $this->filtrerParametre($info);
             $requete = $this->_bdd->prepare('SELECT * FROM client WHERE courriel = ?');
             $requete->bindValue(1, $info, PDO::PARAM_STR);
         }

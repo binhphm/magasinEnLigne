@@ -21,7 +21,7 @@ class GestionCommandes extends GestionBD {
             'INSERT INTO commande (dateCommande, noClient, paypalOrderId)
             VALUES (NOW(), :noClient, :paypalOrderId)'
         );
-        $requete->bindValue(':noClient', $noClient, PDO::PARAM_INT);
+        $requete->bindValue(':noClient', (int) $noClient, PDO::PARAM_INT);
         $requete->bindValue(':paypalOrderId', $paypalOrderId, PDO::PARAM_STR);
         $requete->execute();
         $requete->closeCursor();

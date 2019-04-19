@@ -32,6 +32,7 @@ class GestionArticles extends GestionBD {
      * @return array - un tableau associatif contenant les articles
      */
     public function listerParCategorie($categorie){
+
         $listeArticles = array();
 
         $requete = $this->_bdd->prepare('SELECT * FROM article WHERE categorie = ? ORDER BY `description`');
@@ -54,6 +55,9 @@ class GestionArticles extends GestionBD {
      * @return array - un tableau associatif contenant des articles
      */
     public function listerParMot($mot){
+        //S'assurer que la paramètre ne contient pas du code SQL et/ou HTML
+        $mot = $this->filtrerParametre($mot);
+
         $mot = strtolower($mot);
         $listeArticles = array();
 
@@ -77,13 +81,8 @@ class GestionArticles extends GestionBD {
      */
     public function getArticle($noArticle) {
         $listeArticles = array();
-       
         $noArticle = (int) $noArticle;
-        if(!is_int($noArticle)){
-            error_log('Le numéro d\'un article doit être un nombre entier', 3, 'erreurs.txt');
-            return;
-        }
-
+       
         $requete = $this->_bdd->prepare('SELECT * FROM article WHERE noArticle = ?');
         $requete->bindValue(1, $noArticle, PDO::PARAM_INT);
         $requete->execute();
@@ -102,10 +101,7 @@ class GestionArticles extends GestionBD {
      */
     private function getQteStock($noArticle){
         $noArticle = (int) $noArticle;
-        if(!is_int($noArticle)){
-            error_log('Le numéro d\'un article doit être un nombre entier', 3, 'erreurs.txt');
-            return;
-        }
+      
         $requete = $this->_bdd->prepare('SELECT quantiteEnStock FROM article WHERE noArticle = ?');
         $requete->bindValue(1, $noArticle, PDO::PARAM_INT);
         $requete->execute();
@@ -122,10 +118,7 @@ class GestionArticles extends GestionBD {
      */
     private function getQteDansPanier($noArticle){
         $noArticle = (int) $noArticle;
-        if(!is_int($noArticle)){
-            error_log('Le numéro d\'un article doit être un nombre entier', 3, 'erreurs.txt');
-            return;
-        }
+       
         $requete = $this->_bdd->prepare('SELECT quantiteDansPanier FROM article WHERE noArticle = ?');
         $requete->bindValue(1, $noArticle, PDO::PARAM_INT);
         $requete->execute();

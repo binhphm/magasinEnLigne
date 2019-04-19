@@ -4,12 +4,12 @@
  * -----------------------
  */
 
- /**
- * Affiche l'élément HTML qui la contenir la liste des articles
- * @param {function} callback - la fonction à appeler après avoir affiché le HTML
- * @param {string} filtre - le critère de sélection
- * @param {string} valeur - la valeur du critère de sélection
- */
+/**
+* Affiche l'élément HTML qui la contenir la liste des articles
+* @param {function} callback - la fonction à appeler après avoir affiché le HTML
+* @param {string} filtre - le critère de sélection
+* @param {string} valeur - la valeur du critère de sélection
+*/
 function afficherInventaire(callback, filtre, valeur) {
     let modeleInventaire = new ModeleMagasin("affichage-articles");
     modeleInventaire.appliquerModele("", "milieu-page");
@@ -21,14 +21,14 @@ function afficherInventaire(callback, filtre, valeur) {
  * @param {string} filtre - le critère de sélection
  * @param {string} valeur - la valeur du critère de sélection
  */
-function listerArticles(filtre, valeur){
+function listerArticles(filtre, valeur) {
 
     //Afficher tous les articles
-    let requete = new RequeteAjax("php/main.php?q=inventaire" + 
-                    ((filtre != "" && valeur != "") ? "&" + filtre + "=" + valeur : ""));
+    let requete = new RequeteAjax("php/main.php?q=inventaire" +
+        ((filtre != "" && valeur != "") ? "&" + filtre + "=" + valeur : ""));
     let modeleListeArticles = new ModeleMagasin("modele-liste-articles");
-    requete.getJSON(function(reponse) {
-        if(JSON.parse(reponse).length == 0){
+    requete.getJSON(function (reponse) {
+        if (JSON.parse(reponse).length == 0) {
             document.getElementById("liste-articles").innerHTML = "AUCUN ARTICLE SÉLECTIONNÉ."
         }
         else {
@@ -43,10 +43,10 @@ function listerArticles(filtre, valeur){
  * Affiche un seul article
  * @param {string} noArticle - l'identifiant de l'article
  */
-function afficherArticle(noArticle){
+function afficherArticle(noArticle) {
     let requete = new RequeteAjax("php/main.php?q=inventaire&noArticle=" + noArticle);
     let modeleArticle = new ModeleMagasin("modele-article");
-    requete.getJSON(reponse => {modeleArticle.appliquerModele(reponse, "milieu-page");});
+    requete.getJSON(reponse => { modeleArticle.appliquerModele(reponse, "milieu-page"); });
 }
 
 
@@ -59,10 +59,10 @@ function afficherArticle(noArticle){
 /**
  * Affiche le nombre total d'éléments dans le panier
  */
-function getTotalPanier(){
+function getTotalPanier() {
     let requete = new RequeteAjax("php/main.php?q=panier&r=total");
     requete.getJSON(reponse => {
-        document.getElementById("nombre-total").innerHTML = 
+        document.getElementById("nombre-total").innerHTML =
             "PANIER[" + JSON.parse(reponse) + "]";
     });
 }
@@ -71,12 +71,12 @@ function getTotalPanier(){
  * Permet de choisir la quantité d'un article avant d'ajouter l'article dans le panier
  * @param {HTMLElement} bouton 
  */
-function changerQuantite(bouton){
+function changerQuantite(bouton) {
     let valeur = parseInt(document.getElementById("quantity").value);
-    if(bouton.dataset.type == "minus" && valeur > 0){
+    if (bouton.dataset.type == "minus" && valeur > 0) {
         valeur--;
     }
-    else if(bouton.dataset.type == "plus" && valeur < 100){
+    else if (bouton.dataset.type == "plus" && valeur < 100) {
         valeur++;
     }
     document.getElementById("quantity").value = valeur;
@@ -87,37 +87,37 @@ function changerQuantite(bouton){
  */
 function ajouterAuPanier() {
     let messageErreur = document.getElementById("message-erreur");
-    
+
     let objJSON = {
-        "requete" : "ajouter",
-        "noArticle" : document.getElementById("identifiant").value,
-        "description": document.getElementById("description").value, 
-        "cheminImage" : document.getElementById("cheminImage").value,
+        "requete": "ajouter",
+        "noArticle": document.getElementById("identifiant").value,
+        "description": document.getElementById("description").value,
+        "cheminImage": document.getElementById("cheminImage").value,
         "prixUnitaire": document.getElementById("prix").value,
-        "quantite" : document.getElementById("quantity").value
+        "quantite": document.getElementById("quantity").value
     };
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, function(reponse) {
-        let objJSON = JSON.parse(reponse);  
-        messageErreur.classList.add('alert'); 
-        if(objJSON["statut"] === "succes"){
+    requete.envoyerDonnees(txtJSON, function (reponse) {
+        let objJSON = JSON.parse(reponse);
+        messageErreur.classList.add('alert');
+        if (objJSON["statut"] === "succes") {
             getTotalPanier();
             messageErreur.classList.remove('alert-danger');
             messageErreur.classList.add('alert-success');
             messageErreur.style.color = "green";
             messageErreur.innerHTML = "L'article a été ajouté au panier avec succès.";
         }
-        else if(objJSON["statut"] === "echec"){
+        else if (objJSON["statut"] === "echec") {
             messageErreur.classList.remove('alert-success');
             messageErreur.classList.add('alert-danger');
             messageErreur.style.color = "red";
             messageErreur.innerHTML = "Il n'y a pas assez d'articles en stock. Veuillez choisir une plus petite quantité.";
         }
     });
-        
-        
+
+
 }
 
 
@@ -125,24 +125,24 @@ function ajouterAuPanier() {
  * Afficher le sommaire du panier
  * @param {function} callback - la fonction à appeler après que le sommaire soit chargé
  */
-function afficherSommaire(){
+function afficherSommaire() {
     let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
     let modelePanier = new ModeleMagasin("modele-panier");
     requete.getJSON(reponse => {
         modelePanier.appliquerModele(reponse, "milieu-page");
         listerPanier();
     });
-   
+
 }
 
 /**
  * Affiche tous les éléments du panier
  */
-function listerPanier(){
+function listerPanier() {
     let requete = new RequeteAjax("php/main.php?q=panier&r=liste");
     let modeleListePanier = new ModeleMagasin("modele-liste-panier");
-    requete.getJSON(function(reponse){
-        if(JSON.parse(reponse).length == 0){
+    requete.getJSON(function (reponse) {
+        if (JSON.parse(reponse).length == 0) {
             document.getElementById("liste-panier").innerHTML = "PANIER VIDE."
         }
         else {
@@ -154,14 +154,14 @@ function listerPanier(){
 /**
  * Supprime un élément du panier
  */
-function supprimerDuPanier(){
-   
+function supprimerDuPanier() {
+
     let idBouton = event.target.getAttribute("id");
     let noArticle = document.getElementById(idBouton).dataset.value;
 
     let objJSON = {
-        "requete" : "supprimer",
-        "noArticle" : noArticle
+        "requete": "supprimer",
+        "noArticle": noArticle
     };
 
     let txtJSON = JSON.stringify(objJSON);
@@ -179,44 +179,45 @@ function modifierPanier() {
     //Tableau des numéros d'article
     let liensNoArticle = document.getElementsByClassName("closed");
     let tabNoArticle = new Array();
-    for(let i = 0; i < liensNoArticle.length; i++){
+    for (let i = 0; i < liensNoArticle.length; i++) {
         tabNoArticle.push(liensNoArticle[i].dataset.value);
     }
     //Tableau des quantités
     let champsQuantite = document.getElementsByClassName("quantite");
     let tabQuantite = new Array();
-    for(let i = 0; i < champsQuantite.length; i++){
+    for (let i = 0; i < champsQuantite.length; i++) {
         tabQuantite.push(champsQuantite[i].value);
     }
 
     let objJSON = {
-        "requete" : "modifier",
-        "tabNoArticle" : JSON.stringify(tabNoArticle),
-        "tabQuantite" : JSON.stringify(tabQuantite)
+        "requete": "modifier",
+        "tabNoArticle": JSON.stringify(tabNoArticle),
+        "tabQuantite": JSON.stringify(tabQuantite)
     };
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, function(reponse){
-        let objJSON = JSON.parse(reponse);  
-        messageErreur.classList.add('alert'); 
-        if(objJSON["statut"] == "succes"){
+    requete.envoyerDonnees(txtJSON, function (reponse) {
+        let objJSON = JSON.parse(reponse);
+        messageErreur.classList.add('alert');
+        if (objJSON["statut"] == "succes") {
             getTotalPanier();
             messageErreur.classList.remove('alert-danger');
             messageErreur.classList.add('alert-success');
             messageErreur.style.color = "green";
-            messageErreur.innerHTML = "La modification a été effectuée avec succès.";  
+            messageErreur.innerHTML = "La modification a été effectuée avec succès.";
         }
-        else if(objJSON["statut"] == "echec"){
+        else if (objJSON["statut"] == "echec") {
             messageErreur.classList.remove('alert-success');
             messageErreur.classList.add('alert-danger');
             messageErreur.style.color = "red";
             messageErreur.innerHTML = "Il n'y a pas assez d'articles en stock pour un ou plusieurs articles.";
-                                        
+
         }
     });
-    
+
 }
+
 
 
 /**
@@ -229,7 +230,7 @@ function modifierPanier() {
  * Cacher ou afficher l'en tête et le pied de page
  * @param {string} etat 
  */
-function enTetePiedPage(etat){
+function enTetePiedPage(etat) {
     document.querySelector(".colorlib-nav").style.visibility = etat;
     document.getElementById("colorlib-footer").style.visibility = etat;
 }
@@ -237,11 +238,11 @@ function enTetePiedPage(etat){
 /**
   * Affiche le formulaire d'inscription
   */
- function formulaireInscription() {
+function formulaireInscription() {
     let messageErreur = document.getElementById("message-erreur");
     let nbTotal = document.getElementById("nombre-total").innerText;
-    if(nbTotal == "PANIER[0]"){
-        messageErreur.classList.add('alert'); 
+    if (nbTotal == "PANIER[0]") {
+        messageErreur.classList.add('alert');
         messageErreur.classList.add('alert-danger');
         messageErreur.innerHTML = "Vous ne pouvez pas passer à la caisse si votre panier est vide.";
     }
@@ -249,16 +250,16 @@ function enTetePiedPage(etat){
         enTetePiedPage("hidden");
         let modeleInscription = new ModeleMagasin("modele-inscription");
         modeleInscription.appliquerModele('', "milieu-page");
-    } 
- }
+    }
+}
 
 
 
 
- /**
-  * Valide les données du formulaire
-  */
- function validerFormulaire(){
+/**
+ * Valide les données du formulaire
+ */
+function validerFormulaire() {
     //Message d'erreur
     messageErreur = document.getElementById("message-erreur");
 
@@ -284,16 +285,16 @@ function enTetePiedPage(etat){
     const COURRIEL = /[^@]+@[^\.]+\..+/g;
 
     //Vérifier si le nom, le prénom et la ville ont seulement des lettres
-    if(!nom.match(LETTRES_SEULEMENT) || !prenom.match(LETTRES_SEULEMENT) || 
-            !ville.match(LETTRES_SEULEMENT)){
+    if (!nom.match(LETTRES_SEULEMENT) || !prenom.match(LETTRES_SEULEMENT) ||
+        !ville.match(LETTRES_SEULEMENT)) {
         messageErreur.classList.add('alert');
         messageErreur.classList.add('alert-danger');
         messageErreur.innerHTML = "Ce champ ne doit contenir que des lettres.";
         return;
     }
-   
+
     //Vérifier si le code postal est valide
-    if(!codePostal.match(CODE_POSTAL)) {
+    if (!codePostal.match(CODE_POSTAL)) {
         messageErreur.classList.add('alert');
         messageErreur.classList.add('alert-danger');
         messageErreur.innerHTML = "Format de code postal invalide.";
@@ -301,7 +302,7 @@ function enTetePiedPage(etat){
     }
 
     //Vérifier si le numéro de téléphone est valide
-    if(!noTel.match(NO_TEL)) {
+    if (!noTel.match(NO_TEL)) {
         messageErreur.classList.add('alert');
         messageErreur.classList.add('alert-danger');
         messageErreur.innerHTML = "Format de numéro de téléphone invalide.";
@@ -309,7 +310,7 @@ function enTetePiedPage(etat){
     }
 
     //Vérifier si le courriel est valide
-    if(!courriel.match(COURRIEL)) {
+    if (!courriel.match(COURRIEL)) {
         messageErreur.classList.add('alert');
         messageErreur.classList.add('alert-danger');
         messageErreur.innerHTML = "Format de courriel invalide.";
@@ -317,7 +318,7 @@ function enTetePiedPage(etat){
     }
 
     //Vérifier que les deux mots de passes sont identiques
-    if(motDePasse !== confMotDePasse) {
+    if (motDePasse !== confMotDePasse) {
         messageErreur.classList.add('alert');
         messageErreur.classList.add('alert-danger');
         messageErreur.innerHTML = "Les deux mots de passe doivent être identiques.";
@@ -325,80 +326,89 @@ function enTetePiedPage(etat){
     }
 
     let client = {
-        "nomClient" : nom,
-        "prenomClient" : prenom,
-        "adresse" : adresse,
-        "ville" : ville,
-        "province" : province,
-        "codePostal" : codePostal,
-        "noTel" : noTel,
-        "courriel" : courriel,
-        "pseudo" : pseudo,
-        "motDePasse" : motDePasse
+        "nomClient": nom,
+        "prenomClient": prenom,
+        "adresse": adresse,
+        "ville": ville,
+        "province": province,
+        "codePostal": codePostal,
+        "noTel": noTel,
+        "courriel": courriel,
+        "pseudo": pseudo,
+        "motDePasse": motDePasse
     }
 
     let objJSON = {
-        "requete" : "inscription",
-        "client" : JSON.stringify(client) 
+        "requete": "inscription",
+        "client": JSON.stringify(client)
     };
 
     let txtJSON = JSON.stringify(objJSON);
     ajouterClient(txtJSON);
- }
+}
 
 
- /**
-  * Ajoute le client à la base de données
-  * @param {string} txtJSON - les données à envoyer
-  */
- function ajouterClient(txtJSON) {
+/**
+ * Ajoute le client à la base de données
+ * @param {string} txtJSON - les données à envoyer
+ */
+function ajouterClient(txtJSON) {
+    let messageErreur = document.getElementById("message-erreur");
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, reponse => {
-      afficherCaisse(reponse);
+    requete.envoyerDonnees(txtJSON, function(reponse) {
+        let objJSON = JSON.parse(reponse);
+        if (objJSON["statut"] == "succes") {
+            afficherCaisse(JSON.stringify(objJSON["membre"]));
+        }
+        else if (objJSON["statut"] == "echec") {
+            messageErreur.classList.add('alert');
+            messageErreur.classList.add('alert-danger');
+            messageErreur.innerHTML = "Vous êtes déjà inscrit. Cliquez sur le formulaire de connexion.";
+        }
     });
- }
+}
 
 
-  /**
-  * Affiche le formulaire de connexion
-  */
- function formulaireConnexion() {
+/**
+* Affiche le formulaire de connexion
+*/
+function formulaireConnexion() {
     enTetePiedPage("hidden");
     let modeleConnexion = new ModeleMagasin("modele-connexion");
     modeleConnexion.appliquerModele('', "milieu-page");
- }
+}
 
 
- /**
-  * Permet à un client existant de se connecter
-  */
- function seConnecter() {
+/**
+ * Permet à un client existant de se connecter
+ */
+function seConnecter() {
     let messageErreur = document.getElementById("message-erreur");
     let pseudo = document.getElementById("pseudo").value;
     let motDePasse = document.getElementById("mot-de-passe").value;
 
     let objJSON = {
-        "requete" : "connexion",
-        "pseudo" : pseudo,
-        "motDePasse" : motDePasse
+        "requete": "connexion",
+        "pseudo": pseudo,
+        "motDePasse": motDePasse
     }
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, function(reponse) {
+    requete.envoyerDonnees(txtJSON, function (reponse) {
         let objJSON = JSON.parse(reponse);
-        if(objJSON["statut"] == "succes"){
+        if (objJSON["statut"] == "succes") {
             afficherCaisse(JSON.stringify(objJSON["membre"]));
         }
-        else if (objJSON["statut"] == "echec"){
+        else if (objJSON["statut"] == "echec") {
             messageErreur.classList.add('alert');
             messageErreur.classList.add('alert-danger');
             messageErreur.innerHTML = "Nom d'utilisateur ou mot de passe non valide.";
         }
     });
 
-     
- }
+
+}
 
 
 
@@ -408,16 +418,16 @@ function enTetePiedPage(etat){
  * -----------------------
  */
 
- /**
- * Affiche les informations du client et la facture
- */
-function afficherCaisse(reponse){
+/**
+* Affiche les informations du client et la facture
+*/
+function afficherCaisse(reponse) {
     enTetePiedPage("visible");
-    
+
     //Informations du client
     let modeleCaisse = new ModeleMagasin("modele-caisse");
     modeleCaisse.appliquerModele(reponse, "milieu-page");
-    
+
     //Facture
     let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
     let modeleFacture = new ModeleMagasin("modele-facture");
@@ -426,7 +436,7 @@ function afficherCaisse(reponse){
         listerFacture();
         afficherPaypal();
     });
-   
+
 }
 
 /**
@@ -440,16 +450,16 @@ function listerFacture() {
     });
 }
 
-function afficherPaypal () {
+function afficherPaypal() {
     paypal.Buttons({
         locale: 'fr_CA',
         style: {
-            layout:  'vertical',
-            color:   'silver',
-            shape:   'pill',
-            label:   'paypal'
+            layout: 'vertical',
+            color: 'silver',
+            shape: 'pill',
+            label: 'paypal'
         },
-        createOrder: function(data, actions) {
+        createOrder: function (data, actions) {
             console.log(data);
             return actions.order.create({
                 purchase_units: [{
@@ -459,12 +469,12 @@ function afficherPaypal () {
                 }]
             });
         },
-        onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
+        onApprove: function (data, actions) {
+            return actions.order.capture().then(function (details) {
                 console.log(details);
                 placerCommande(data.orderID);
             });
-          }
+        }
     }).render('#paypal-button-container');
 }
 
@@ -477,22 +487,22 @@ function placerCommande(paypalOrderId) {
     //Tableau des numéros d'article
     let numeros = document.getElementsByClassName("numeros");
     let tabNoArticle = new Array();
-    for(let i = 0; i < numeros.length; i++){
+    for (let i = 0; i < numeros.length; i++) {
         tabNoArticle.push(numeros[i].value);
     }
     //Tableau des quantités
     let quantites = document.getElementsByClassName("quantites");
     let tabQuantite = new Array();
-    for(let i = 0; i < quantites.length; i++){
+    for (let i = 0; i < quantites.length; i++) {
         tabQuantite.push(quantites[i].value);
     }
 
     let objJSON = {
-        "requete" : "commande",
-        "noClient" : document.getElementById("numero-client").value,
-        "paypalOrderId" : paypalOrderId,
-        "tabNoArticle" : JSON.stringify(tabNoArticle),
-        "tabQuantite" : JSON.stringify(tabQuantite)
+        "requete": "commande",
+        "noClient": document.getElementById("numero-client").value,
+        "paypalOrderId": paypalOrderId,
+        "tabNoArticle": JSON.stringify(tabNoArticle),
+        "tabQuantite": JSON.stringify(tabQuantite)
     };
 
     let txtJSON = JSON.stringify(objJSON);
@@ -502,13 +512,13 @@ function placerCommande(paypalOrderId) {
         getTotalPanier();
         commandeTerminee();
     });
-   
+
 }
 
 /**
  * Affiche que la commande est bel et bien complétée
  */
-function commandeTerminee(){
-    let modeleComplete= new ModeleMagasin("modele-commande-complete");
-    modeleComplete.appliquerModele('', "milieu-page");  
+function commandeTerminee() {
+    let modeleComplete = new ModeleMagasin("modele-commande-complete");
+    modeleComplete.appliquerModele('', "milieu-page");
 }

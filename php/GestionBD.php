@@ -7,10 +7,10 @@
 abstract class GestionBD {
 
     /* ATTRIBUTS */
-    protected $_bdd;
     private $_nomBD = 'magasin_en_ligne';
     private $_utilisateur = 'webdev';
     private $_mdp = 'toto99';
+    protected $_bdd;
 
     /**
      * CONSTRUCTEUR : instanciation de l'objet
@@ -46,6 +46,21 @@ abstract class GestionBD {
             exit;
         }
 
+    }
+
+
+    /**
+     * Filtre un paramètre pour prévenir les injections SQL
+     * et les failles XSS
+     */
+    protected function filtrerParametre($parametre){
+        if (get_magic_quotes_gpc()){
+            $parametre = stripslashes($parametre);
+            $parametre = $this->_bdd->real_escape_string($parametre);
+            $parametre = htmlentities($parametre);
+        }
+
+        return $parametre;
     }
 
 }
