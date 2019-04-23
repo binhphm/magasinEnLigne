@@ -49,6 +49,11 @@ if(isset($_GET["q"])){
                 case "liste": //afficher chaque article du panier
                     echo json_encode($panier->getPanier());
                     break;
+                case "detruire" ://détruire le panier (appel manuel de la fonction pour tester)
+                    $gestionArticles->retablirQteStockTous(); 
+                    $gestionArticles->effacerQtePanierTous();
+                    $panier->supprimerPanier(); 
+                    break;
             }
         }
     }
@@ -128,7 +133,6 @@ elseif(isset($_POST["x"])){
             $gestionArticles->effacerQtePanierTous();
             $panier->verrouillerPanier();
             $panier->supprimerPanier();
-        
             break;
     }
    

@@ -186,8 +186,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	
 	<!-- Modèle d'un élément dans la liste des articles -->
 	<template id="modele-liste-articles" type="text/MagasinModele">
-		<div class="col-lg-3 mb-4 text-center" onClick="afficherArticle(document.getElementById('article{noArticle}').value)">
-			<input type="hidden" id="article{noArticle}" value="{noArticle}">
+		<div class="col-lg-3 mb-4 text-center" onClick="afficherArticle({noArticle})">
             <div class="product-entry border">
                 <a href="#" class="prod-img">
                     <img src="{cheminImage}" class="img-fluid" alt="{description}">

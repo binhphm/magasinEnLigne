@@ -75,6 +75,16 @@ class GestionArticles extends GestionBD {
     }
 
     /**
+     * Calcule le nombre total d'articles
+     */
+    function getNbArticles(){
+        $requete = $this->_bdd->query('SELECT COUNT(*) FROM article');
+        $somme = $requete->fetch(PDO::FETCH_NUM);
+        $requete->closeCursor();
+        return (int) $somme[0];
+    }
+
+    /**
      * Retourne un seul article
      * @param {int} $id - l'identifiant de l'article
      * @return array - un tableau associatif de l'instance d'un objet Article
@@ -337,6 +347,26 @@ class GestionArticles extends GestionBD {
     public function effacerQtePanierTous() {
         $requete = $this->_bdd->query('UPDATE article SET quantiteDansPanier = 0');
         $requete->closeCursor();
+    }
+
+    /**
+     * Rétablit la quantité en stock pour tous
+     */
+    public function retablirQteStockTous() {
+       // $qteDansPanier = $this->getQteDansPanier();
+       $nbArticles = $this->getNbArticles();
+       
+       for($i = 1; $i <= $nbArticles; $i++){
+           $requete = $this->_bdd->prepare(
+               'UPDATE article
+               SET quantiteEnStock = quantiteEnStock + :quantite
+               WHERE noArticle = :noArticle'
+            );
+            $requete->bindValue(':quantite', $this->getQteDansPanier($i), PDO::PARAM_INT);
+            $requete->bindValue(':noArticle', $i, PDO::PARAM_INT);
+            $requete->execute();
+            $requete->closeCursor();
+       }
     }
 
 }
