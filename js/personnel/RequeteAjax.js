@@ -1,7 +1,7 @@
 /**
  * Représente une classe de type RequeteAjax
  * son rôle est de faire des requêtes HTTP au serveur
- * copié de l'exemple de projet fourni par l'enseignant
+ * Copié de l'exemple de projet fourni par l'enseignant
  */
 class RequeteAjax {
 

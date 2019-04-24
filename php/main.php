@@ -68,12 +68,15 @@ elseif(isset($_POST["x"])){
             $cheminImage = $obj->cheminImage;
             $quantite = (int) $obj->quantite;
             $prixUnitaire = $obj->prixUnitaire;
-            if($gestionArticles->reserverArticle($noArticle, $quantite)){
+            try {
+                $gestionArticles->reserverArticle($noArticle, $quantite);
                 $panier->ajouterArticle($noArticle, $description, $cheminImage, $quantite, $prixUnitaire);
                 $reponse["statut"] = "succes";
+                $reponse["message"] = "L'article a été ajouté au panier avec succès.";
             }
-            else {
+            catch (Exception $e) {
                 $reponse["statut"] = "echec";
+                $reponse["message"] = $e->getMessage();
             }
             echo json_encode($reponse);
             break;
@@ -85,36 +88,43 @@ elseif(isset($_POST["x"])){
         case "modifier" : //modifier la quantité des articles dans le panier
             $tabNoArticle = json_decode($obj->tabNoArticle);
             $tabQuantite = json_decode($obj->tabQuantite);
-            if($gestionArticles->modifierPanier($tabNoArticle, $tabQuantite)) {
+            try {
+                $gestionArticles->modifierPanier($tabNoArticle, $tabQuantite);
                 $panier->modifierQteArticles($tabNoArticle, $tabQuantite);
                 $reponse["statut"] = "succes";
+                $reponse["message"] = "Modification effectuée avec succès.";
             }
-            else {
+            catch (Exception $e) {
                 $reponse["statut"] = "echec";
+                $reponse["message"] = $e->getMessage();
             }
             echo json_encode($reponse);
             break;
         case "inscription" ://inscrire un client
             $donneesClient = json_decode($obj->client, true);
             $client = new Client($donneesClient);
-            if($gestionClients->ajouterClient($client) !== false){
+            try {
+                $gestionClients->ajouterClient($client);
                 $reponse["statut"] = "succes";
                 $reponse["client"] = $gestionClients->getDernierClient();
             }
-            else {
+            catch (Exception $e){
                 $reponse["statut"] = "echec";
+                $reponse["message"] = $e->getMessage();
             }
             echo json_encode($reponse);
             break;
         case "connexion" ://connexion d'un membre existant
             $pseudo = $obj->pseudo;
             $motDePasse = $obj->motDePasse;
-            if($gestionClients->getMembre($pseudo, $motDePasse) !== false){
+            try {
+                $gestionClients->getMembre($pseudo, $motDePasse);
                 $reponse["statut"] = "succes";
                 $reponse["membre"] = $gestionClients->getMembre($pseudo, $motDePasse);
             }
-            else {
+            catch (Exception $e) {
                 $reponse["statut"] = "echec";
+                $reponse["message"] = $e->getMessage();
             }
             echo json_encode($reponse);
             break;

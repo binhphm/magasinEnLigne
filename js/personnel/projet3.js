@@ -105,15 +105,14 @@ function ajouterAuPanier() {
             getTotalPanier();
             messageErreur.classList.remove('alert-danger');
             messageErreur.classList.add('alert-success');
-            messageErreur.style.color = "green";
-            messageErreur.innerHTML = "L'article a été ajouté au panier avec succès.";
+            messageErreur.style.color = "green";   
         }
         else if (objJSON["statut"] === "echec") {
             messageErreur.classList.remove('alert-success');
             messageErreur.classList.add('alert-danger');
             messageErreur.style.color = "red";
-            messageErreur.innerHTML = "Il n'y a pas assez d'articles en stock. Veuillez choisir une plus petite quantité.";
         }
+        messageErreur.innerHTML = objJSON["message"];
     });
 
 
@@ -196,24 +195,24 @@ function modifierPanier() {
 
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
-    requete.envoyerDonnees(txtJSON, function (reponse) {
+    requete.envoyerDonnees(txtJSON, function(reponse) {
         let objJSON = JSON.parse(reponse);
-        messageErreur.classList.add('alert');
-        if (objJSON["statut"] == "succes") {
-            getTotalPanier();
-            messageErreur.classList.remove('alert-danger');
-            messageErreur.classList.add('alert-success');
-            messageErreur.style.color = "green";
-            messageErreur.innerHTML = "La modification a été effectuée avec succès.";
-        }
-        else if (objJSON["statut"] == "echec") {
-            messageErreur.classList.remove('alert-success');
+        if(objJSON["statut"] === "echec"){
+            messageErreur.classList.add('alert');
             messageErreur.classList.add('alert-danger');
             messageErreur.style.color = "red";
-            messageErreur.innerHTML = "Il n'y a pas assez d'articles en stock pour un ou plusieurs articles.";
-
+            messageErreur.innerHTML = objJSON["message"];
         }
+        else {
+            getTotalPanier()
+            afficherSommaire(listerPanier);
+        }
+        
+        
+         
     });
+        
+     
 }
 
 
@@ -358,7 +357,7 @@ function ajouterClient(txtJSON) {
         else if (objJSON["statut"] === "echec") {
             messageErreur.classList.add('alert');
             messageErreur.classList.add('alert-danger');
-            messageErreur.innerHTML = "Vous êtes déjà inscrit. Cliquez sur le formulaire de connexion.";
+            messageErreur.innerHTML = objJSON["message"];
         }
     });
 }
@@ -398,13 +397,11 @@ function seConnecter() {
         else if (objJSON["statut"] == "echec") {
             messageErreur.classList.add('alert');
             messageErreur.classList.add('alert-danger');
-            messageErreur.innerHTML = "Nom d'utilisateur ou mot de passe non valide.";
+            messageErreur.innerHTML = objJSON["message"];
         }
     });
 
-
 }
-
 
 
 /**
@@ -417,7 +414,6 @@ function seConnecter() {
 * Affiche les informations du client et la facture
 */
 function afficherCaisse(reponse) {
-    console.log(reponse);
     enTetePiedPage("visible");
 
     //Informations du client
@@ -428,7 +424,6 @@ function afficherCaisse(reponse) {
     let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
     let modeleFacture = new ModeleMagasin("modele-facture");
     requete.getJSON(donnees => {
-        console.log(donnees);
         modeleFacture.appliquerModele(donnees, "facture");
         listerFacture();
         afficherPaypal();
@@ -462,7 +457,6 @@ function afficherPaypal() {
             label: 'paypal'
         },
         createOrder: function (data, actions) {
-            console.log(data);
             return actions.order.create({
                 purchase_units: [{
                     amount: {
@@ -473,7 +467,6 @@ function afficherPaypal() {
         },
         onApprove: function (data, actions) {
             return actions.order.capture().then(function (details) {
-                console.log(details);
                 placerCommande(data.orderID);
             });
         }
@@ -511,7 +504,6 @@ function placerCommande(paypalOrderId) {
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
     requete.envoyerDonnees(txtJSON, (donnees) => {
-        console.log(donnees);
         getTotalPanier();
         commandeTerminee();
     });

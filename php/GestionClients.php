@@ -7,56 +7,9 @@
  class GestionClients extends GestionBD {
 
     /**
-     * Vérifie si le client existe déjà
-     * @param {string} $courriel - le courriel du client
-     * @return boolean
-     */
-    public function existeDeja($courriel) {
-        return $this->getClient($courriel) !== false;
-    }
-
-    /**
-     * Ajoute un nouveau client
-     * @param {Client} $client - un client déjà instancié
-     * @return boolean
-     */
-    public function ajouterClient(Client $client) {
-
-        if(!$this->existeDeja($client->getCourriel())) {
-            $requete = $this->_bdd->prepare(
-                'INSERT INTO client (nomClient, prenomClient, adresse, ville, province,
-                    codePostal, noTel, courriel, pseudo, motDePasse)
-                VALUES (:nomClient, :prenomClient, :adresse, :ville, :province,
-                    :codePostal, :noTel, :courriel, :pseudo, :motDePasse)'
-            );
-    
-            $requete->bindValue(':nomClient', $client->getNomClient(), PDO::PARAM_STR);
-            $requete->bindValue(':prenomClient', $client->getPrenomClient(), PDO::PARAM_STR);
-            $requete->bindValue(':adresse', $client->getAdresse(), PDO::PARAM_STR);
-            $requete->bindValue(':ville', $client->getVille(), PDO::PARAM_STR);
-            $requete->bindValue(':province', $client->getProvince(), PDO::PARAM_STR);
-            $requete->bindValue(':codePostal', $client->getCodePostal(), PDO::PARAM_STR);
-            $requete->bindValue(':noTel', $client->getNoTel(), PDO::PARAM_STR);
-            $requete->bindValue(':courriel', $client->getCourriel(), PDO::PARAM_STR);
-            $requete->bindValue(':pseudo', $client->getPseudo(), PDO::PARAM_STR);
-            $requete->bindValue(':motDePasse', $client->getMotDePasse(), PDO::PARAM_STR);
-
-            $requete->execute();
-            $requete->closeCursor();
-
-            return true;
-        }
-
-        return false;
-        
-    }
-
-
-    /**
      * Retourne les informations du client
      * @param {int} noClient - l'identifiant du client
      * @return array - un tableau associatif si le client existe
-     * @return boolean - si le client n'existe pas
      */
     public function getClient($info) {
         $tabClient = array();
@@ -76,25 +29,70 @@
         $donnees = $requete->fetch(PDO::FETCH_ASSOC);
         $requete->closeCursor();
 
-        if($donnees !== false){
-            $client = new Client($donnees);
-            array_push($tabClient, $client->getTableau());
-            return $tabClient;
+        if($donnees === false){
+           throw new Exception("Le client n'existe pas");
         }
 
-        else {
-            return false;
-        }
+        $client = new Client($donnees);
+        array_push($tabClient, $client->getTableau());
+        return $tabClient;
        
     }
 
+    /**
+     * Vérifie si le client existe déjà
+     * @param {string} $courriel - le courriel du client
+     * @return boolean
+     */
+    public function existeDeja($courriel) {
+        try {
+            $this->getClient($courriel);
+            return true;
+        }
+        catch (Exception $e){
+            return false;
+        }
+    }
 
+    /**
+     * Ajoute un nouveau client
+     * @param {Client} $client - un client déjà instancié
+     */
+    public function ajouterClient(Client $client) {
+
+        if($this->existeDeja($client->getCourriel())) {
+           throw new Exception("Vous êtes déjà inscrit. Cliquez sur le formulaire de connexion.");
+        }
+
+        $requete = $this->_bdd->prepare(
+            'INSERT INTO client (nomClient, prenomClient, adresse, ville, province,
+                codePostal, noTel, courriel, pseudo, motDePasse)
+            VALUES (:nomClient, :prenomClient, :adresse, :ville, :province,
+                :codePostal, :noTel, :courriel, :pseudo, :motDePasse)'
+        );
+
+        $requete->bindValue(':nomClient', $client->getNomClient(), PDO::PARAM_STR);
+        $requete->bindValue(':prenomClient', $client->getPrenomClient(), PDO::PARAM_STR);
+        $requete->bindValue(':adresse', $client->getAdresse(), PDO::PARAM_STR);
+        $requete->bindValue(':ville', $client->getVille(), PDO::PARAM_STR);
+        $requete->bindValue(':province', $client->getProvince(), PDO::PARAM_STR);
+        $requete->bindValue(':codePostal', $client->getCodePostal(), PDO::PARAM_STR);
+        $requete->bindValue(':noTel', $client->getNoTel(), PDO::PARAM_STR);
+        $requete->bindValue(':courriel', $client->getCourriel(), PDO::PARAM_STR);
+        $requete->bindValue(':pseudo', $client->getPseudo(), PDO::PARAM_STR);
+        $requete->bindValue(':motDePasse', $client->getMotDePasse(), PDO::PARAM_STR);
+
+        $requete->execute();
+        $requete->closeCursor();
+        
+    }
+
+    
     /**
      * Retourne les informations d'une personne déjà inscrite
      * @param {string} $pseuoo - le pseudonyme
      * @param {string} $motDePasse - le mot de passe
      * @return array - si le membre existe
-     * @return boolean - si le membre n'existe pas
      */
     public function getMembre($pseudo, $motDePasse) {
         $tabMembre = array();
@@ -108,14 +106,13 @@
         $donnees = $requete->fetch(PDO::FETCH_ASSOC);
         $requete->closeCursor();
 
-        if($donnees !== false ){
-            $membre = new Client($donnees);
-            array_push($tabMembre, $membre->getTableau());
-            return $tabMembre;
+        if($donnees === false ){
+           throw new Exception("Nom d'utilisateur ou mot de passe non valide.");
         }
-        else {
-            return false;
-        }
+       
+        $membre = new Client($donnees);
+        array_push($tabMembre, $membre->getTableau());
+        return $tabMembre;
        
     }
 

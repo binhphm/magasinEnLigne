@@ -143,11 +143,13 @@ class GestionArticles extends GestionBD {
      * Réserve un article dans l'inventaire
      * @param {int} $noArticle - l'identifiant de l'article
      * @param {int} $quantite - la quantité demandée
-     * @return boolean
      */
     public function reserverArticle($noArticle, $quantite) {
-        if($this->getQteDansPanier($noArticle) + $quantite > $this->getQteStock($noArticle)){
-            return false;
+        $noArticle = (int) $noArticle;
+        $quantite = (int) $quantite;
+
+        if($quantite > $this->getQteStock($noArticle)){
+            throw new Exception("Il n'y a pas assez d'articles en stock. Veuillez choisir une plus petite quantité.");
         }
         else{
             $requete = $this->_bdd->prepare(
@@ -155,16 +157,13 @@ class GestionArticles extends GestionBD {
                 SET 
                     quantiteEnStock = quantiteEnStock - ?,
                     quantiteDansPanier = quantiteDansPanier + ?   
-                WHERE noArticle = ?
-                    AND quantiteDansPanier + ? <= quantiteEnStock'
+                WHERE noArticle = ?'
             );
             $requete->bindValue(1, $quantite, PDO::PARAM_INT);
             $requete->bindValue(2, $quantite, PDO::PARAM_INT);
             $requete->bindValue(3, $noArticle, PDO::PARAM_INT);
-            $requete->bindValue(4, $quantite, PDO::PARAM_INT);
             $requete->execute();
             $requete->closeCursor();
-            return true;
         }
 
     }
@@ -196,37 +195,31 @@ class GestionArticles extends GestionBD {
      * @param {array} $tabQteDansPanier - toutes les quantités
      */
     public function modifierPanier($tabNoArticle, $tabQuantite){
-       
-        //Valider s'il y a assez d'articles dans l'inventaire
-        for($i = 0; $i < count($tabNoArticle); $i++){
-            if($this->getQteDansPanier((int)$tabNoArticle[$i]) + 
-                (int)$tabQuantite[$i] > $this->getQteStock((int)$tabNoArticle[$i])){
-                return false;
-            }
-        }
-
-        for($i = 0; $i < count($tabNoArticle); $i++) {
-            //Calculer la somme des quantités (stock + panier)
-            $somme = $this->getQteStock((int) $tabNoArticle[$i]) + $this->getQteDansPanier((int)$tabNoArticle[$i]);
         
+        for($i = 0; $i < count($tabNoArticle); $i++){
+            $qteStock = $this->getQteStock((int)$tabNoArticle[$i]);
+            $qtePanier = $this->getQteDansPanier((int)$tabNoArticle[$i]);
+            $somme = $qteStock + $qtePanier;
+            if((int) $tabQuantite[$i] > $somme){
+                throw new Exception("Une quantité est trop élevée pour un des articles.");
+            }
+            
             $requete = $this->_bdd->prepare(
                 'UPDATE article
                 SET 
                     quantiteEnStock = :somme - :quantite,
                     quantiteDansPanier = :quantite2
-                WHERE noArticle = :noArticle
-                AND quantiteDansPanier <= quantiteEnStock'
+                WHERE noArticle = :noArticle'
             );
-            
+
             $requete->bindValue(':somme', (int) $somme, PDO::PARAM_INT);
             $requete->bindValue(':quantite', (int) $tabQuantite[$i], PDO::PARAM_INT);
             $requete->bindValue(':quantite2', (int) $tabQuantite[$i], PDO::PARAM_INT);
             $requete->bindValue(':noArticle', (int) $tabNoArticle[$i], PDO::PARAM_INT);
             $requete->execute();
-            $requete->closeCursor();
-
+            $requete->closeCursor();  
         }
-        return true;
+       
     }
 
 
