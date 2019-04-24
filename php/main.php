@@ -50,8 +50,7 @@ if(isset($_GET["q"])){
                     echo json_encode($panier->getPanier());
                     break;
                 case "detruire" ://détruire le panier (appel manuel de la fonction pour tester)
-                    $gestionArticles->retablirQteStockTous(); 
-                    $gestionArticles->effacerQtePanierTous();
+                    $gestionArticles->detruirePanier(); 
                     $panier->supprimerPanier(); 
                     break;
             }
