@@ -47,26 +47,20 @@ class Commande {
 
     /* MUTATEURS */
     public function setNoCommande($noCommande){
-        if(!is_int($noCommande)){
-            error_log('Le numéro de commande doit être un nombre entier.', 3, 'erreurs.txt');
-            return;
-        }
+        $noCommande = (int) $noCommande;
         $this->_noCommande = $noCommande;
     }
 
     public function setDateCommande($dateCommande){
         if(!preg_match(self::DATE, $dateCommande)){
-            error_log('Format de date invalide.', 3, 'erreurs.txt');
+            throw new Exception('Format de date invalide.');
             return;
         }
         $this->_dateCommande = $dateCommande;
     }
 
     public function setNoClient($noClient){
-        if(!is_int($noClient)){
-            error_log('Le numéro d\'un client doit être un nombre entier.', 3, 'erreurs.txt');
-            return;
-        }
+        $noClient = (int) $noClient;
         $this->_noClient = $noClient;
     }
 

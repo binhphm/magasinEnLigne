@@ -83,16 +83,13 @@ class Client {
     /* MUTATEURS */
 
     public function setNoClient($noClient) {
-        if(!is_int($noClient)){
-            error_log('Le numéro d\'un client doit être un nombre entier.', 3, 'erreurs.txt');
-            return;
-        }
+        $noClient = (int) $noClient;
         $this->_noClient = $noClient;
     }
 
     public function setNomClient($nomClient) {
         if(!preg_match(self::LETTRES_SEULEMENT, $nomClient)){
-            error_log('Le nom du client ne doit contenir que des lettres', 3, 'erreurs.txt');
+            throw new Exception('Le nom du client ne doit contenir que des lettres');
             return;
         }
         $this->_nomClient = $nomClient;
@@ -100,23 +97,19 @@ class Client {
 
     public function setPrenomClient($prenomClient) {
         if(!preg_match(self::LETTRES_SEULEMENT, $prenomClient)){
-            error_log('Le prénom ne doit contenir que des lettrees.', 3, 'erreurs.txt');
+            throw new Exception('Le prénom ne doit contenir que des lettrees.');
             return;
         }
         $this->_prenomClient = $prenomClient;
     }
 
     public function setAdresse($adresse) {
-        if(!is_string($adresse)){
-            error_log('L\'adresse d\'un client doit être une chaîne de caractères.', 3, 'erreurs.txt');
-            return;
-        }
         $this->_adresse = $adresse;
     }
 
     public function setVille($ville) {
         if(!preg_match(self::LETTRES_SEULEMENT, $ville)){
-            error_log('La ville ne doit contenir que des lettres.', 3, 'erreurs.txt');
+            throw new Exception('La ville ne doit contenir que des lettres.');
             return;
         }
         $this->_ville = $ville;
@@ -124,7 +117,7 @@ class Client {
 
     public function setProvince($province) {
         if(!preg_match(self::LETTRES_SEULEMENT, $province)){
-            error_log('La province ne doit contenir que des lettres.', 3, 'erreurs.txt');
+            throw new Exception('La province ne doit contenir que des lettres.');
             return;
         }
         $this->_province = $province;
@@ -132,7 +125,7 @@ class Client {
 
     public function setCodePostal($codePostal) {
         if(!preg_match(self::CODE_POSTAL, $codePostal)){
-            error_log('Format de code postal invalide.', 3, 'erreurs.txt');
+            throw new Exception('Format de code postal invalide.');
             return;
         }
         $this->_codePostal = $codePostal;
@@ -140,7 +133,7 @@ class Client {
 
     public function setNoTel($noTel) {
         if(!preg_match(self::NO_TEL, $noTel)){
-            error_log('Format de numéro de téléphone invalide.', 3, 'erreurs.txt');
+            throw new Exception('Format de numéro de téléphone invalide.');
             return;
         }
         $this->_noTel = $noTel;

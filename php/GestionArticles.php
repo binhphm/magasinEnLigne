@@ -230,6 +230,10 @@ class GestionArticles extends GestionBD {
     }
 
 
+    /**
+     * Détruit le panier d'achat : rétablit la quantité en stock
+     * et annule la quantité dans le panier
+     */
     public function detruirePanier(){
           
        $nbArticles = $this->getNbArticles();

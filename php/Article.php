@@ -60,32 +60,20 @@ class Article {
 
     public function setNoArticle($noArticle) {
         $noArticle = (int) $noArticle;
-        if(!is_int($noArticle)){
-            error_log('Le numéro d\'article doit être un nombre entier.' . PHP_EOL, 3, 'erreurs.txt');
-            return;
-        }
         $this->_noArticle = $noArticle;
     }
 
     public function setCategorie($categorie) {
-        if(!is_string($categorie)){
-            error_log('La catégorie d\'un article doit être une chaîne de caractères.' . PHP_EOL, 3, 'erreurs.txt');
-            return;
-        }
         $this->_categorie = $categorie;
     }
 
     public function setDescription($description) {
-        if(!is_string($description)){
-            error_log('La description d\'un article doit être une chaîne de caractères.' . PHP_EOL, 3, 'erreurs.txt');
-            return;
-        }
         $this->_description = $description;
     }
 
     public function setCheminImage($cheminImage) {
         if(!preg_match(self::CHEMIN_IMAGE, $cheminImage)){
-            error_log('Le chemin de l\'image d\'un article doit être une chaîne de caractères.' . PHP_EOL, 3, 'erreurs.txt');
+            throw new Exception('Format de chemin d\'image invalide');
             return;
         }
         $this->_cheminImage = $cheminImage;
@@ -93,33 +81,16 @@ class Article {
 
     public function setPrixUnitaire($prixUnitaire) {
         $prixUnitaire = (double) $prixUnitaire;
-        
-        if(!is_double($prixUnitaire)){
-            error_log('Le prix unitaire d\'un article doit être un nombre décimal.' . PHP_EOL, 3, 'erreurs.txt');
-            return;
-        }
-        
         $this->_prixUnitaire = $prixUnitaire;
     }
 
     public function setQuantiteEnStock($quantiteEnStock) {
         $quantiteEnStock = (int) $quantiteEnStock;
-
-        if(!is_int($quantiteEnStock)){
-            error_log('La quantité en stock d\'un article doit être un nombre entier.' . PHP_EOL , 3, 'erreurs.txt');
-            return;
-        }
         $this->_quantiteEnStock = $quantiteEnStock;
     }
 
     public function setQuantiteDansPanier($quantiteDansPanier) {
         $quantiteDansPanier = (int) $quantiteDansPanier;
-        
-        if(!is_int($quantiteDansPanier)){
-            error_log('La quantité dans le panier doit être un nombre entier.' . PHP_EOL , 3, 'erreurs.txt');
-            return;
-        }
-        
         $this->_quantiteDansPanier = $quantiteDansPanier;
     }
     
