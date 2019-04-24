@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Représente un objet de type Commande
+ */
 class Commande {
 
     /* ATTRIBUTS */

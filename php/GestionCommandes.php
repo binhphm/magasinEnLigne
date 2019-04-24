@@ -3,7 +3,7 @@
 /**
  * Représente un objet de type GestionCommandes
  * Son rôle est de gérer les commandes dans la base de données MySQL
- *
+ * Hérite de la classe GestionBD
  */
 class GestionCommandes extends GestionBD {
 

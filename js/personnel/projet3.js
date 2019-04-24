@@ -251,9 +251,6 @@ function formulaireInscription() {
     }
 }
 
-
-
-
 /**
  * Valide les données du formulaire
  */
@@ -355,10 +352,10 @@ function ajouterClient(txtJSON) {
     let requete = new RequeteAjax("php/main.php");
     requete.envoyerDonnees(txtJSON, function(reponse) {
         let objJSON = JSON.parse(reponse);
-        if (objJSON["statut"] == "succes") {
-            afficherCaisse(JSON.stringify(objJSON["membre"]));
+        if (objJSON["statut"] === "succes") {
+            afficherCaisse(JSON.stringify(objJSON["client"]));
         }
-        else if (objJSON["statut"] == "echec") {
+        else if (objJSON["statut"] === "echec") {
             messageErreur.classList.add('alert');
             messageErreur.classList.add('alert-danger');
             messageErreur.innerHTML = "Vous êtes déjà inscrit. Cliquez sur le formulaire de connexion.";
@@ -420,6 +417,7 @@ function seConnecter() {
 * Affiche les informations du client et la facture
 */
 function afficherCaisse(reponse) {
+    console.log(reponse);
     enTetePiedPage("visible");
 
     //Informations du client
@@ -430,6 +428,7 @@ function afficherCaisse(reponse) {
     let requete = new RequeteAjax("php/main.php?q=panier&r=sommaire");
     let modeleFacture = new ModeleMagasin("modele-facture");
     requete.getJSON(donnees => {
+        console.log(donnees);
         modeleFacture.appliquerModele(donnees, "facture");
         listerFacture();
         afficherPaypal();
@@ -448,6 +447,11 @@ function listerFacture() {
     });
 }
 
+
+/**
+ * Affiche le bouton Paypal et affiche la fenêtre de paypal
+ * lorsqu'on clique dessus
+ */
 function afficherPaypal() {
     paypal.Buttons({
         locale: 'fr_CA',
@@ -479,6 +483,7 @@ function afficherPaypal() {
 
 /**
  * Crée une commande avec les articles
+ * @param {string} paypalOrderId - le numéro de confirmation de Paypal
  */
 function placerCommande(paypalOrderId) {
 

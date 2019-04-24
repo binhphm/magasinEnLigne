@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  mar. 23 avr. 2019 à 21:03
+-- Généré le :  mer. 24 avr. 2019 à 06:44
 -- Version du serveur :  10.1.36-MariaDB
 -- Version de PHP :  7.2.11
 
@@ -48,9 +48,9 @@ CREATE TABLE IF NOT EXISTS `article` (
 
 INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `prixUnitaire`, `quantiteEnStock`, `quantiteDansPanier`) VALUES
 (1, 'Cheveux', 'Alikay Naturals Lemongrass Leave In Conditioner', 'images/alikay_naturals_lemongrass_leave_in_conditioner.jpg', '28.99', 10, 0),
-(2, 'Cheveux', 'ApHogee Curlific! Texture Treatment', 'images/aphogee_curlific_texture_treatment.jpg', '13.99', 10, 0),
-(3, 'Cheveux', 'As I Am Coconut Cowash Cleansing Conditioner', 'images/as_i_am_coconut_cowash.jpeg', '15.99', 10, 0),
-(4, 'Maquillage', 'Ardell Magnetic Lashes Double Wispies', 'images/ardell_magnetic_lashes_double_wispies.jpg', '21.99', 10, 0),
+(2, 'Cheveux', 'ApHogee Curlific! Texture Treatment', 'images/aphogee_curlific_texture_treatment.jpg', '13.99', 9, 0),
+(3, 'Cheveux', 'As I Am Coconut Cowash Cleansing Conditioner', 'images/as_i_am_coconut_cowash.jpeg', '15.99', 8, 0),
+(4, 'Maquillage', 'Ardell Magnetic Lashes Double Wispies', 'images/ardell_magnetic_lashes_double_wispies.jpg', '21.99', 8, 0),
 (5, 'Maquillage', 'Ardell Natural Lashes Wispies Brown', 'images/ardell_natural_lashes_wispies_brown.jpg', '6.99', 10, 0),
 (6, 'Cheveux', 'BaByliss Pro Nano Titanium OPTIMA 3100 Straightening Iron', 'images/babylisspro_nano_titanium_optima_3100_straightening_iron_1_inch.jpg', '271.99', 10, 0),
 (7, 'Hommes', 'Beard Guyz Beard Care And Grooming Kit', 'images/beard_guyz_beard_care_grooming_kit.jpg', '29.99', 10, 0),
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `article_en_commande` (
   PRIMARY KEY (`noArticleEnCommande`),
   KEY `commande_fk` (`noCommande`),
   KEY `article_fk` (`noArticle`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `article_en_commande`
@@ -119,7 +119,10 @@ INSERT INTO `article_en_commande` (`noArticleEnCommande`, `noCommande`, `noArtic
 (19, 8, 17, 2),
 (20, 8, 4, 3),
 (21, 8, 14, 4),
-(22, 9, 2, 3);
+(22, 9, 2, 3),
+(23, 10, 2, 1),
+(24, 10, 3, 2),
+(25, 11, 4, 2);
 
 -- --------------------------------------------------------
 
@@ -132,16 +135,16 @@ CREATE TABLE IF NOT EXISTS `client` (
   `noClient` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `nomClient` varchar(50) NOT NULL,
   `prenomClient` varchar(50) NOT NULL,
-  `adresse` varchar(50) NOT NULL,
+  `adresse` varchar(255) NOT NULL,
   `ville` varchar(50) NOT NULL,
   `province` varchar(50) NOT NULL,
   `codePostal` varchar(10) NOT NULL,
   `noTel` varchar(25) NOT NULL,
   `pseudo` varchar(25) DEFAULT NULL,
-  `motDePasse` varchar(25) DEFAULT NULL,
+  `motDePasse` varchar(255) DEFAULT NULL,
   `courriel` varchar(255) NOT NULL,
   PRIMARY KEY (`noClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `client`
@@ -165,7 +168,10 @@ INSERT INTO `client` (`noClient`, `nomClient`, `prenomClient`, `adresse`, `ville
 (16, 'Arteaga Garay', 'Denna', '878 Speers Road', 'Brampton', 'Ontario', 'G0H 1H0', '905-790-4905', 'Morty1947', 'ayo6gooXuwae', 'dennaarteagagaray@rhyta.com '),
 (17, 'Olivas', 'Jaclyn Lira', '3767 Wallace Street', 'Nanaimo', 'Colombie-Britannique', 'V9R 3A8', '250-755-5941', 'Acusid', 'vahWeiL2Ch', 'jaclynliraolivas@armyspy.com '),
 (18, 'Bernier', 'Geneviève', '1805 Quayside Dr', 'New Westminster', 'Colombie-Britannique', 'V3M 6A1', '604-764-5263', 'Sucan1982', 'ahMobahtae2', 'genevievebernier@dayrep.com '),
-(19, 'Bondy', 'Favor', '3295 2nd Street', 'Lac Du Bonnet', 'Manitoba', 'R0E 1A0', '204-345-8196', 'Heeut1980', 'Foe7zi9Othie', 'favorbondy@armyspy.com');
+(19, 'Bondy', 'Favor', '3295 2nd Street', 'Lac Du Bonnet', 'Manitoba', 'R0E 1A0', '204-345-8196', 'Heeut1980', 'Foe7zi9Othie', 'favorbondy@armyspy.com'),
+(22, 'test', 'test', 'test test', 'test', 'Québec', 'A2B 2C4', '514-123-4567', 'test123', 'toto99', 'test@test.com'),
+(23, 'test', 'test', 'test test', 'Montréal', 'Québec', 'A2B 2C4', '514-123-4567', 'test1234', 'toto99', 'test123@test.com'),
+(24, 'Test', 'Nadine', '123, rue Test appartement 100', 'Montréal', 'Québec', 'A1B 2C3', '514-123-4567', 'nad2273', 'magasin', 'nadine@test.com');
 
 -- --------------------------------------------------------
 
@@ -181,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `commande` (
   `paypalOrderId` char(17) NOT NULL,
   PRIMARY KEY (`noCommande`),
   KEY `commande_noclient_idx` (`noClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `commande`
@@ -196,7 +202,9 @@ INSERT INTO `commande` (`noCommande`, `dateCommande`, `noClient`, `paypalOrderId
 (6, '2019-04-14 11:31:08', 1, '1FP03323RH1890633'),
 (7, '2019-04-14 11:50:14', 2, '51U788521W1105035'),
 (8, '2019-04-14 12:01:28', 5, '6SP278845A189145G'),
-(9, '2019-04-14 12:31:11', 15, '47506035TU448745G');
+(9, '2019-04-14 12:31:11', 15, '47506035TU448745G'),
+(10, '2019-04-23 23:50:41', 24, '8SP47294TD071174H'),
+(11, '2019-04-24 00:40:36', 2, '22J515486N2962932');
 
 -- --------------------------------------------------------
 

@@ -2,6 +2,7 @@
 /**
  * Représente un objet de type GestionClients
  * Son rôle est de gérer les clients dans la base de données MySQL
+ * Hérite de la classe GestionBD
  */
  class GestionClients extends GestionBD {
 
@@ -11,7 +12,7 @@
      * @return boolean
      */
     public function existeDeja($courriel) {
-        return count($this->getClient($courriel)) > 0;
+        return $this->getClient($courriel) !== false;
     }
 
     /**
@@ -39,7 +40,7 @@
             $requete->bindValue(':courriel', $client->getCourriel(), PDO::PARAM_STR);
             $requete->bindValue(':pseudo', $client->getPseudo(), PDO::PARAM_STR);
             $requete->bindValue(':motDePasse', $client->getMotDePasse(), PDO::PARAM_STR);
-    
+
             $requete->execute();
             $requete->closeCursor();
 
@@ -54,7 +55,8 @@
     /**
      * Retourne les informations du client
      * @param {int} noClient - l'identifiant du client
-     * @return array - un tableau associatif
+     * @return array - un tableau associatif si le client existe
+     * @return boolean - si le client n'existe pas
      */
     public function getClient($info) {
         $tabClient = array();
@@ -73,17 +75,26 @@
         $requete->execute();
         $donnees = $requete->fetch(PDO::FETCH_ASSOC);
         $requete->closeCursor();
-        $client = new Client($donnees);
-        array_push($tabClient, $client->getTableau());
 
-        return $tabClient;
+        if($donnees !== false){
+            $client = new Client($donnees);
+            array_push($tabClient, $client->getTableau());
+            return $tabClient;
+        }
+
+        else {
+            return false;
+        }
+       
     }
+
 
     /**
      * Retourne les informations d'une personne déjà inscrite
      * @param {string} $pseuoo - le pseudonyme
      * @param {string} $motDePasse - le mot de passe
-     * @return array or boolean
+     * @return array - si le membre existe
+     * @return boolean - si le membre n'existe pas
      */
     public function getMembre($pseudo, $motDePasse) {
         $tabMembre = array();
@@ -97,13 +108,13 @@
         $donnees = $requete->fetch(PDO::FETCH_ASSOC);
         $requete->closeCursor();
 
-        if($donnees == false ){
-            return false;
-        }
-        else {
+        if($donnees !== false ){
             $membre = new Client($donnees);
             array_push($tabMembre, $membre->getTableau());
             return $tabMembre;
+        }
+        else {
+            return false;
         }
        
     }

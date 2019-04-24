@@ -63,7 +63,7 @@ if(isset($_GET["q"])){
 elseif(isset($_POST["x"])){
     $obj = json_decode($_POST["x"], false);
     switch($obj->requete) {
-        case "ajouter" :
+        case "ajouter" : //ajouter un article dans le panier
             $noArticle = (int) $obj->noArticle;
             $description = $obj->description;
             $cheminImage = $obj->cheminImage;
@@ -78,12 +78,12 @@ elseif(isset($_POST["x"])){
             }
             echo json_encode($reponse);
             break;
-        case "supprimer" :
+        case "supprimer" : //supprimer un article dans le panier
             $noArticle = (int) $obj->noArticle;
             $panier->supprimerArticle($noArticle);
             $gestionArticles->supprimerDuPanier($noArticle);
             break;
-        case "modifier" :
+        case "modifier" : //modifier la quantité des articles dans le panier
             $tabNoArticle = json_decode($obj->tabNoArticle);
             $tabQuantite = json_decode($obj->tabQuantite);
             if($gestionArticles->modifierPanier($tabNoArticle, $tabQuantite)) {
@@ -95,10 +95,10 @@ elseif(isset($_POST["x"])){
             }
             echo json_encode($reponse);
             break;
-        case "inscription" :
+        case "inscription" ://inscrire un client
             $donneesClient = json_decode($obj->client, true);
             $client = new Client($donneesClient);
-            if($gestionClients->ajouterClient($client)){
+            if($gestionClients->ajouterClient($client) !== false){
                 $reponse["statut"] = "succes";
                 $reponse["client"] = $gestionClients->getDernierClient();
             }
@@ -107,7 +107,7 @@ elseif(isset($_POST["x"])){
             }
             echo json_encode($reponse);
             break;
-        case "connexion" :
+        case "connexion" ://connexion d'un membre existant
             $pseudo = $obj->pseudo;
             $motDePasse = $obj->motDePasse;
             if($gestionClients->getMembre($pseudo, $motDePasse) !== false){
@@ -119,7 +119,7 @@ elseif(isset($_POST["x"])){
             }
             echo json_encode($reponse);
             break;
-        case "commande" :
+        case "commande" : //placer une commande
             //Récupérer les données
             $paypalOrderId = $obj->paypalOrderId;
             $tabNoArticle = json_decode($obj->tabNoArticle);

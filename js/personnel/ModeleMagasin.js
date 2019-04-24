@@ -1,9 +1,24 @@
+/**
+ * Représente une classe de type ModeleMagasin
+ * Son rôle est d'identifier les différents modèles et
+ * d'y insérer les bonnes données
+ * Copié de l'exemple de projet fourni par l'enseignant
+ */
 class ModeleMagasin {
 
+    /**
+     * CONSTRUCTEUR
+     * @param {string} idModele 
+     */
     constructor(idModele) {
         this.modele = document.getElementById(idModele).innerHTML;
     }
 
+    /**
+     * Insère les bonnes données au bon endroit dans le modèle
+     * @param {string} txtJSON - la réponse du serveur
+     * @param {string} idElement - le modèle à afficher
+     */
     appliquerModele(txtJSON, idElement) {
         let codeHTML = "";
         
