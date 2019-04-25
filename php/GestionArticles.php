@@ -201,7 +201,7 @@ class GestionArticles extends GestionBD {
             $qtePanier = $this->getQteDansPanier((int)$tabNoArticle[$i]);
             $somme = $qteStock + $qtePanier;
             if((int) $tabQuantite[$i] > $somme){
-                throw new Exception("Une quantité est trop élevée pour un des articles.");
+                throw new Exception("Une quantité est trop élevée pour un ou plusieurs articles.");
             }
             
             $requete = $this->_bdd->prepare(

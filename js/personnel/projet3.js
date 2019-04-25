@@ -165,7 +165,7 @@ function supprimerDuPanier() {
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
     requete.envoyerDonnees(txtJSON, getTotalPanier);
-    afficherSommaire(listerPanier);
+    afficherSommaire();
 }
 
 /**
@@ -204,12 +204,9 @@ function modifierPanier() {
             messageErreur.innerHTML = objJSON["message"];
         }
         else {
-            getTotalPanier()
-            afficherSommaire(listerPanier);
-        }
-        
-        
-         
+            getTotalPanier();
+            afficherSommaire();  
+        }    
     });
         
      
