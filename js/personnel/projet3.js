@@ -59,10 +59,11 @@ function afficherArticle(noArticle) {
 /**
  * Affiche le nombre total d'éléments dans le panier
  */
-function getTotalPanier() {
+function getTotalPanier(callback) {
     let requete = new RequeteAjax("php/main.php?q=panier&r=total");
     requete.getJSON(reponse => {
         document.getElementById("nombre-total").innerHTML = JSON.parse(reponse);
+        callback();
     });
 }
 
@@ -501,16 +502,20 @@ function placerCommande(paypalOrderId) {
     let txtJSON = JSON.stringify(objJSON);
     let requete = new RequeteAjax("php/main.php");
     requete.envoyerDonnees(txtJSON, (donnees) => {
-        getTotalPanier();
-        commandeTerminee();
+        getTotalPanier(commandeTerminee);
     });
 
 }
 
 /**
- * Affiche que la commande est bel et bien complétée
+ * Affiche que la commande est bel et bien complétée,
+ * le numéro de confirmation et le courriel du client
  */
 function commandeTerminee() {
+    let requete = new RequeteAjax("php/main.php?q=commande");
     let modeleComplete = new ModeleMagasin("modele-commande-complete");
-    modeleComplete.appliquerModele('', "milieu-page");
+    requete.getJSON(reponse => {
+        modeleComplete.appliquerModele(reponse, "milieu-page");
+    });
+    
 }

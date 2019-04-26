@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  mer. 24 avr. 2019 à 06:44
+-- Généré le :  ven. 26 avr. 2019 à 04:15
 -- Version du serveur :  10.1.36-MariaDB
 -- Version de PHP :  7.2.11
 
@@ -47,11 +47,11 @@ CREATE TABLE IF NOT EXISTS `article` (
 --
 
 INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `prixUnitaire`, `quantiteEnStock`, `quantiteDansPanier`) VALUES
-(1, 'Cheveux', 'Alikay Naturals Lemongrass Leave In Conditioner', 'images/alikay_naturals_lemongrass_leave_in_conditioner.jpg', '28.99', 10, 0),
+(1, 'Cheveux', 'Alikay Naturals Lemongrass Leave In Conditioner', 'images/alikay_naturals_lemongrass_leave_in_conditioner.jpg', '28.99', 8, 0),
 (2, 'Cheveux', 'ApHogee Curlific! Texture Treatment', 'images/aphogee_curlific_texture_treatment.jpg', '13.99', 9, 0),
 (3, 'Cheveux', 'As I Am Coconut Cowash Cleansing Conditioner', 'images/as_i_am_coconut_cowash.jpeg', '15.99', 8, 0),
 (4, 'Maquillage', 'Ardell Magnetic Lashes Double Wispies', 'images/ardell_magnetic_lashes_double_wispies.jpg', '21.99', 8, 0),
-(5, 'Maquillage', 'Ardell Natural Lashes Wispies Brown', 'images/ardell_natural_lashes_wispies_brown.jpg', '6.99', 10, 0),
+(5, 'Maquillage', 'Ardell Natural Lashes Wispies Brown', 'images/ardell_natural_lashes_wispies_brown.jpg', '6.99', 8, 0),
 (6, 'Cheveux', 'BaByliss Pro Nano Titanium OPTIMA 3100 Straightening Iron', 'images/babylisspro_nano_titanium_optima_3100_straightening_iron_1_inch.jpg', '271.99', 10, 0),
 (7, 'Hommes', 'Beard Guyz Beard Care And Grooming Kit', 'images/beard_guyz_beard_care_grooming_kit.jpg', '29.99', 10, 0),
 (8, 'Cheveux', 'Camille Rose Naturals Curl Maker', 'images/camille_rose_curl_maker.jpg', '41.99', 10, 0),
@@ -72,9 +72,9 @@ INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `
 (23, 'Cheveux', 'Moroccanoil Oil Treatment', 'images/moroccanoil_treatment.jpg', '59.99', 10, 0),
 (24, 'Peau', 'TGIN Argan Replenishing Hair And Body Serum', 'images/tgin_argan_replenishing_hair_body_serum.jpg', '24.99', 10, 0),
 (25, 'Cheveux', 'Denman Brush D4 Black', 'images/denman_brush_d4_black.jpg', '34.99', 10, 0),
-(26, 'Hommes', 'The Mane Choice Head Honcho Hair & Beard Oil + Butter = The Balm ', 'images/tmc_head_honcho_the_balm.jpg', '16.99', 10, 0),
+(26, 'Hommes', 'The Mane Choice Head Honcho Hair And Beard Oil + Butter = The Balm ', 'images/tmc_head_honcho_the_balm.jpg', '16.99', 10, 0),
 (27, 'Hommes', 'Shea Moisture Maracuja Oil And Shea Butter Full Beard Detangler', 'images/shea_moisture_maracuja_oil_beard_detangler.jpg', '15.99', 10, 0),
-(28, 'Hommes', 'Uncle Jimmy Beard Softener Conditioning Balm', 'images/uncle_jimmy_beard_softener.jpg', '19.99', 10, 0);
+(28, 'Hommes', 'Uncle Jimmy Beard Softener Conditioning Balm', 'images/uncle_jimmy_beard_softener.jpg', '19.99', 9, 0);
 
 -- --------------------------------------------------------
 
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `article_en_commande` (
   PRIMARY KEY (`noArticleEnCommande`),
   KEY `commande_fk` (`noCommande`),
   KEY `article_fk` (`noArticle`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `article_en_commande`
@@ -122,7 +122,22 @@ INSERT INTO `article_en_commande` (`noArticleEnCommande`, `noCommande`, `noArtic
 (22, 9, 2, 3),
 (23, 10, 2, 1),
 (24, 10, 3, 2),
-(25, 11, 4, 2);
+(25, 11, 4, 2),
+(26, 12, 1, 2),
+(27, 12, 5, 2),
+(28, 12, 28, 1),
+(29, 13, 1, 2),
+(30, 13, 5, 2),
+(31, 13, 28, 1),
+(32, 14, 1, 2),
+(33, 14, 5, 2),
+(34, 14, 28, 1),
+(35, 15, 1, 2),
+(36, 15, 5, 2),
+(37, 15, 28, 1),
+(38, 16, 1, 2),
+(39, 16, 5, 2),
+(40, 16, 28, 1);
 
 -- --------------------------------------------------------
 
@@ -187,7 +202,7 @@ CREATE TABLE IF NOT EXISTS `commande` (
   `paypalOrderId` char(17) NOT NULL,
   PRIMARY KEY (`noCommande`),
   KEY `commande_noclient_idx` (`noClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `commande`
@@ -204,7 +219,12 @@ INSERT INTO `commande` (`noCommande`, `dateCommande`, `noClient`, `paypalOrderId
 (8, '2019-04-14 12:01:28', 5, '6SP278845A189145G'),
 (9, '2019-04-14 12:31:11', 15, '47506035TU448745G'),
 (10, '2019-04-23 23:50:41', 24, '8SP47294TD071174H'),
-(11, '2019-04-24 00:40:36', 2, '22J515486N2962932');
+(11, '2019-04-24 00:40:36', 2, '22J515486N2962932'),
+(12, '2019-04-25 21:32:50', 10, '6VH66797M3545032V'),
+(13, '2019-04-25 21:36:50', 16, '0BG24831D59700828'),
+(14, '2019-04-25 21:39:19', 12, '9CN53198D46468411'),
+(15, '2019-04-25 21:45:54', 14, '5AK647786A433245Y'),
+(16, '2019-04-25 21:55:59', 17, '0YJ40016H08239404');
 
 -- --------------------------------------------------------
 

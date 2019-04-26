@@ -42,17 +42,32 @@ class GestionCommandes extends GestionBD {
 
     }
 
-    /**
-     * Récupère la dernière commande que l'on vient d'ajouter
+     /**
+     * Retourne le numéro de confirmation et le courriel de l'utilisateur
      * @return array - un tableau associatif
      */
-    public function getDerniereCommande(){
-        $requete = $this->_bdd->query('SELECT * FROM commande ORDER BY dateCommande DESC LIMIT 1');
+    public function getConfirmation(){
+        $tabCommande = array();
+
+        $requete = $this->_bdd->query(
+            'SELECT
+                commande.paypalOrderId,
+                client.courriel
+            FROM commande
+            JOIN client ON commande.noClient = client.noClient
+            ORDER BY dateCommande DESC
+            LIMIT 1;'
+        );
         $donnees = $requete->fetch(PDO::FETCH_ASSOC);
         $requete->closeCursor();
-        $commande = new Commande($donnees);
-        return $commande->getTableau();
+        
+        
+        array_push($tabCommande, $donnees);
+        return $tabCommande;
     }
+
+
+   
 }
 
 ?>

@@ -61,7 +61,7 @@
     public function ajouterClient(Client $client) {
 
         if($this->existeDeja($client->getCourriel())) {
-           throw new Exception("Vous êtes déjà inscrit. Cliquez sur le formulaire de connexion.");
+           throw new Exception("Un compte est déjà associé à ce courriel");
         }
 
         $requete = $this->_bdd->prepare(

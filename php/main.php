@@ -56,6 +56,9 @@ if(isset($_GET["q"])){
             }
         }
     }
+    if($_GET["q"] == "commande"){
+        echo json_encode($gestionCommandes->getConfirmation());
+    }
 }
 
 /* REQUÊTES POST */
