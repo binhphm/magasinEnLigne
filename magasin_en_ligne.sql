@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  ven. 26 avr. 2019 à 04:15
+-- Généré le :  ven. 26 avr. 2019 à 04:36
 -- Version du serveur :  10.1.36-MariaDB
 -- Version de PHP :  7.2.11
 
@@ -52,7 +52,7 @@ INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `
 (3, 'Cheveux', 'As I Am Coconut Cowash Cleansing Conditioner', 'images/as_i_am_coconut_cowash.jpeg', '15.99', 8, 0),
 (4, 'Maquillage', 'Ardell Magnetic Lashes Double Wispies', 'images/ardell_magnetic_lashes_double_wispies.jpg', '21.99', 8, 0),
 (5, 'Maquillage', 'Ardell Natural Lashes Wispies Brown', 'images/ardell_natural_lashes_wispies_brown.jpg', '6.99', 8, 0),
-(6, 'Cheveux', 'BaByliss Pro Nano Titanium OPTIMA 3100 Straightening Iron', 'images/babylisspro_nano_titanium_optima_3100_straightening_iron_1_inch.jpg', '271.99', 10, 0),
+(6, 'Cheveux', 'BaByliss Pro Nano Titanium OPTIMA 3100 Straightening Iron', 'images/babylisspro_nano_titanium_optima_3100_straightening_iron_1_inch.jpg', '271.99', 9, 0),
 (7, 'Hommes', 'Beard Guyz Beard Care And Grooming Kit', 'images/beard_guyz_beard_care_grooming_kit.jpg', '29.99', 10, 0),
 (8, 'Cheveux', 'Camille Rose Naturals Curl Maker', 'images/camille_rose_curl_maker.jpg', '41.99', 10, 0),
 (9, 'Cheveux', 'Cantu Shea Butter For Natural Hair Coconut Curling Cream', 'images/cantu_coconut_curling_cream.jpg', '31.99', 10, 0),
@@ -60,7 +60,7 @@ INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `
 (11, 'Cheveux', 'Carol\'s daughter Hair Milk Curl Defining Moisture Mask', 'images/carols_daughter_hair_milk_curl_defining_moisture_mask.jpg', '34.99', 10, 0),
 (12, 'Cheveux', 'Curls Blueberry Bliss Curl Control Paste', 'images/curls_blueberry_control_paste.jpg', '15.99', 10, 0),
 (13, 'Cheveux', 'DevaCurl Supercream Coconut Curl Styler', 'images/devacurl_supercream_coconut_curl_styler.jpg', '55.99', 10, 0),
-(14, 'Peau', 'Dudu-Osun Black Soap', 'images/dudu_osun_black_soap.jpg', '5.99', 10, 0),
+(14, 'Peau', 'Dudu-Osun Black Soap', 'images/dudu_osun_black_soap.jpg', '5.99', 7, 0),
 (15, 'Maquillage', 'DUO Strip Lash Adhesive Tube Dark Tone', 'images/duo_strip_lash_adhesive_tube_dark_tone.jpg', '8.99', 10, 0),
 (16, 'Cheveux', 'Eco Styler Olive Oil Styling Gel', 'images/eco_styler_olive_oil_gel.jpeg', '9.99', 10, 0),
 (17, 'Cheveux', 'EDEN BodyWorks Coconut Shea Cleansing CoWash', 'images/eden_body_works_coconut_shea_cleansing_cowash.jpg', '17.99', 10, 0),
@@ -73,7 +73,7 @@ INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `
 (24, 'Peau', 'TGIN Argan Replenishing Hair And Body Serum', 'images/tgin_argan_replenishing_hair_body_serum.jpg', '24.99', 10, 0),
 (25, 'Cheveux', 'Denman Brush D4 Black', 'images/denman_brush_d4_black.jpg', '34.99', 10, 0),
 (26, 'Hommes', 'The Mane Choice Head Honcho Hair And Beard Oil + Butter = The Balm ', 'images/tmc_head_honcho_the_balm.jpg', '16.99', 10, 0),
-(27, 'Hommes', 'Shea Moisture Maracuja Oil And Shea Butter Full Beard Detangler', 'images/shea_moisture_maracuja_oil_beard_detangler.jpg', '15.99', 10, 0),
+(27, 'Hommes', 'Shea Moisture Maracuja Oil And Shea Butter Full Beard Detangler', 'images/shea_moisture_maracuja_oil_beard_detangler.jpg', '15.99', 8, 0),
 (28, 'Hommes', 'Uncle Jimmy Beard Softener Conditioning Balm', 'images/uncle_jimmy_beard_softener.jpg', '19.99', 9, 0);
 
 -- --------------------------------------------------------
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `article_en_commande` (
   PRIMARY KEY (`noArticleEnCommande`),
   KEY `commande_fk` (`noCommande`),
   KEY `article_fk` (`noArticle`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `article_en_commande`
@@ -137,7 +137,10 @@ INSERT INTO `article_en_commande` (`noArticleEnCommande`, `noCommande`, `noArtic
 (37, 15, 28, 1),
 (38, 16, 1, 2),
 (39, 16, 5, 2),
-(40, 16, 28, 1);
+(40, 16, 28, 1),
+(41, 17, 6, 1),
+(42, 17, 27, 2),
+(43, 17, 14, 3);
 
 -- --------------------------------------------------------
 
@@ -202,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `commande` (
   `paypalOrderId` char(17) NOT NULL,
   PRIMARY KEY (`noCommande`),
   KEY `commande_noclient_idx` (`noClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `commande`
@@ -224,7 +227,8 @@ INSERT INTO `commande` (`noCommande`, `dateCommande`, `noClient`, `paypalOrderId
 (13, '2019-04-25 21:36:50', 16, '0BG24831D59700828'),
 (14, '2019-04-25 21:39:19', 12, '9CN53198D46468411'),
 (15, '2019-04-25 21:45:54', 14, '5AK647786A433245Y'),
-(16, '2019-04-25 21:55:59', 17, '0YJ40016H08239404');
+(16, '2019-04-25 21:55:59', 17, '0YJ40016H08239404'),
+(17, '2019-04-25 22:35:02', 19, '4AW725945X636102U');
 
 -- --------------------------------------------------------
 
