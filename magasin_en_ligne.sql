@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le :  ven. 26 avr. 2019 à 04:36
+-- Généré le :  ven. 26 avr. 2019 à 04:47
 -- Version du serveur :  10.1.36-MariaDB
 -- Version de PHP :  7.2.11
 
@@ -67,9 +67,9 @@ INSERT INTO `article` (`noArticle`, `categorie`, `description`, `cheminImage`, `
 (18, 'Cheveux', 'Shea Moisture Jamaican Black Castor Oil Strengthen And Grow Thermal Protectant', 'images/shea_moisture_jbco_thermal_protectant.jpg', '19.99', 10, 0),
 (19, 'Cheveux', 'Kera Care Edge Tamer', 'images/kera_care_edge_tamer.jpg', '11.99', 10, 0),
 (20, 'Cheveux', 'Kinky Curly Come Clean Shampoo', 'images/kinky_curly_come_clean_shampoo.jpg', '21.99', 10, 0),
-(21, 'Cheveux', 'Maui Moisture Curl Quench+ Coconut Oil Curl Milk', 'images/maui_moisture_curl_quench_coconut_oil_curl_milk.jpg', '10.99', 10, 0),
+(21, 'Cheveux', 'Maui Moisture Curl Quench+ Coconut Oil Curl Milk', 'images/maui_moisture_curl_quench_coconut_oil_curl_milk.jpg', '10.99', 9, 0),
 (22, 'Cheveux', 'Mielle Organics Babassu Mint Deep Conditioner', 'images/mielle_organics_babassu_oil_mint_deep_conditioner.jpg', '22.99', 10, 0),
-(23, 'Cheveux', 'Moroccanoil Oil Treatment', 'images/moroccanoil_treatment.jpg', '59.99', 10, 0),
+(23, 'Cheveux', 'Moroccanoil Oil Treatment', 'images/moroccanoil_treatment.jpg', '59.99', 9, 0),
 (24, 'Peau', 'TGIN Argan Replenishing Hair And Body Serum', 'images/tgin_argan_replenishing_hair_body_serum.jpg', '24.99', 10, 0),
 (25, 'Cheveux', 'Denman Brush D4 Black', 'images/denman_brush_d4_black.jpg', '34.99', 10, 0),
 (26, 'Hommes', 'The Mane Choice Head Honcho Hair And Beard Oil + Butter = The Balm ', 'images/tmc_head_honcho_the_balm.jpg', '16.99', 10, 0),
@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `article_en_commande` (
   PRIMARY KEY (`noArticleEnCommande`),
   KEY `commande_fk` (`noCommande`),
   KEY `article_fk` (`noArticle`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `article_en_commande`
@@ -140,7 +140,9 @@ INSERT INTO `article_en_commande` (`noArticleEnCommande`, `noCommande`, `noArtic
 (40, 16, 28, 1),
 (41, 17, 6, 1),
 (42, 17, 27, 2),
-(43, 17, 14, 3);
+(43, 17, 14, 3),
+(44, 18, 21, 1),
+(45, 18, 23, 1);
 
 -- --------------------------------------------------------
 
@@ -162,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   `motDePasse` varchar(255) DEFAULT NULL,
   `courriel` varchar(255) NOT NULL,
   PRIMARY KEY (`noClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `client`
@@ -189,7 +191,8 @@ INSERT INTO `client` (`noClient`, `nomClient`, `prenomClient`, `adresse`, `ville
 (19, 'Bondy', 'Favor', '3295 2nd Street', 'Lac Du Bonnet', 'Manitoba', 'R0E 1A0', '204-345-8196', 'Heeut1980', 'Foe7zi9Othie', 'favorbondy@armyspy.com'),
 (22, 'test', 'test', 'test test', 'test', 'Québec', 'A2B 2C4', '514-123-4567', 'test123', 'toto99', 'test@test.com'),
 (23, 'test', 'test', 'test test', 'Montréal', 'Québec', 'A2B 2C4', '514-123-4567', 'test1234', 'toto99', 'test123@test.com'),
-(24, 'Test', 'Nadine', '123, rue Test appartement 100', 'Montréal', 'Québec', 'A1B 2C3', '514-123-4567', 'nad2273', 'magasin', 'nadine@test.com');
+(24, 'Test', 'Nadine', '123, rue Test appartement 100', 'Montréal', 'Québec', 'A1B 2C3', '514-123-4567', 'nad2273', 'magasin', 'nadine@test.com'),
+(25, 'Sandyman', 'Menegilda', '2470 Findlay Creek Road', 'Creston', 'Colombie-Britannique', 'V0B 1G0', '250-402-3442', 'Boodsom', 'aV8Ahghahnan', 'MenegildaSandyman@dayrep.com');
 
 -- --------------------------------------------------------
 
@@ -205,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `commande` (
   `paypalOrderId` char(17) NOT NULL,
   PRIMARY KEY (`noCommande`),
   KEY `commande_noclient_idx` (`noClient`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 --
 -- Déchargement des données de la table `commande`
@@ -228,7 +231,8 @@ INSERT INTO `commande` (`noCommande`, `dateCommande`, `noClient`, `paypalOrderId
 (14, '2019-04-25 21:39:19', 12, '9CN53198D46468411'),
 (15, '2019-04-25 21:45:54', 14, '5AK647786A433245Y'),
 (16, '2019-04-25 21:55:59', 17, '0YJ40016H08239404'),
-(17, '2019-04-25 22:35:02', 19, '4AW725945X636102U');
+(17, '2019-04-25 22:35:02', 19, '4AW725945X636102U'),
+(18, '2019-04-25 22:47:23', 25, '9R613830CD671870Y');
 
 -- --------------------------------------------------------
 
