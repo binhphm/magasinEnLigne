@@ -56,7 +56,7 @@ class GestionCommandes extends GestionBD {
             FROM commande
             JOIN client ON commande.noClient = client.noClient
             ORDER BY dateCommande DESC
-            LIMIT 1;'
+            LIMIT 1'
         );
         $donnees = $requete->fetch(PDO::FETCH_ASSOC);
         $requete->closeCursor();
